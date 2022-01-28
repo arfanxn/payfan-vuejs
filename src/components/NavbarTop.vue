@@ -1,6 +1,6 @@
 <template>
     <teleport to="#navbar-top">
-        <nav class="navbar navbar-expand-lg navbar-dark py-3 bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark py-3 bg-navy">
             <div class="container-md">
                 <a class="navbar-brand fw-bold" href="#">Payfan</a>
                 <button
