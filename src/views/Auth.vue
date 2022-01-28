@@ -44,6 +44,6 @@ defineComponent({ Login, Register });
 
 <style scoped>
 main {
-    min-height: 100vh;
+    margin-bottom: 200px !important;
 }
 </style>
