@@ -1,8 +1,8 @@
 <template>
     <teleport to="#navbar-top">
-        <nav class="navbar navbar-expand-lg navbar-dark py-3 bg-navy">
-            <div class="container-md">
-                <a class="navbar-brand fw-bold" href="#">Payfan</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-navy">
+            <div class="container-md navbar-custom-container">
+                <a class="navbar-brand fw-bold fs-3" href="#">Payfan</a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -18,16 +18,20 @@
                     class="collapse navbar-collapse d-md-flex justify-content-between"
                     id="navbarNavAltMarkup"
                 >
-                    <div class="navbar-nav">
+                    <div class="navbar-nav d-flex justify-content-end">
                         <router-link
                             v-for="(navb, index ) in state.navbars"
                             :key="index"
-                            class="nav-link active"
+                            class="nav-link nav-link-left-side p-2 px-3 me-2 fs-6 fw-bold rounded-pill active"
                             :to="navb.link"
-                        >{{ navb.text }}</router-link>
+                        >
+                            <small>{{ navb.text }}</small>
+                        </router-link>
                     </div>
                     <div class="navbar-nav">
-                        <a href class="nav-link" @click.prevent="handleLogout()">Logout</a>
+                        <a href class="nav-link fw-bold fs-6" @click.prevent="handleLogout()">
+                            <small>LOG OUT</small>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -59,3 +63,18 @@ function handleLogout() {
     });
 }
 </script>
+
+<style scoped>
+.navbar-custom-container {
+    padding: 7.5px 175px 7.5px 175px;
+}
+
+.router-link-active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link-left-side:hover {
+    /* transition: #fff 1s ease; */
+    border: 0.5px solid #fff;
+}
+</style>
