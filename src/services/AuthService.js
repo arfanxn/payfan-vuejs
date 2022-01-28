@@ -13,6 +13,21 @@ export default class AuthService {
         }
     }
 
+    static async register(fullname, email, password, password_confirmation) {
+        try {
+            const response = await axios.post("/api/user/register", {
+                name: fullname,
+                fullname: fullname, // just in case if the server only accept fullname  
+                email,
+                password,
+                password_confirmation
+            });
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
     static async logout() {
         try {
             const response = await axios.get("/api/user/logout");

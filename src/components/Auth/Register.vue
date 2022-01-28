@@ -7,15 +7,27 @@
                     type="text"
                     class="form-control"
                     id="inputFullname"
-                    v-model="formValues.name"
+                    v-model="state.form.values.fullname"
                 />
-                <AlertError :error="formErrors.name"></AlertError>
+                <AlertError
+                    class="mt-1"
+                    @close="deleteFormErrorMessage(`fullname`)"
+                    :error="state.form.errors.fullname"
+                ></AlertError>
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="inputEmail" v-model="formValues.email" />
-                <!-- <small class="text-danger" v-if="formErrors.email">{{ formErrors.email }}</small> -->
-                <AlertError :error="formErrors.email"></AlertError>
+                <input
+                    type="email"
+                    class="form-control"
+                    id="inputEmail"
+                    v-model="state.form.values.email"
+                />
+                <AlertError
+                    class="mt-1"
+                    @close="deleteFormErrorMessage(`email`)"
+                    :error="state.form.errors.email"
+                ></AlertError>
             </div>
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
@@ -23,9 +35,13 @@
                     type="password"
                     class="form-control"
                     id="inputPassword"
-                    v-model="formValues.password"
+                    v-model="state.form.values.password"
                 />
-                <AlertError :error="formErrors.password"></AlertError>
+                <AlertError
+                    class="mt-1"
+                    @close="deleteFormErrorMessage(`password`)"
+                    :error="state.form.errors.password"
+                ></AlertError>
             </div>
             <div class="mb-3">
                 <label for="inputConfPassword" class="form-label">Confirm Password</label>
@@ -33,9 +49,13 @@
                     type="password"
                     class="form-control"
                     id="inputConfPassword"
-                    v-model="formValues.password_confirmation"
+                    v-model="state.form.values.password_confirmation"
                 />
-                <AlertError :error="formErrors.password_confirmation"></AlertError>
+                <AlertError
+                    class="mt-1"
+                    @close="deleteFormErrorMessage(`password_confirmation`)"
+                    :error="state.form.errors.password_confirmation"
+                ></AlertError>
             </div>
             <button
                 type="submit"
@@ -48,47 +68,53 @@
 
 <script setup>
 import AlertError from '../Errors/AlertError.vue';
-import { ref, watch, defineComponent } from 'vue';
-import { useStore } from "vuex";
-const store = useStore();
-
-const formValues = ref({
-    name: String(), email: String(), password: String(), password_confirmation: String()
-}), formErrors = ref({
-    name: String(), email: String(),
-    password: String(), password_confirmation: String()
+import AuthService from '../../services/AuthService';
+import { reactive, defineComponent } from 'vue';
+import router from '../../router';
+import Helpers from '../../Helpers';
+defineComponent({ AlertError });
+const state = reactive({
+    form: {
+        values: {
+            fullname: "",
+            email: "",
+            password: "",
+            password_confirmation: ""
+        },
+        errors: {
+            fullname: "",
+            email: "",
+            password: "",
+            password_confirmation: ""
+        }
+    }
 });
 
-defineComponent({ AlertError })
-
-watch(() => formValues.value.name, () => {
-    formErrors.value.name = null;
-});
-watch(() => formValues.value.email, () => {
-    formErrors.value.email = null;
-});
-watch(() => formValues.value.password, () => {
-    formErrors.value.password = null;
-});
-watch(() => formValues.value.password_confirmation, () => {
-    formErrors.value.password_confirmation = null;
-});
-
+function deleteFormErrorMessage(key) {
+    state.form.errors[key] = null;
+}
 
 async function handleRegister() {
-    store.dispatch("auth/register", formValues.value)
-        .then(({ data, statusText }) => {
-            if (data.name || data.email || data.password || data.password_confirmation) {
-                formErrors.value.name = "name" in data ? data.name[0] : null;
-                formErrors.value.email = "email" in data ? data.email[0] : null;
-                formErrors.value.password = "password" in data ? data.password[0] : null;
-                formErrors.value.password_confirmation = "password_confirmation" in data
-                    ? data.password_confirmation[0] : null;
-            } else if (data.error_message) formErrors.value.password = data.error_message;
+    // refresh errors message 
+    // const errMessageKeys = Object.keys(state.form.errors);
+    // errMessageKeys.forEach(key => {
+    //     state.form.errors[key] = null;
+    // })
 
-            if (statusText.toLowerCase() == "ok") {
-                window.location = "/";
+    // handle the registration ;
+    const formValues = state.form.values;
+    AuthService.register(formValues.fullname, formValues.email,
+        formValues.password, formValues.password_confirmation).then((r) => {
+            if (r.status == 201) {
+                console.log(r);
+                router.go('/');
+            } else {
+                state.form.errors.fullname = Helpers.errorMessageAccessor(r.data, "name");
+                state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
+                state.form.errors.password = Helpers.errorMessageAccessor(r.data, "password");
+                state.form.errors.password_confirmation =
+                    Helpers.errorMessageAccessor(r.data, "password_confirmation");
             }
         });
 }
-</script>
+</script>   
