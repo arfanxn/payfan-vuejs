@@ -1,3 +1,11 @@
+.custom-container {
+    padding: 7.5px 175px 7.5px 175px;
+}
+
 .bg-navy {
     background: #003087 !important;
+}
+
+.border-navy {
+    border-color: #003087 !important;
 }
