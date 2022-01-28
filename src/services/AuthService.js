@@ -45,4 +45,13 @@ export default class AuthService {
             return error.response;
         }
     }
+
+    static async userProfile() {
+        try {
+            const response = await axios.get("/api/user/profile");
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
 }
