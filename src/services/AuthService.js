@@ -37,6 +37,15 @@ export default class AuthService {
         }
     }
 
+    static async refresh() {
+        try {
+            const response = await axios.get("/api/user/auth/refresh");
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
     static async check() {
         try {
             const response = await axios.get("/api/user/auth/check");
