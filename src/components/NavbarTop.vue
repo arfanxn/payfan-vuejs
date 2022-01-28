@@ -69,7 +69,8 @@ const state = reactive({
         {
             "link": "/about",
             "text": "Activity"
-        }, {
+        },
+        {
             "link": "/help",
             "text": "Help"
         },
