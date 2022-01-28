@@ -1,8 +1,8 @@
 <template>
     <teleport to="#navbar-top">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-navy">
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-navy">
             <div class="container-md navbar-custom-container">
-                <a class="navbar-brand fw-bold fs-3" href="#">Payfan</a>
+                <a class="navbar-brand fw-bold fs-3" href="/">Payfan</a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -22,13 +22,27 @@
                         <router-link
                             v-for="(navb, index ) in state.navbars"
                             :key="index"
-                            class="nav-link nav-link-left-side p-2 px-3 me-2 fs-6 fw-bold rounded-pill active"
+                            class="nav-link nav-link-left-side d-flex px-3 mx-1 fs-6 fw-bold rounded-pill active"
                             :to="navb.link"
                         >
-                            <small>{{ navb.text }}</small>
+                            <small class="my-auto">{{ navb.text }}</small>
                         </router-link>
                     </div>
                     <div class="navbar-nav">
+                        <a href="#" class="nav-link fw-bold fs-6 d-flex">
+                            <img
+                                class="nav-link-icon my-auto"
+                                src="../assets/icons/bell-ring.png"
+                                alt="Notifications"
+                            />
+                        </a>
+                        <a href="#" class="nav-link fw-bold fs-6 d-flex">
+                            <img
+                                class="nav-link-icon my-auto"
+                                src="../assets/icons/settings.png"
+                                alt="Settings"
+                            />
+                        </a>
                         <a href class="nav-link fw-bold fs-6" @click.prevent="handleLogout()">
                             <small>LOG OUT</small>
                         </a>
@@ -50,7 +64,14 @@ const state = reactive({
         },
         {
             "link": "/about",
-            "text": "About"
+            "text": "Send and Request"
+        },
+        {
+            "link": "/about",
+            "text": "Activity"
+        }, {
+            "link": "/help",
+            "text": "Help"
         },
     ]
 });
@@ -76,5 +97,11 @@ function handleLogout() {
 .nav-link-left-side:hover {
     /* transition: #fff 1s ease; */
     border: 0.5px solid #fff;
+}
+
+.nav-link-icon {
+    width: 25px;
+    height: 25px;
+    color: white;
 }
 </style>
