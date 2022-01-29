@@ -9,13 +9,9 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                 />
-                <ul class="dropdown-menu shadow px-3">
-                    <li class="my-1">
-                        <router-link class="text-dark" to="/contacts">Manage contacts</router-link>
-                    </li>
-                    <li class="my-1">
-                        <router-link class="text-dark" to="/transfer">Send to others</router-link>
-                    </li>
+                <ul class="dropdown-menu shadow">
+                    <router-link class="dropdown-item text-dark" to="/contacts">Manage contacts</router-link>
+                    <router-link class="dropdown-item text-dark" to="/transfer">Send to others</router-link>
                 </ul>
             </div>
         </div>

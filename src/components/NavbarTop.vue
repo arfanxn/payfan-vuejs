@@ -29,13 +29,7 @@
                         </router-link>
                     </div>
                     <div class="navbar-nav">
-                        <a href="#" class="nav-link fw-bold fs-6 d-flex">
-                            <img
-                                class="nav-link-icon my-auto"
-                                src="../assets/icons/bell-ring.png"
-                                alt="Notifications"
-                            />
-                        </a>
+                        <DropdownNotifications />
                         <a href="#" class="nav-link fw-bold fs-6 d-flex">
                             <img
                                 class="nav-link-icon my-auto"
@@ -55,8 +49,12 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, defineComponent } from 'vue';
 import AuthService from '../services/AuthService';
+import DropdownNotifications from './Navbar/DropdownNotifications.vue';
+defineComponent({
+    DropdownNotifications
+})
 const state = reactive({
     "navbars": [
         {
@@ -105,5 +103,17 @@ function handleLogout() {
     width: 25px;
     height: 25px;
     color: white;
+}
+
+.notification-dropdown-menu header {
+    background-color: #0070ba !important;
+}
+
+.notification-dropdown-menu {
+    width: 300px;
+    height: 100vh;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    top: 100% !important;
 }
 </style>
