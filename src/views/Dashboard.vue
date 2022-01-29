@@ -1,27 +1,36 @@
 <template>
   <div class="home">
     <NavbarTop />
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <h1 class="text-danger">BS5</h1>
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <div class="row mt-2 p-0 m-0">
+      <div class="col-md-7 p-0 m-0">
+        <h2 class="mb-4">Hello, Muhammad Arfan.</h2>
+        <WalletCard />
+      </div>
+      <div class="col-md-5 p-0 ps-5 pe-4 m-0">
+        <TransferMenu />
+
+        <SendAgain />
+
+        <RecentActivity />
+      </div>
+    </div>
   </div>
 </template>
 
-<script>
+<script setup>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import NavbarTop from '../components/NavbarTop.vue';
-import { defineComponent } from 'vue'
+import WalletCard from '../components/Dashboard/WalletCard.vue';
+import TransferMenu from '../components/Dashboard/TransferMenu.vue';
+import RecentActivity from '../components/Dashboard/RecentActivity.vue';
+import SendAgain from '../components/Dashboard/SendAgain.vue';
+import { defineComponent } from 'vue';
 
 defineComponent({
-  NavbarTop
+  NavbarTop, TransferMenu, WalletCard, RecentActivity, SendAgain
 })
 
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld,
-    NavbarTop
-  }
-}
 </script>
+
+<style scoped>
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <router-view class="container-md custom-container pt-5 mt-5"></router-view>
+  <router-view class="container-md custom-container"></router-view>
 </template>
 
 <script setup>

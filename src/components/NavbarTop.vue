@@ -50,6 +50,7 @@
                 </div>
             </div>
         </nav>
+        <div class="pt-5 mt-5"></div>
     </teleport>
 </template>
 
@@ -63,11 +64,11 @@ const state = reactive({
             "text": "Dashboard"
         },
         {
-            "link": "/about",
+            "link": "/transfer",
             "text": "Send and Request"
         },
         {
-            "link": "/about",
+            "link": "/activity",
             "text": "Activity"
         },
         {

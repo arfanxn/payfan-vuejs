@@ -1,11 +1,31 @@
+a {
+    text-decoration: none !important;
+}
+
 .custom-container {
     padding: 7.5px 175px 7.5px 175px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .bg-navy {
     background: #003087 !important;
 }
 
+.text-navy {
+    color: #0070ba !important;
+}
+
 .border-navy {
     border-color: #003087 !important;
+}
+
+.hover-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.hover-underline:hover {
+    text-decoration: underline;
 }
