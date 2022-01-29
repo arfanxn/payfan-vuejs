@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-3 pt-3 pb-4 px-4 d-flex justify-content-between">
+  <div class="bg-white shadow-sm rounded-3 pt-3 pb-4 px-4 d-flex justify-content-between">
     <div class>
       <h5 class="text-navy fw-bold mb-3">Payfan balance</h5>
       <h1 class="fw-light my-0 py-0">0,00 $</h1>
@@ -19,10 +19,8 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       />
-      <ul class="dropdown-menu shadow px-3">
-        <li class="my-1">
-          <router-link class="text-dark" to="/help">Get Help</router-link>
-        </li>
+      <ul class="dropdown-menu shadow">
+        <router-link class="dropdown-item text-dark" to="/help">Get Help</router-link>
       </ul>
     </div>
   </div>
