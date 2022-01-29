@@ -15,13 +15,27 @@ const routes = [{
     component: Dashboard // import("../views/Dashboard.vue") 
   },
   {
-    path: "/authenticate",
-    name: "Authenticate",
+    path: "/auth/:type",
+    name: "Auth",
     component: Auth,
     meta: {
       guest: true
     }
   },
+  // {
+  //   path: "/login",
+  //   component: Auth,
+  //   meta: {
+  //     guest: true
+  //   }
+  // },
+  // {
+  //   path: "/register",
+  //   component: Auth,
+  //   meta: {
+  //     guest: true
+  //   }
+  // },
   {
     path: '/transfer',
     name: 'transfer',
@@ -58,7 +72,7 @@ router.beforeEach((to, from, next) => {
     `${docTitle} | ${process.env.VUE_APP_TITLE || "Default"}` :
     `${process.env.VUE_APP_TITLE || "Default"}`;
 
-  if (to.name.toLowerCase() == "authenticate") {
+  if (to.name.toLowerCase() == "auth") {
     AuthService.check().then(response => {
       response.status != 401 ? window.location = '/' : null;
     });
@@ -66,7 +80,7 @@ router.beforeEach((to, from, next) => {
 
   if (!("guest" in to.meta)) {
     AuthService.check().then(response => {
-      response.status != 401 ? next() : window.location = "/authenticate";
+      response.status != 401 ? next() : window.location = "/auth";
     });
   } else next();
 

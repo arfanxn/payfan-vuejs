@@ -9,12 +9,12 @@
                     <a
                         href
                         class="text-decoration-none text-white fw-bold d-inline me-3"
-                        @click.prevent="currentStep = `login`"
+                        @click.prevent="changeAuthType(`login`)"
                     >Login</a>
                     <a
                         href
                         class="text-decoration-none text-white fw-bold d-inline"
-                        @click.prevent="currentStep = `register`"
+                        @click.prevent="changeAuthType(`register`)"
                     >Register</a>
                 </div>
             </div>
@@ -32,13 +32,40 @@
 </template>
 
 <script setup>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onBeforeMount } from 'vue';
+import { useRoute } from 'vue-router';
 import Login from '../components/Auth/Login.vue';
 import Register from '../components/Auth/Register.vue';
+import router from '../router';
+const route = useRoute();
 
 const currentStep = ref("login");
 
 defineComponent({ Login, Register });
+
+onBeforeMount(() => {
+    changeAuthType(route.params.type);
+});
+
+function changeAuthType(type) {
+    if (type == "register") {
+        currentStep.value = "register";
+        router.replace({
+            ...router.currentRoute,
+            params: {
+                type: "register"
+            }
+        })
+    } else {
+        currentStep.value = "login";
+        router.replace({
+            ...router.currentRoute,
+            params: {
+                type: "login"
+            }
+        })
+    }
+}
 
 </script>
 
