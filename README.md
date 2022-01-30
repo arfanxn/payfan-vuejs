@@ -1,5 +1,7 @@
 # payfan
 
+# Paypal clone with VueJS and integrated with restfull apis backend laravel application "payfan-laravel" (repository)
+
 ## Project setup
 ```
 yarn install
