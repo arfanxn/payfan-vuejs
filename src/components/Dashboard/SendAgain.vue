@@ -1,7 +1,10 @@
 <template>
     <div class="mb-5">
         <div class="d-flex justify-content-between mb-4">
-            <router-link class="text-navy fw-bold fs-5" to="/trasnfer">Send Again</router-link>
+            <router-link
+                class="text-navy fw-bold fs-5 hover-underline"
+                to="/transfer/send"
+            >Send Again</router-link>
             <div class="dropstart cursor-pointer">
                 <img
                     class="vertical-dots dropdown-toggle"
@@ -10,8 +13,11 @@
                     aria-expanded="false"
                 />
                 <ul class="dropdown-menu shadow">
-                    <router-link class="dropdown-item text-dark" to="/contacts">Manage contacts</router-link>
-                    <router-link class="dropdown-item text-dark" to="/transfer">Send to others</router-link>
+                    <router-link
+                        class="dropdown-item text-dark"
+                        to="/transfer/contacts"
+                    >Manage contacts</router-link>
+                    <router-link class="dropdown-item text-dark" to="/transfer/send">Send to others</router-link>
                 </ul>
             </div>
         </div>
