@@ -21,6 +21,7 @@
                     <div class="navbar-nav d-flex justify-content-end">
                         <router-link
                             v-for="(navb, index ) in state.navbars"
+                            :id="navb.text == `Send and Request` ? `NavLinkSendandRequest` : null"
                             :key="index"
                             class="nav-link nav-link-left-side d-flex px-3 mx-1 fs-6 fw-bold rounded-pill active"
                             :to="navb.link"
@@ -62,7 +63,7 @@ const state = reactive({
             "text": "Dashboard"
         },
         {
-            "link": "/transfer",
+            "link": "/transfer/send",
             "text": "Send and Request"
         },
         {
