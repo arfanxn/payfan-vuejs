@@ -15,7 +15,7 @@ const routes = [{
     component: Dashboard // import("../views/Dashboard.vue") 
   },
   {
-    path: "/auth/:type",
+    path: "/auth/:menu?",
     name: "Auth",
     component: Auth,
     meta: {
@@ -37,7 +37,7 @@ const routes = [{
   //   }
   // },
   {
-    path: '/transfer',
+    path: '/transfer/:menu?',
     name: 'Send And Request',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

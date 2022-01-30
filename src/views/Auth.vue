@@ -9,12 +9,12 @@
                     <a
                         href
                         class="text-decoration-none text-white fw-bold d-inline me-3"
-                        @click.prevent="changeAuthType(`login`)"
+                        @click.prevent="changeMenu(`login`)"
                     >Login</a>
                     <a
                         href
                         class="text-decoration-none text-white fw-bold d-inline"
-                        @click.prevent="changeAuthType(`register`)"
+                        @click.prevent="changeMenu(`register`)"
                     >Register</a>
                 </div>
             </div>
@@ -44,16 +44,16 @@ const currentStep = ref("login");
 defineComponent({ Login, Register });
 
 onBeforeMount(() => {
-    changeAuthType(route.params.type);
+    changeMenu(route.params.type);
 });
 
-function changeAuthType(type) {
+function changeMenu(type) {
     if (type == "register") {
         currentStep.value = "register";
         router.replace({
             ...router.currentRoute,
             params: {
-                type: "register"
+                menu: "register"
             }
         })
     } else {
@@ -61,7 +61,7 @@ function changeAuthType(type) {
         router.replace({
             ...router.currentRoute,
             params: {
-                type: "login"
+                menu: "login"
             }
         })
     }
