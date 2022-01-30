@@ -1,12 +1,12 @@
 <template>
     <div class="d-flex justify-content-around mb-5">
-        <router-link to="/transfer">
+        <router-link to="/transfer/send">
             <div class="hover-underline">
                 <img src="@/assets/icons/send-money.png" class="transfer-icons p-1 rounded-circle" />
                 <small class="d-block text-center fw-bold text-dark">Send</small>
             </div>
         </router-link>
-        <router-link to="/transfer">
+        <router-link to="/transfer/request">
             <div class="hover-underline cursor-pointer">
                 <img
                     src="@/assets/icons/request-money.png"
