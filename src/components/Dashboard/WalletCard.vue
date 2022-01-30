@@ -5,7 +5,7 @@
       <h1 class="fw-light my-0 py-0">0,00 $</h1>
       <small class="text-secondary d-block mb-3">Available</small>
       <router-link
-        to="/transfer"
+        to="/transfer/send"
         class="fw-bold rounded-pill py-1 px-3 border border-1 border-navy text-navy text-decoration-none"
       >
         <small>Transfer Funds</small>
