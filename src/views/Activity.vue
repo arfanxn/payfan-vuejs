@@ -2,6 +2,14 @@
     <main>
         <NavbarTop />
         <SearchNFiltersActivity />
+
+        <div class="bg-white mx-1 border rounded p-4 mt-4">
+            <p class="fw-bold">All Activities</p>
+
+            <div class="px-3">
+                <small class="fw-bold">No activities yet.</small>
+            </div>
+        </div>
     </main>
 </template>
 
