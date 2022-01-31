@@ -80,7 +80,7 @@ const state = reactive({
 function handleLogout() {
     AuthService.logout().then(res => {
         if (res.status == 200) {
-            window.location = "/authenticate"
+            window.location = "/auth/login"
         }
     });
 }
