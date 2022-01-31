@@ -15,6 +15,10 @@ const routes = [{
     component: Dashboard // import("../views/Dashboard.vue") 
   },
   {
+    path: '/:pathMatch(.*)*',
+    component: () => import("@/views/Errors/404PageNotFound.vue")
+  },
+  {
     path: "/auth/:menu?",
     name: "Auth",
     component: Auth,
@@ -68,7 +72,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   let docTitle = String();
 
-  if ("name" in to) {
+  if (to.name) {
     docTitle = to.name;
   } else if ("title" in to.meta) {
     docTitle = to.meta.title;
@@ -77,7 +81,7 @@ router.beforeEach((to, from, next) => {
     `${process.env.VUE_APP_TITLE || "Default"}: ${docTitle}` :
     `${process.env.VUE_APP_TITLE || "Default"}`;
 
-  if (to.name.toLowerCase() == "auth") {
+  if (to.name && to.name.toLowerCase() == "auth") {
     AuthService.check().then(response => {
       response.status != 401 ? window.location = '/' : null;
     });
