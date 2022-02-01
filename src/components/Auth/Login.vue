@@ -9,8 +9,11 @@
                     v-model="state.form.values.email"
                     id="inputEmail"
                 />
-                <!-- <small class="text-danger" v-if="formErrors.email">{{ formErrors.email }}</small> -->
-                <AlertError class="my-1" :error="state.form.errors.email"></AlertError>
+                <AlertError
+                    class="mt-1"
+                    @close="deleteFormErrorMessage(`email`)"
+                    :error="state.form.errors.email"
+                ></AlertError>
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
             <div class="mb-3">
@@ -21,7 +24,11 @@
                     v-model="state.form.values.password"
                     id="inputPassword"
                 />
-                <AlertError class="my-1" :error="state.form.errors.password"></AlertError>
+                <AlertError
+                    class="mt-1"
+                    @close="deleteFormErrorMessage(`password`)"
+                    :error="state.form.errors.password"
+                ></AlertError>
             </div>
 
             <button
@@ -39,11 +46,9 @@ import AuthService from "../../services/AuthService.js";
 import Helpers from "../../Helpers.js";
 import { reactive, defineComponent } from 'vue';
 import router from '../../router';
-import { useStore } from "vuex";
-
+import SwalPlugin from '../../plugins/SwalPlugin';
 defineComponent({ AlertError })
 
-const store = useStore();
 const state = reactive({
     form: {
         values: {
@@ -57,37 +62,26 @@ const state = reactive({
     }
 });
 
+function deleteFormErrorMessage(key) {
+    state.form.errors[key] = null;
+}
 
 async function handleLogin() {
-    // AuthService.check().then(r => console.log(r));
-    // AuthService.logout().then(r => console.log(r));
+    // refresh errors message 
+    Object.keys(state.form.errors).forEach(key => state.form.errors[key] = null);
 
-
-    AuthService.login(state.form.values.email, state.form.values.password)
-        .then((r) => {
-            if (r.status == 200) {
-                router.go("/");
-            } else {
-                state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
-                state.form.errors.password =
-                    Helpers.errorMessageAccessor(r.data, "password");
-            }
-        })
-
-
-
-
-
-    store;
-    // store.dispatch("auth/login", formValues.value).then(({ data, statusText }) => {
-    //     if (data.email || data.password) {
-    //         formErrors.value.email = "email" in data ? data.email[0] : null;
-    //         formErrors.value.password = "password" in data ? data.password[0] : null;
-    //     } else if (data.error_message) formErrors.value.password = data.error_message;
-
-    //     if (statusText.toLowerCase() == "ok") {
-    //         window.location = "/";
-    //     }
-    // })
+    SwalPlugin.showLoading(() =>
+        AuthService.login(state.form.values.email, state.form.values.password)
+            .then((r) => {
+                SwalPlugin.close();
+                if (r.status == 200) {
+                    router.go("/");
+                } else {
+                    state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
+                    state.form.errors.password =
+                        Helpers.errorMessageAccessor(r.data, "password");
+                }
+            })
+    )
 }
 </script>
