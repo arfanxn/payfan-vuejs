@@ -12,19 +12,11 @@
 
                     <div class="text-center wrapper-filter-menu-lists">
                         <a
+                            v-for="(filterBy, index) in state.filters_option.filter_by_status"
+                            :key="index"
                             class="border border-navy d-flex justify-content-center rounded-pill py-1 cursor-pointer text-dark mb-2"
                         >
-                            <span class="my-auto">Completed</span>
-                        </a>
-                        <a
-                            class="border border-navy d-flex justify-content-center rounded-pill py-1 cursor-pointer text-dark mb-2"
-                        >
-                            <span class="my-auto">Pending</span>
-                        </a>
-                        <a
-                            class="border border-navy d-flex justify-content-center rounded-pill py-1 cursor-pointer text-dark mb-2"
-                        >
-                            <span class="my-auto">Failed</span>
+                            <span class="my-auto">{{ filterBy.name }}</span>
                         </a>
                     </div>
                 </div>
@@ -36,19 +28,11 @@
 
                     <div class="text-center wrapper-filter-menu-lists">
                         <a
+                            v-for="(filterBy, index) in state.filters_option.filter_by_transaction_type"
+                            :key="index"
                             class="border border-navy d-flex justify-content-center rounded-pill py-1 cursor-pointer text-dark mb-2"
                         >
-                            <span class="my-auto">Send</span>
-                        </a>
-                        <a
-                            class="border border-navy d-flex justify-content-center rounded-pill py-1 cursor-pointer text-dark mb-2"
-                        >
-                            <span class="my-auto">Request</span>
-                        </a>
-                        <a
-                            class="border border-navy d-flex justify-content-center rounded-pill py-1 cursor-pointer text-dark mb-2"
-                        >
-                            <span class="my-auto">Received</span>
+                            <span class="my-auto">{{ filterBy.name }}</span>
                         </a>
                     </div>
                 </div>
@@ -56,6 +40,22 @@
         </div>
     </main>
 </template>
+
+<script setup>
+import { reactive } from 'vue';
+const state = reactive({
+    filters_option: {
+        filter_by_status: [
+            { name: "Completed" }, { name: "Pending" }, { name: "Failed" }
+        ],
+        filter_by_transaction_type: [
+            { name: "Send" }, { name: "Reqeust" }, { name: "Received" }
+        ]
+    }
+});
+state;
+
+</script>
 
 <style scoped>
 .wrapper-filter-menu-lists a:hover {

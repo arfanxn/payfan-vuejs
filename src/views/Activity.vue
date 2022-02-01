@@ -1,6 +1,6 @@
 <template>
     <main>
-        <NavbarTop />   
+        <NavbarTop />
         <SearchNFiltersActivity />
 
         <div class="bg-white mx-1 border rounded p-4 mt-4">
