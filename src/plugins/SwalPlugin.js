@@ -28,6 +28,6 @@ export default class SwalPlugin {
             return await resultOfCallback;
         }
         // if "callback" parameter/argument of this function is null or not a function, then return Swal;  
-        else return Swal;
+        return Swal;
     }
 }
