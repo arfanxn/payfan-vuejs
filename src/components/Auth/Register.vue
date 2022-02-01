@@ -69,9 +69,11 @@
 <script setup>
 import AlertError from '../Errors/AlertError.vue';
 import AuthService from '../../services/AuthService';
+import Swal from 'sweetalert2';
 import { reactive, defineComponent } from 'vue';
 import router from '../../router';
 import Helpers from '../../Helpers';
+import SwalPlugin from '../../plugins/SwalPlugin';
 defineComponent({ AlertError });
 const state = reactive({
     form: {
@@ -96,18 +98,31 @@ function deleteFormErrorMessage(key) {
 
 async function handleRegister() {
     // refresh errors message 
-    // const errMessageKeys = Object.keys(state.form.errors);
-    // errMessageKeys.forEach(key => {
-    //     state.form.errors[key] = null;
-    // })
+    Object.keys(state.form.errors).forEach(key => state.form.errors[key] = null);
 
     // handle the registration ;
     const formValues = state.form.values;
+
+    SwalPlugin.showLoading()
     AuthService.register(formValues.fullname, formValues.email,
         formValues.password, formValues.password_confirmation).then((r) => {
+            SwalPlugin.close()
             if (r.status == 201) {
-                console.log(r);
-                router.go('/');
+                Swal.fire({
+                    title: 'Account registered successfully',
+                    html: '<h5>Please wait a few seconds, we are redirecting you to your Dashboard.</h5>',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    },
+                }).then((result) => {
+                    if (result.dismiss) {
+                        router.go('/');
+                    }
+                })
             } else {
                 state.form.errors.fullname = Helpers.errorMessageAccessor(r.data, "name");
                 state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
@@ -116,5 +131,16 @@ async function handleRegister() {
                     Helpers.errorMessageAccessor(r.data, "password_confirmation");
             }
         });
+
+
+
+
+
+
+
+
+
+
+
 }
 </script>   
