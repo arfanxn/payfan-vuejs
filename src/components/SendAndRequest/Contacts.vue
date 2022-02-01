@@ -47,11 +47,19 @@
                     </svg>
                 </div>
             </div>
+
+            <div class="d-flex justify-content-center mt-5">
+                <small
+                    class="fw-bold text-navy hover-underline cursor-pointer text-center"
+                >View blocked contacts</small>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
+
+
 function addOrRmFavoriteContact(id) {
     const elem = document.getElementById(`top-contact-${id}`);
     if (elem.classList.contains("text-dark")) {
