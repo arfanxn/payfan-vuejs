@@ -2,7 +2,7 @@
     <teleport to="#navbar-top">
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-navy">
             <div class="container-md navbar-custom-container">
-                <a class="navbar-brand fw-bold fs-3" href="/">Payfan</a>
+                <a class="navbar-brand fw-bold fs-3" href="/">{{ Helpers.ENV("APP_TITLE") }}</a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -51,6 +51,7 @@
 
 <script setup>
 import { reactive, defineComponent } from 'vue';
+import Helpers from '../Helpers';
 import AuthService from '../services/AuthService';
 import DropdownNotifications from './Navbar/DropdownNotifications.vue';
 defineComponent({
