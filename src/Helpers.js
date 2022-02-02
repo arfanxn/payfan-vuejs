@@ -21,4 +21,8 @@ export default class Helpers {
     static ENV(key) {
         return process.env[key] ? process.env[key] : process.env[`VUE_${key}`];
     }
+
+    static triggerBSModal(...key) {
+        document.querySelectorAll(key).forEach(el => el.click());
+    }
 }
