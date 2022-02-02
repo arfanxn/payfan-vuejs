@@ -18,6 +18,7 @@
 
 <script setup>
 import { onMounted } from "@vue/runtime-core";
+import Helpers from "@/Helpers.js";
 
 onMounted(() => {
     document.body.classList.add("bg-navy");
