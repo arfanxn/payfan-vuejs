@@ -45,12 +45,12 @@
 
                         <div class="d-flex justify-content-center mt-4">
                             <a
-                                class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-4 py-2"
+                                class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-5 py-2"
                             >
                                 <span class="fw-bold">Send</span>
                             </a>
                             <a
-                                class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-4 py-2"
+                                class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-5 py-2"
                             >
                                 <span class="fw-bold">Request</span>
                             </a>
