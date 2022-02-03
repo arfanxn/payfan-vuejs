@@ -37,7 +37,7 @@
                             <div class="ps-3 my-auto text-secondary">
                                 <span class="d-block m-0 p-0 fw-bold">Alif Maulana</span>
                                 <a class="cursor-pointer d-flex text-dark m-0 p-0">
-                                    <StarIcon class="my-auto" width="20" height="20" />
+                                    <StarIcon width="20" height="20" />
                                     <span class="ms-1 text-secondary my-auto">Mark as a top contact</span>
                                 </a>
                             </div>
@@ -77,8 +77,9 @@
 
                         <div class="text-center mt-4">
                             <a
-                                class="cursor-pointer text-navy hover-underline d-block mb-2"
+                                class="cursor-pointer text-navy hover-underline mb-2"
                             >Remove this contact</a>
+                            <br />
                             <a class="cursor-pointer text-navy hover-underline">Block this contact</a>
                         </div>
                     </div>
