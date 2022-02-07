@@ -21,7 +21,7 @@ export default class AuthService {
                 email,
                 password,
                 password_confirmation,
-                code
+                code: code
             });
             return response;
         } catch (error) {
@@ -40,7 +40,7 @@ export default class AuthService {
         }
     }
 
-    static async verifyVerificationCode(email, otp, hashed_code) {
+    static async verifyVerificationCode(email, otp, hashed_code = null) {
         try {
             const response = await axios.post("/api/user/verification-code/verify", {
                 email,
