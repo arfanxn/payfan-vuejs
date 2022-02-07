@@ -1,7 +1,6 @@
 import Swal from "sweetalert2";
 import Helpers from "../Helpers";
 import AuthService from "../services/AuthService";
-// import AuthService from "../services/AuthService";
 
 export default class SwalPlugin {
     static close() {
