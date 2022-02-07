@@ -1,9 +1,12 @@
 export default class Helpers {
     static errorMessageAccessor(data, errorName = null) {
-        if (errorName) {
+        if (typeof errorName == "string") {
             if (errorName in data) {
                 return Array.isArray(data[errorName]) ?
                     data[errorName][0] : data[errorName];
+            } else if ("errors" in data) {
+                return Array.isArray(data.errors[errorName]) ?
+                    data.errors[errorName][0] : (data.errors[errorName] || null);
             } else {
                 return null;
             }
