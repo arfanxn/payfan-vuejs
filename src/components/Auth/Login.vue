@@ -73,7 +73,6 @@ async function handleLogin() {
     SwalPlugin.showLoading(() =>
         AuthService.login(state.form.values.email, state.form.values.password)
             .then((r) => {
-                SwalPlugin.close();
                 if (r.status == 200) {
                     router.go("/");
                 } else {
