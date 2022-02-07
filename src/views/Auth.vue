@@ -45,11 +45,11 @@ const currentStep = ref("login");
 defineComponent({ Login, Register });
 
 onBeforeMount(() => {
-    changeMenu(route.params.type);
+    changeMenu(route.params.menu);
 });
 
-function changeMenu(type) {
-    if (type == "register") {
+function changeMenu(menu) {
+    if (menu == "register") {
         currentStep.value = "register";
         router.replace({
             ...router.currentRoute,
