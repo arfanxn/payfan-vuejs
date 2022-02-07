@@ -27,7 +27,7 @@ export default class SwalPlugin {
             title,
             html: `<input type="text" id="verification-code" class="swal2-input " placeholder="Verification Code"><br><small class="text-break">OTP has been sent to your email.</small>
             <div class=" pt-2 pb-1 text-center ">
-                <button id="resend" class="btn btn-light">Resend<span class="ms-1"></span></button>
+                <button id="resend" disabled class="btn btn-light">Resend<span class="ms-1">(60)</span></button>
                 <span class="px-1"></span>
                 <button id="next"
                 class="btn btn-primary"
@@ -45,6 +45,8 @@ export default class SwalPlugin {
             didOpen() {
                 let inputVerificationCode = Swal.getPopup().querySelector('#verification-code');
 
+                btnResendTimerCountdown();
+
                 Swal.getPopup().querySelector('#next').addEventListener("click", () => {
                     if (inputVerificationCode.value.length != 6) {
                         Swal.showValidationMessage("Verification Code must be 6 chars!");
@@ -59,7 +61,8 @@ export default class SwalPlugin {
                     }
                 });
 
-                Swal.getPopup().querySelector('#resend').addEventListener("click", async event => {
+                const btnResend = Swal.getPopup().querySelector('#resend');
+                btnResend.addEventListener("click", async () => {
                     let response;
 
                     if (typeof resendCallbackOrObjectOrEmail == "function") {
@@ -73,22 +76,26 @@ export default class SwalPlugin {
                     }
 
                     if (response.status == 429 && typeof resendCallbackOrObjectOrEmail != "function") {
-                        new Promise(() => {
-                            let timer60Sec = 60;
-                            let resendInterval = setInterval(() => {
-                                timer60Sec -= 1;
-                                event.target.disabled = true;
-                                event.target.childNodes[1].innerHTML = `(${timer60Sec})`;
-
-                                if (!timer60Sec) {
-                                    event.target.disabled = false;
-                                    event.target.childNodes[1].innerHTML = "";
-                                    clearInterval(resendInterval);
-                                }
-                            }, 1000);
-                        })
+                        btnResendTimerCountdown();
                     }
                 });
+
+                function btnResendTimerCountdown() {
+                    new Promise(() => {
+                        let timer60Sec = 60;
+                        let resendInterval = setInterval(() => {
+                            timer60Sec -= 1;
+                            btnResend.disabled = true;
+                            btnResend.childNodes[1].innerHTML = `(${timer60Sec})`;
+
+                            if (!timer60Sec) {
+                                btnResend.disabled = false;
+                                btnResend.childNodes[1].innerHTML = "";
+                                clearInterval(resendInterval);
+                            }
+                        }, 1000);
+                    })
+                }
             }
         });
     }
