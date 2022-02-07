@@ -99,48 +99,47 @@ function deleteFormErrorMessage(key) {
 async function handleRegister() {
     // refresh errors message 
     Object.keys(state.form.errors).forEach(key => state.form.errors[key] = null);
-
     // handle the registration ;
     const formValues = state.form.values;
 
-    SwalPlugin.showLoading()
-    AuthService.register(formValues.fullname, formValues.email,
-        formValues.password, formValues.password_confirmation).then((r) => {
-            SwalPlugin.close()
-            if (r.status == 201) {
-                Swal.fire({
-                    title: 'Account registered successfully',
-                    html: '<h5>Please wait a few seconds, we are redirecting you to your Dashboard.</h5>',
-                    timer: 2000,
-                    timerProgressBar: true,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    didOpen: () => {
-                        Swal.showLoading()
-                    },
-                }).then((result) => {
-                    if (result.dismiss) {
-                        router.go('/');
+    SwalPlugin.showLoading();
+    AuthService.createVerificationCode(formValues.email).then(() => {
+        SwalPlugin.close();
+        SwalPlugin.showVerificationCode("Verify your account", verificationCode => {
+            AuthService.register(formValues.fullname, formValues.email,
+                formValues.password, formValues.password_confirmation,
+                verificationCode).then(r => {
+                    if (r.status == 201) {
+                        Swal.fire({
+                            title: 'Account verified successfully',
+                            html: '<h5>Please wait a few seconds, we are redirecting you to your Dashboard.</h5>',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            didOpen: () => {
+                                Swal.showLoading()
+                            },
+                        }).then((result) => {
+                            if (result.dismiss) {
+                                router.go('/');
+                            }
+                        })
+                    } else if ("verification_code_error_message" in r.data) {
+                        state.form.errors.fullname = Helpers.errorMessageAccessor(r.data, "name");
+                        state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
+                        state.form.errors.password = Helpers.errorMessageAccessor(r.data, "password");
+                        state.form.errors.password_confirmation = Helpers.errorMessageAccessor(r.data, "password_confirmation");
+                        Swal.showValidationMessage(`${r.data.verification_code_error_message}`);
+                    } else {
+                        state.form.errors.fullname = Helpers.errorMessageAccessor(r.data, "name");
+                        state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
+                        state.form.errors.password = Helpers.errorMessageAccessor(r.data, "password");
+                        state.form.errors.password_confirmation =
+                            Helpers.errorMessageAccessor(r.data, "password_confirmation");
                     }
-                })
-            } else {
-                state.form.errors.fullname = Helpers.errorMessageAccessor(r.data, "name");
-                state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
-                state.form.errors.password = Helpers.errorMessageAccessor(r.data, "password");
-                state.form.errors.password_confirmation =
-                    Helpers.errorMessageAccessor(r.data, "password_confirmation");
-            }
-        });
-
-
-
-
-
-
-
-
-
-
-
+                });
+        }, formValues.email);
+    });
 }
-</script>   
+</script>    
