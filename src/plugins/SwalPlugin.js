@@ -74,7 +74,8 @@ export default class SwalPlugin {
                         null; // still on progress build  
                     }
 
-                    if (response.status == 429 && typeof resendCallbackOrObjectOrEmail != "function") {
+                    if ((response.statusText == "OK" || response.status == 429) &&
+                        typeof resendCallbackOrObjectOrEmail != "function") {
                         btnResendTimerCountdown();
                     }
                 });
