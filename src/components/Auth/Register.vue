@@ -11,8 +11,8 @@
                 />
                 <AlertError
                     class="mt-1"
-                    @close="deleteFormErrorMessage(`fullname`)"
-                    :error="state.form.errors.fullname"
+                    @close="v$.$reset()"
+                    :error="v$?.form?.values?.fullname?.$errors[0]?.$message"
                 ></AlertError>
             </div>
             <div class="mb-3">
@@ -21,12 +21,12 @@
                     type="email"
                     class="form-control"
                     id="inputEmail"
-                    v-model="state.form.values.email"
+                    v-model.lazy="state.form.values.email"
                 />
                 <AlertError
                     class="mt-1"
-                    @close="deleteFormErrorMessage(`email`)"
-                    :error="state.form.errors.email"
+                    @close="v$.$reset()"
+                    :error="v$?.form?.values?.email?.$errors[0]?.$message"
                 ></AlertError>
             </div>
             <div class="mb-3">
@@ -39,8 +39,8 @@
                 />
                 <AlertError
                     class="mt-1"
-                    @close="deleteFormErrorMessage(`password`)"
-                    :error="state.form.errors.password"
+                    @close="v$.$reset()"
+                    :error="v$?.form?.values?.password?.$errors[0]?.$message"
                 ></AlertError>
             </div>
             <div class="mb-3">
@@ -53,8 +53,8 @@
                 />
                 <AlertError
                     class="mt-1"
-                    @close="deleteFormErrorMessage(`password_confirmation`)"
-                    :error="state.form.errors.password_confirmation"
+                    @close="v$.$reset()"
+                    :error="v$?.form?.values?.password_confirmation?.$errors[0]?.$message"
                 ></AlertError>
             </div>
             <button
@@ -72,8 +72,10 @@ import AuthService from '../../services/AuthService';
 import Swal from 'sweetalert2';
 import { reactive, defineComponent } from 'vue';
 import router from '../../router';
-import Helpers from '../../Helpers';
 import SwalPlugin from '../../plugins/SwalPlugin';
+import useVuelidate from '@vuelidate/core'
+import { required, email, minLength, helpers } from '@vuelidate/validators';
+import ValidatorService from '../../services/ValidatorService';
 defineComponent({ AlertError });
 const state = reactive({
     form: {
@@ -82,23 +84,31 @@ const state = reactive({
             email: "",
             password: "",
             password_confirmation: ""
-        },
-        errors: {
-            fullname: "",
-            email: "",
-            password: "",
-            password_confirmation: ""
         }
     }
 });
-
-function deleteFormErrorMessage(key) {
-    state.form.errors[key] = null;
-}
+const rules = {
+    form: {
+        values: {
+            fullname: { required, minLength: minLength(2) },
+            email: {
+                required, email, $lazy: true, isUnique: helpers.withMessage("Email has been taken!",
+                    helpers.withAsync(ValidatorService.isEmailTaken))
+            },
+            password: { required, minLength: minLength(6) },
+            password_confirmation: {
+                required, minLength: minLength(6),
+                sameAsPassword: helpers.withMessage("Password must match!", () => state.form.values.password == state.form.values.password_confirmation)
+            }
+        }
+    }
+};
+const v$ = useVuelidate(rules, state);
 
 async function handleRegister() {
-    // refresh errors message 
-    Object.keys(state.form.errors).forEach(key => state.form.errors[key] = null);
+    const validator = await v$.value.$validate(); // validate
+    if (!validator) return;
+
     // handle the registration ;
     const formValues = state.form.values;
 
@@ -117,19 +127,9 @@ async function handleRegister() {
                                     router.go('/');
                                 }
                             });
-                    } else if ("verification_code_error_message" in r.data) {
-                        Swal.showValidationMessage(`${r.data.verification_code_error_message}`);
-                        state.form.errors.fullname = Helpers.errorMessageAccessor(r.data, "name");
-                        state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
-                        state.form.errors.password = Helpers.errorMessageAccessor(r.data, "password");
-                        state.form.errors.password_confirmation = Helpers.errorMessageAccessor(r.data, "password_confirmation");
-                    } else {
-                        SwalPlugin.close();
-                        state.form.errors.fullname = Helpers.errorMessageAccessor(r.data, "name");
-                        state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
-                        state.form.errors.password = Helpers.errorMessageAccessor(r.data, "password");
-                        state.form.errors.password_confirmation =
-                            Helpers.errorMessageAccessor(r.data, "password_confirmation");
+                    } else if (ValidatorService.statusTextIsVerifyCodeMiddleware(r.statusText)) {
+                        if ("verification_code_error_message" in r.data)
+                            Swal.showValidationMessage(`${r.data.verification_code_error_message}`);
                     }
                 });
         }, formValues.email);
