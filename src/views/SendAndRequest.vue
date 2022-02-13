@@ -43,7 +43,7 @@ onBeforeMount(() => {
 onMounted(() => {
     // keep the nav link active after click menus (components)
     document.getElementById("NavLinkSendandRequest").classList.add("router-link-active")
-    document.body.style.height = "2000px";
+    document.body.style.height = "1000px";
 });
 onUpdated(() => {
     // keep the nav link active after click menus (components )
@@ -67,11 +67,3 @@ function changeMenu(menu) {
     }
 }
 </script>
-
-<style scoped>
-.router-link-active {
-    color: rgb(0, 112, 186) !important;
-    border-color: rgb(0, 112, 186) !important;
-    border-bottom-width: 3px !important;
-}
-</style>
