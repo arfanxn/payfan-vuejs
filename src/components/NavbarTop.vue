@@ -38,7 +38,10 @@
                                 alt="Settings"
                             />
                         </a>
-                        <a href class="nav-link fw-bold fs-6" @click.prevent="handleLogout()">
+                        <a
+                            class="cursor-pointer nav-link fw-bold fs-6"
+                            @click.prevent="handleLogout()"
+                        >
                             <small>LOG OUT</small>
                         </a>
                     </div>
@@ -50,6 +53,7 @@
 </template>
 
 <script setup>
+import Swal from 'sweetalert2';
 import { reactive, defineComponent } from 'vue';
 import Helpers from '../Helpers';
 import AuthService from '../services/AuthService';
@@ -79,10 +83,18 @@ const state = reactive({
 });
 
 function handleLogout() {
-    AuthService.logout().then(res => {
-        if (res.status == 200) {
-            window.location = "/auth/login"
-        }
+    Swal.fire({
+        title: "Are u sure to Logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Logout",
+    }).then(result => {
+        if (result.isConfirmed)
+            AuthService.logout().then(res => {
+                if (res.status == 200) {
+                    window.location = "/auth/login"
+                }
+            });
     });
 }
 </script>
