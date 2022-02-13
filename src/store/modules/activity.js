@@ -6,9 +6,6 @@ export default {
     //     userCredentials(state) {
     //     },
     // },
-    // mutations: {
-    //     userCredentials(state, newValue) {}
-    // },
     // actions: {
     //     async login(store) {},
     // },
