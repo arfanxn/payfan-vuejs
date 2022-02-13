@@ -28,4 +28,16 @@ export default class Helpers {
     static triggerBSModal(...key) {
         document.querySelectorAll(key).forEach(el => el.click());
     }
+
+    static arrayContains(array, contains, caseSensitivy = false) {
+        let isContains = false;
+        array.forEach(elem => {
+            if (isContains) return;
+
+            if (elem.toLowerCase() == contains.toLowerCase() && !caseSensitivy) isContains = true
+            else if (caseSensitivy) isContains = array.includes(contains);
+            else isContains = false;
+        })
+        return isContains;
+    }
 }
