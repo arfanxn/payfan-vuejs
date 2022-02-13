@@ -50,17 +50,62 @@
                 </div>
             </div>
         </form>
+
+        <div class="d-flex mx-1">
+            <div
+                v-if="state.selectedFilters.status"
+                class="rounded-pill filter-tag-oval px-3 d-flex justify-content-between me-2"
+            >
+                <small>{{ state.selectedFilters.status }}</small>
+                <small
+                    @click="closeFilterTag(`status`)"
+                    class="ms-3 mb-auto p-0 cursor-pointer fw-bold"
+                >X</small>
+            </div>
+            <div
+                v-if="state.selectedFilters.transaction_type"
+                class="rounded-pill filter-tag-oval px-3 d-flex justify-content-between"
+            >
+                <small>{{ state.selectedFilters.transaction_type }}</small>
+                <small
+                    @click="closeFilterTag(`transaction_type`)"
+                    class="ms-3 mb-auto p-0 cursor-pointer fw-bold"
+                >X</small>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { defineComponent } from "@vue/runtime-core"
+import { defineComponent, reactive, computed } from "@vue/runtime-core"
+import { useStore } from "vuex";
 import DropdownFiltersActivity from "./DropdownFiltersActivity.vue"
+const store = useStore();
 defineComponent({ DropdownFiltersActivity });
+const state = reactive({
+    selectedFilters: {
+        status: computed(() => store.state['activity'].filter_by.status),
+        transaction_type: computed(() => store.state['activity'].filter_by.transaction_type),
+    }
+})
 
+function closeFilterTag(filterBy) {
+    switch (filterBy.toLowerCase()) {
+        case "transaction_type":
+            store.commit("activity/updateFilterBy", { transaction_type: null });
+            break;
+        default:
+            store.commit("activity/updateFilterBy", { status: null });
+            break;
+    }
+}
 </script>
 
 <style scoped>
+.filter-tag-oval {
+    background-color: #f8f8f8 !important;
+    border: 1px solid #0070ba;
+}
 .icon-search {
     width: 25px;
     height: 25px;
