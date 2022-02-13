@@ -12,11 +12,13 @@
 
                     <div class="text-center wrapper-filter-menu-lists">
                         <a
-                            v-for="(filterBy, index) in state.filters_option.filter_by_status"
+                            @click.prevent="filterByStatus($event)"
+                            v-for="(filterBy, index) in state.filter_options.status"
                             :key="index"
-                            class="border border-navy d-flex justify-content-center rounded-pill py-1 cursor-pointer text-dark mb-2"
+                            class="option-filter-by-tx-type text-center border border-navy d-flex w-100 rounded-pill cursor-pointer text-dark mb-2 overflow-hidden"
+                            :class="{ 'option-filter-clicked': state.selectedFilters.status == filterBy }"
                         >
-                            <span class="my-auto">{{ filterBy.name }}</span>
+                            <span class="d-block w-100 h-100 text-center py-1">{{ filterBy }}</span>
                         </a>
                     </div>
                 </div>
@@ -28,11 +30,13 @@
 
                     <div class="text-center wrapper-filter-menu-lists">
                         <a
-                            v-for="(filterBy, index) in state.filters_option.filter_by_transaction_type"
+                            @click.prevent="filterByTxType($event)"
+                            v-for="(filterBy, index) in state.filter_options.transaction_type"
                             :key="index"
-                            class="border border-navy d-flex justify-content-center rounded-pill py-1 cursor-pointer text-dark mb-2"
+                            class="option-filter-by-tx-type text-center border border-navy d-flex w-100 rounded-pill cursor-pointer text-dark mb-2 overflow-hidden"
+                            :class="{ 'option-filter-clicked': state.selectedFilters.transaction_type == filterBy }"
                         >
-                            <span class="my-auto">{{ filterBy.name }}</span>
+                            <span class="d-block w-100 h-100 text-center py-1">{{ filterBy }}</span>
                         </a>
                     </div>
                 </div>
@@ -41,25 +45,37 @@
     </main>
 </template>
 
-<script setup>
-import { reactive } from 'vue';
-const state = reactive({
-    filters_option: {
-        filter_by_status: [
-            { name: "Completed" }, { name: "Pending" }, { name: "Failed" }
-        ],
-        filter_by_transaction_type: [
-            { name: "Send" }, { name: "Reqeust" }, { name: "Received" }
-        ]
-    }
-});
-state;
 
+<script setup>
+import { useStore } from 'vuex';
+import { computed, reactive } from 'vue';
+const store = useStore();
+
+const state = reactive({
+    selectedFilters: {
+        status: computed(() => store.state['activity'].filter_by.status),
+        transaction_type: computed(() => store.state['activity'].filter_by.transaction_type),
+    },
+    filter_options: store.state["activity"].filter_options
+});
+
+function filterByStatus(event) {
+    store.commit("activity/updateFilterBy", { status: event.target.childNodes[0].textContent });
+}
+function filterByTxType(event) {
+    store.commit("activity/updateFilterBy",
+        { transaction_type: event.target.childNodes[0].textContent });
+}
 </script>
 
 <style scoped>
 .wrapper-filter-menu-lists a:hover {
-    background-color: rgba(0, 48, 135, 0.85);
+    background-color: rgba(0, 48, 135, 0.85) !important;
+    color: #fff !important;
+}
+
+.option-filter-clicked {
+    background-color: rgba(0, 48, 135, 1) !important;
     color: #fff !important;
 }
 
