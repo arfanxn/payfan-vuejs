@@ -26,26 +26,9 @@ const routes = [{
       guest: true
     }
   },
-  // {
-  //   path: "/login",
-  //   component: Auth,
-  //   meta: {
-  //     guest: true
-  //   }
-  // },
-  // {
-  //   path: "/register",
-  //   component: Auth,
-  //   meta: {
-  //     guest: true
-  //   }
-  // },
   {
     path: '/transfer/:menu?',
     name: 'Send And Request',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import( /* webpackChunkName: "about" */ '../views/SendAndRequest.vue')
   },
   {
@@ -60,6 +43,11 @@ const routes = [{
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import( /* webpackChunkName: "about" */ '../views/Help.vue')
+  },
+  {
+    path: "/account/settings/:menu?",
+    name: "Account Settings",
+    component: () => import("@/views/Settings.vue"),
   },
   {
     path: '/test/view',
