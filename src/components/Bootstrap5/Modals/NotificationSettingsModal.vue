@@ -37,22 +37,40 @@
                             >
                                 <span>Make a payment</span>
 
-                                <a class="cursor-pointer hover-underline text-navy fw-bold">On</a>
+                                <div class="form-check form-switch">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="flexSwitchCheckChecked"
+                                        checked
+                                    />
+                                </div>
                             </div>
                             <div
                                 class="cursor-pointer py-4 border-bottom border-secondary d-flex justify-content-between"
                             >
                                 <span>Request a payment</span>
-                                <a
-                                    class="cursor-pointer hover-underline text-navy fw-bold ps-2 d-block"
-                                >Off</a>
+                                <div class="form-check form-switch">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="flexSwitchCheckChecked"
+                                    />
+                                </div>
                             </div>
                             <div
                                 class="cursor-pointer py-4 border-bottom border-secondary d-flex justify-content-between"
                             >
                                 <span>Receive a payment</span>
 
-                                <a class="cursor-pointer hover-underline text-navy fw-bold">Off</a>
+                                <div class="form-check form-switch">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="flexSwitchCheckChecked"
+                                        checked
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
