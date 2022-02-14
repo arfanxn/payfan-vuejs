@@ -19,7 +19,7 @@
             >
                 <h5>Notifications</h5>
                 <div class="d-flex justify-content-between">
-                    <span class="text-secondary">Notifications preference settings</span>
+                    <span class="text-secondary">Email notifications preference settings</span>
                     <a class="cursor-pointer hover-underline text-dark fw-bold">
                         <ChevronRightIcon width="18" height="18" />
                     </a>
