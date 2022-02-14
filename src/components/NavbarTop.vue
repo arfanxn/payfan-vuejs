@@ -2,7 +2,12 @@
     <teleport to="#navbar-top">
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-navy">
             <div class="container-md navbar-custom-container">
-                <a class="navbar-brand fw-bold fs-3" href="/">{{ Helpers.ENV("APP_TITLE") }}</a>
+                <router-link
+                    class="navbar-brand fw-bold fs-3"
+                    active-class="none"
+                    exact-active-class="none"
+                    to="/"
+                >{{ Helpers.ENV("APP_TITLE") }}</router-link>
                 <button
                     class="navbar-toggler"
                     type="button"
