@@ -77,6 +77,8 @@ router.beforeEach((to, from, next) => {
     `${process.env.VUE_APP_TITLE || "Default"}: ${docTitle}` :
     `${process.env.VUE_APP_TITLE || "Default"}`;
 
+  window.scrollTo(0, 0);
+
   if (to.name && to.name.toLowerCase() == "auth") {
     AuthService.check().then(response => {
       response.status != 401 ? window.location = '/' : null;
