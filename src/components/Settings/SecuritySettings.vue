@@ -1,6 +1,6 @@
 <template>
     <div class="ps-5 pe-4 pb-3">
-        <div class="cursor-pointer py-4 border-bottom border-secondary">
+        <div @click="changePassword" class="cursor-pointer py-4 border-bottom border-secondary">
             <h5>Password</h5>
             <div class="d-flex justify-content-between">
                 <span class="text-secondary">Create or update your password.</span>
@@ -13,28 +13,97 @@
                 <span
                     class="text-secondary"
                 >Add an extra layer of security to your account by using a one-time security code in addition to your password each time you log in.</span>
-                <a class="cursor-pointer hover-underline text-navy fw-bold ps-2 d-block">Set&nbsp;up</a>
+                <div class="form-check form-switch ms-3">
+                    <input
+                        @click.prevent="enableOrDisable2FA"
+                        class="form-check-input"
+                        type="checkbox"
+                        id="swicthEnableOrDisable2FA"
+                    />
+                </div>
             </div>
         </div>
-        <div class="cursor-pointer py-4 border-bottom border-secondary">
+        <div @click="securityQuestion" class="cursor-pointer py-4 border-bottom border-secondary">
             <h5>Security questions</h5>
             <div class="d-flex justify-content-between">
                 <span
                     class="text-secondary"
                 >For your protection, please choose 2 security questions. This way, we can verify it’s really you if there’s ever a doubt.</span>
-                <a class="cursor-pointer hover-underline text-navy fw-bold">Create</a>
+                <a class="cursor-pointer hover-underline text-navy fw-bold ms-3">Create</a>
             </div>
         </div>
-        <div class="cursor-pointer py-4 border-bottom border-secondary">
+        <!-- <div
+            @click="customerServicePINSetting"
+            class="cursor-pointer py-4 border-bottom border-secondary"
+        >
             <h5>Customer service PIN</h5>
             <div class="d-flex justify-content-between">
                 <span class="text-secondary">Customer service PIN.</span>
                 <a class="cursor-pointer hover-underline text-navy fw-bold">Update</a>
             </div>
-        </div>
+        </div>-->
+
+        <ChangePasswordModal />
+        <SecurityQuestionModal />
+        <CustomerServicePINSettingModal />
     </div>
 </template>
 
 <script setup>
+import { defineComponent } from "vue";
+import ChangePasswordModal from "@/components/Bootstrap5/Modals/ChangePasswordModal.vue";
+import SecurityQuestionModal from "@/components/Bootstrap5/Modals/SecurityQuestionModal.vue";
+import CustomerServicePINSettingModal from
+    "@/components/Bootstrap5/Modals/CustomerServicePINSettingModal.vue";
+import Helpers from "../../Helpers";
+import Swal from "sweetalert2";
+defineComponent({ ChangePasswordModal, SecurityQuestionModal, CustomerServicePINSettingModal });
+
+// function customerServicePINSetting() {
+//     Helpers.triggerBSModal(`#btn-modal-customer-service-pin-setting`);
+// }
+
+function securityQuestion(event) {
+    event;
+    Helpers.triggerBSModal(`#btn-modal-security-question`);
+}
+
+function enableOrDisable2FA(event) {
+    // make sure the switch isn't getting clicked 
+    event.target.checked = !event.target.checked;
+
+    //  do the operations 
+    if (event.target.checked == true) {
+        Swal.fire({
+            icon: "warning",
+            title: "Disable 2-step verification ?",
+            showCancelButton: true,
+            confirmButtonText: "Disable",
+
+        }).then(result => {
+            if (result.isConfirmed) {
+                event.target.checked = false;
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: "info",
+            title: "Enable 2-step verification ?",
+            html: `<small class="text-secondary">Each time you log in, you’ll use a one-time code in addition to your password. Choose how you’ll get your code.</small>`,
+            showCancelButton: true,
+            confirmButtonText: "Enable",
+
+        }).then(result => {
+            if (result.isConfirmed) {
+                event.target.checked = true;
+            }
+        });
+    }
+}
+
+function changePassword() {
+    Helpers.triggerBSModal(`#btn-modal-change-password`);
+}
+
 
 </script>
