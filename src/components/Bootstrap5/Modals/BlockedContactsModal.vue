@@ -58,11 +58,9 @@
 </template>
 
 <script setup>
-import { defineComponent } from "@vue/runtime-core";
-import StarIcon from "@/components/Icons/StarIcon.vue";
-
-defineComponent({ StarIcon })
-
+function unblockContact(event) {
+    event;
+}
 </script>
 
 <style scoped>
