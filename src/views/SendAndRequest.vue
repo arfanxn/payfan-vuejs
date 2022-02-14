@@ -20,10 +20,9 @@ import SendPaymentTo from '../components/SendAndRequest/SendPaymentTo.vue';
 import RequestPaymentFrom from '../components/SendAndRequest/RequestPaymentFrom.vue';
 import RightSideMenu from '../components/RightSideMenu.vue';
 import Contacts from "@/components/SendAndRequest/Contacts.vue";
-
+import { useRoute } from 'vue-router';
 import { defineComponent, onMounted, onBeforeMount, reactive, onUpdated } from 'vue';
-// import { useRoute } from 'vue-router';
-// const route = useRoute();
+const route = useRoute();
 const state = reactive({
     currentMenu: "Send Money",
     rightSideMenu: [{
@@ -41,6 +40,8 @@ onBeforeMount(() => {
     changeMenu(state.rightSideMenu[0].name);
 });
 onMounted(() => {
+    (state.rightSideMenu).forEach(elem => elem.link.toLowerCase() == route.path.toLowerCase()
+        ? state.currentMenu = elem.name : null);
     // keep the nav link active after click menus (components)
     document.getElementById("NavLinkSendandRequest").classList.add("router-link-active")
     document.body.style.height = "1000px";
@@ -53,17 +54,5 @@ onUpdated(() => {
 
 function changeMenu(menu) {
     state.currentMenu = menu.name;
-    const menuNames = state.rightSideMenu.map(elem => elem.name);
-
-    switch (menu) {
-        case menuNames[1]:
-            state.currentMenu = menuNames[1];
-            break;
-        case menuNames[2]:
-            state.currentMenu = menuNames[2];
-            break;
-        case menuNames[0]:
-            state.currentMenu = menuNames[0];
-    }
 }
 </script>

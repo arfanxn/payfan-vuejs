@@ -15,12 +15,15 @@
 </template>
 
 <script setup>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, onMounted } from 'vue';
 import NavbarTop from '../components/NavbarTop.vue';
 import RightSideMenu from '../components/RightSideMenu.vue';
 import AccountSettings from "@/components/Settings/AccountSettings.vue";
 import SecuritySettings from "@/components/Settings/SecuritySettings.vue";
 import PrivacyAndNotifications from '../components/Settings/PrivacyAndNotifications.vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
+
 defineComponent({
     NavbarTop, RightSideMenu, AccountSettings,
     SecuritySettings, PrivacyAndNotifications
@@ -36,22 +39,14 @@ const state = reactive({
     }]
 });
 
+onMounted(() => {
+    (state.rightSideMenu).forEach(elem => elem.link.toLowerCase() == route.path.toLowerCase()
+        ? state.currentMenu = elem.name : null);
+});
+
 
 
 function changeMenu(menu) {
     state.currentMenu = menu.name;
-
-    // const menuNames = state.rightSideMenu.map(elem => elem.name);
-
-    // switch (menu) {
-    //     case menuNames[1]:
-    //         state.currentMenu = menuNames[1];
-    //         break;
-    //     case menuNames[2]:
-    //         state.currentMenu = menuNames[2];
-    //         break;
-    //     case menuNames[0]:
-    //         state.currentMenu = menuNames[0];
-    // }
 }
 </script>
