@@ -39,6 +39,7 @@
 
                                 <div class="form-check form-switch">
                                     <input
+                                        disabled
                                         class="form-check-input"
                                         type="checkbox"
                                         id="flexSwitchCheckChecked"
@@ -79,12 +80,3 @@
         </div>
     </teleport>
 </template>
-
-<script setup>
-import { defineComponent } from "@vue/runtime-core";
-import StarIcon from "@/components/Icons/StarIcon.vue";
-
-defineComponent({ StarIcon })
-
-</script>
-
