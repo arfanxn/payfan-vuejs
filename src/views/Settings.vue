@@ -32,7 +32,7 @@ const state = reactive({
     }, {
         name: "Security", link: "/account/settings/security"
     }, {
-        name: "Privacy & Notifications", link: "/account/settings/data-and-privacy"
+        name: "Privacy & Notifications", link: "/account/settings/privacy-and-notifications"
     }]
 });
 
