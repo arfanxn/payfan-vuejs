@@ -31,13 +31,18 @@
                     </div>
                     <div class="navbar-nav">
                         <DropdownNotifications />
-                        <a href="#" class="nav-link fw-bold fs-6 d-flex">
+                        <router-link
+                            active-class="none"
+                            exact-active-class="none"
+                            to="/account/settings"
+                            class="cursor-pointer nav-link fw-bold fs-6 d-flex"
+                        >
                             <img
                                 class="nav-link-icon my-auto"
                                 src="../assets/icons/settings.png"
                                 alt="Settings"
                             />
-                        </a>
+                        </router-link>
                         <a
                             class="cursor-pointer nav-link fw-bold fs-6"
                             @click.prevent="handleLogout()"
