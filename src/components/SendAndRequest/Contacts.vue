@@ -38,9 +38,12 @@
             </div>
 
             <div class="d-flex justify-content-center mt-5">
-                <small
+                <router-link
+                    to="/account/settings/privacy-and-notifications"
                     class="fw-bold text-navy hover-underline cursor-pointer text-center"
-                >View blocked contacts</small>
+                >
+                    <small>View blocked contacts</small>
+                </router-link>
             </div>
         </div>
 
@@ -54,7 +57,6 @@ import ContactDetailModal from '../Bootstrap5/Modals/ContactDetailModal.vue';
 import { defineComponent } from '@vue/runtime-core';
 import Helpers from '../../Helpers';
 defineComponent({ StarIcon, ContactDetailModal })
-
 
 
 function contactDetail(data) {
