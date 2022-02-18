@@ -37,11 +37,17 @@
                                     class="form-label"
                                 >Confirm your current password</label>
                                 <input
+                                    v-model.lazy="state.current_password"
                                     type="password"
                                     class="form-control"
                                     placeholder="Current password"
                                     id="inputCurrentPassword"
                                 />
+                                <AlertError
+                                    class="mt-1"
+                                    @close="v$.$reset()"
+                                    :error="v$?.current_password?.$errors[0]?.$message"
+                                ></AlertError>
                             </div>
                             <div class="mt-4">
                                 <div
@@ -49,20 +55,34 @@
                                     class="form-text text-dark mb-2"
                                 >Enter your new password (Keep your account more secure. Don't use your name.)</div>
                                 <input
+                                    v-model.lazy="state.password"
                                     type="password"
-                                    class="form-control mb-3"
+                                    class="form-control"
                                     id="newPassword"
                                     placeholder="New password"
                                 />
+                                <AlertError
+                                    class="mt-1"
+                                    @close="v$.$reset()"
+                                    :error="v$?.password?.$errors[0]?.$message"
+                                ></AlertError>
+
                                 <input
+                                    v-model.lazy="state.password_confirmation"
                                     type="password"
-                                    class="form-control"
+                                    class="form-control mt-3"
                                     id="newPasswordConfirmation"
                                     placeholder="Confirm new password"
                                 />
+                                <AlertError
+                                    class="mt-1"
+                                    @close="v$.$reset()"
+                                    :error="v$?.password_confirmation?.$errors[0]?.$message"
+                                ></AlertError>
                             </div>
                             <button
-                                type="submit"
+                                @click.prevent="changePassword"
+                                type="button"
                                 class="btn btn-primary fw-bold rounded-pill text-white w-100 mt-4"
                             >Submit</button>
                         </form>
@@ -74,6 +94,56 @@
 </template>
 
 <script setup>
+import AlertError from '../../Errors/AlertError.vue';
+import useVuelidate from "@vuelidate/core";
+import { helpers, minLength, required } from "@vuelidate/validators";
+import { reactive, defineComponent } from "vue";
+import AuthService from "../../../services/AuthService";
+import UserService from '../../../services/UserService';
+import SwalPlugin from '../../../plugins/SwalPlugin';
+import ValidatorService from '../../../services/ValidatorService';
+import Swal from 'sweetalert2';
+defineComponent({
+    AlertError
+});
 
+const state = reactive({
+    current_password: null,
+    password: null,
+    password_confirmation: null,
+});
+
+const v$ = useVuelidate({ // rules
+    current_password: {
+        required, $lazy: true,
+        sameAsCurrentPassword: helpers.withMessage("Wrong password!", helpers.withAsync(ValidatorService.passwordCheck))
+    },
+    password: { required, minLength: minLength(8) },
+    password_confirmation: {
+        required, minLength: minLength(8),
+        sameAsPassword:
+            helpers.withMessage("Password must match!", () => state.password == state.password_confirmation)
+    }
+}, state)
+
+async function changePassword() {
+    const validator = await v$.value.$validate();
+    if (!validator) return;
+
+    AuthService.createVerificationCode().then(() => {
+        document.querySelector(".btn-close").click(); // close the modal and then open the verify modal 
+        SwalPlugin.verificationCode("Verify to update password", verificationCode => {
+            UserService.updatePassword(state.current_password, state.password, state.password_confirmation, verificationCode)
+                .then(r => {
+                    if (r.status == 200) {
+                        SwalPlugin.autoCloseAlert("Password updated successfully", null, "info", 1000);
+                    } else if (ValidatorService.statusTextIsVerifyCodeMiddleware(r.statusText)) {
+                        if ("verification_code_error_message" in r.data)
+                            Swal.showValidationMessage(`${r.data.verification_code_error_message}`);
+                    }
+                });
+        })
+    });
+}
 
 </script>
