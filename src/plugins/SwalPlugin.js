@@ -64,7 +64,10 @@ export default class SwalPlugin {
                 btnResend.addEventListener("click", async () => {
                     let response;
 
-                    if (typeof resendCallbackOrObjectOrEmail == "function") {
+                    if (resendCallbackOrObjectOrEmail == null) {
+                        await AuthService.createVerificationCode();
+                        return;
+                    } else if (typeof resendCallbackOrObjectOrEmail == "function") {
                         resendCallbackOrObjectOrEmail();
                     } else if (typeof resendCallbackOrObjectOrEmail == "object") {
                         response = await AuthService.createVerificationCode(resendCallbackOrObjectOrEmail.email);
@@ -125,11 +128,12 @@ export default class SwalPlugin {
         return Swal;
     }
 
-    static async autoCloseAlert(title, html, timer = 2000) {
+    static async autoCloseAlert(title, html = null, icon, timer = 2000) {
         return await Swal.fire({
             title,
             html,
             timer,
+            icon,
             timerProgressBar: true,
             allowOutsideClick: false,
             allowEscapeKey: false,

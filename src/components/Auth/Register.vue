@@ -121,7 +121,7 @@ async function handleRegister() {
                 verificationCode).then(r => {
                     if (r.status == 201) {
                         SwalPlugin.autoCloseAlert('Account verified successfully',
-                            '<h5>Please wait a few seconds, we are redirecting you to your Dashboard.</h5>', 2000)
+                            '<h5>Please wait a few seconds, we are redirecting you to your Dashboard.</h5>', "info", 2000)
                             .then(result => {
                                 if (result.dismiss) {
                                     router.go('/');
