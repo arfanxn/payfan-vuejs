@@ -53,11 +53,9 @@
 import { defineComponent } from "vue";
 import ChangePasswordModal from "@/components/Bootstrap5/Modals/ChangePasswordModal.vue";
 import SecurityQuestionModal from "@/components/Bootstrap5/Modals/SecurityQuestionModal.vue";
-import CustomerServicePINSettingModal from
-    "@/components/Bootstrap5/Modals/CustomerServicePINSettingModal.vue";
 import Helpers from "../../Helpers";
 import Swal from "sweetalert2";
-defineComponent({ ChangePasswordModal, SecurityQuestionModal, CustomerServicePINSettingModal });
+defineComponent({ ChangePasswordModal, SecurityQuestionModal });
 
 // function customerServicePINSetting() {
 //     Helpers.triggerBSModal(`#btn-modal-customer-service-pin-setting`);
