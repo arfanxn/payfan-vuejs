@@ -3,9 +3,15 @@
         <NavbarTop />
         <div class="row p-0 m-0">
             <div class="col-md-8 bg-white">
-                <SendPaymentTo v-if="state.currentMenu == state.rightSideMenu[0].name" />
-                <RequestPaymentFrom v-if="state.currentMenu == state.rightSideMenu[1].name" />
-                <Contacts v-if="state.currentMenu == state.rightSideMenu[2].name" />
+                <keep-alive>
+                    <SendPaymentTo v-if="state.currentMenu == state.rightSideMenu[0].name" />
+                </keep-alive>
+                <keep-alive>
+                    <RequestPaymentFrom v-if="state.currentMenu == state.rightSideMenu[1].name" />
+                </keep-alive>
+                <keep-alive>
+                    <Contacts v-if="state.currentMenu == state.rightSideMenu[2].name" />
+                </keep-alive>
             </div>
             <div class="col-md-4">
                 <RightSideMenu :menus="state.rightSideMenu" @menuClicked="changeMenu" />
