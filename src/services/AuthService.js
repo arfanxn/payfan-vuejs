@@ -29,7 +29,7 @@ export default class AuthService {
         }
     }
 
-    static async createVerificationCode(email) {
+    static async createVerificationCode(email = null) {
         try {
             const response = await axios.post("/api/user/verification-code/create", {
                 email,
