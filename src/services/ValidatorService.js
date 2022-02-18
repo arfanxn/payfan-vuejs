@@ -30,4 +30,10 @@ export default class ValidatorService {
             return responseShouldBoolean ? false : error.response || error;
         }
     }
+
+    static isImage(img) {
+        const allowedExts = ['.jpg', '.jpeg', '.bmp', '.gif', '.png'];
+        return allowedExts.some(el => img.endsWith(el));
+    }
+
 }
