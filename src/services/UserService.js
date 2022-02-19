@@ -37,4 +37,26 @@ export default class UserService {
             return error.response;
         }
     }
+
+    static async updateProfilePict(formDataOrBLOB) {
+        try {
+            console.log(formDataOrBLOB instanceof FormData);
+            let response;
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            if (formDataOrBLOB instanceof FormData) {
+                response = await axios.post("/api/user/profile-pict/self", formDataOrBLOB, config);
+            } else {
+                response = await axios.post("/api/user/profile-pict/self", {
+                    profile_pict: formDataOrBLOB
+                }, config);
+            }
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
 }
