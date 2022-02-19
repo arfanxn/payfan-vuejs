@@ -40,25 +40,38 @@
                             />
                         </div>
 
-                        <form v-on:submit.prevent>
+                        <form v-on:submit.prevent class="mt-4" enctype="multipart/form-data">
                             <button
+                                v-show="!state.form.values.profile_pict"
                                 @click="triggerInputProfilePict()"
                                 type="buttton"
-                                class="btn btn-add-ur-photo text-white rounded-pill mt-4 py-2 w-75"
+                                class="btn btn-add-ur-photo text-white rounded-pill py-2 w-75"
                             >Add Your Photo</button>
+                            <div class v-show="state.form.values.profile_pict">
+                                <button
+                                    @click="triggerInputProfilePict()"
+                                    class="btn btn-add-ur-photo text-white rounded-pill py-2 px-3"
+                                >Change</button>
+                                <span class="mx-1"></span>
+                                <button
+                                    @click="uploadProfilePict()"
+                                    class="btn btn-add-ur-photo text-white rounded-pill py-2 px-3"
+                                >Save</button>
+                            </div>
                             <input
                                 @change="changeProfilePict"
                                 class="d-none"
                                 type="file"
                                 name
                                 id="input-profile-pict"
+                                accept="image/*"
                             />
                         </form>
 
                         <p
-                            v-if="state.input_error_profile_pict"
+                            v-if="state.form.errors.profile_pict"
                             class="mt-4"
-                        >{{ state.input_error_profile_pict }}</p>
+                        >{{ state.form.errors.profile_pict }}</p>
                     </div>
                 </div>
             </div>
@@ -69,9 +82,13 @@
 <script setup>
 import { reactive } from "vue-demi";
 import FileService from "../../../services/FileService";
+import UserService from "../../../services/UserService";
 const state = reactive({
-    input_error_profile_pict: null
-})
+    form: {
+        values: { profile_pict: null },
+        errors: { profile_pict: null }
+    }
+});
 
 function triggerInputProfilePict() {
     document.querySelector("#input-profile-pict").click();
@@ -85,13 +102,27 @@ function changeProfilePict(event) {
     if (!files.length) return;
 
     FileService.resizeImage({ file: files[0], maxSize: 500 }).then(blob => {
+        state.form.values.profile_pict = blob;
+        state.form.errors.profile_pict = null;
         let image = URL.createObjectURL(blob);
         preview.src = image;
     }, () => {
-        state.input_error_profile_pict = `Make sure your photo is a JPG, JPEG, GIF, PNG, or BMP.`;
+        state.form.values.profile_pict = null;
+        state.form.errors.profile_pict = `Make sure your photo is a JPG, JPEG, GIF, PNG, or BMP.`;
         event.target.files = [];
         preview.src = previousImgSrc;
-        preview.src = null;
+    });
+}
+
+function uploadProfilePict() {
+    let formData = new FormData();
+    formData.append("profile_pict", state.form.values.profile_pict);
+
+    UserService.updateProfilePict(formData).then(r => {
+        if (r.status == 200) {
+            //  still on progress
+            // window.location.reload();
+        }
     });
 }
 
