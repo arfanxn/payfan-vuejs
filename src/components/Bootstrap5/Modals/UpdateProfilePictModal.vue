@@ -81,6 +81,7 @@
 
 <script setup>
 import { reactive } from "vue-demi";
+import SwalPlugin from "../../../plugins/SwalPlugin";
 import FileService from "../../../services/FileService";
 import UserService from "../../../services/UserService";
 const state = reactive({
@@ -120,8 +121,12 @@ function uploadProfilePict() {
 
     UserService.updateProfilePict(formData).then(r => {
         if (r.status == 200) {
-            //  still on progress
-            // window.location.reload();
+            SwalPlugin.autoCloseAlert(r.data.message, null, "success", 2000).then(result => {
+                if (result.isDismissed || result.isConfirmed)
+                    window.location.reload();
+            })
+        } else if ("error_message" in r.data) {
+            SwalPlugin.alert({ title: r.data.error_message, icon: "warning" });
         }
     });
 }
