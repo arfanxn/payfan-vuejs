@@ -19,6 +19,20 @@ export default class ValidatorService {
         }
     }
 
+    static async isEmailTakenExceptSelf(email, responseShouldBoolean = true) {
+        try {
+            console.log(email);
+            if (!email) throw Error("Email is required");
+
+            const response = await axios.post('/api/validator/users/email/is-taken/except/self', {
+                email
+            });
+            return responseShouldBoolean ? response.data.valid : response;
+        } catch (error) {
+            return responseShouldBoolean ? false : error.response || error;
+        }
+    }
+
     static async passwordCheck(password, responseShouldBoolean = true) {
         try {
             if (!password) throw Error("Password is required");
