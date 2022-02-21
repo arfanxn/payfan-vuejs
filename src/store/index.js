@@ -2,6 +2,7 @@ import {
   createStore
 } from 'vuex'
 import activity from './modules/activity.js';
+import user from './modules/user.js';
 
 export default createStore({
   state: {},
@@ -9,5 +10,6 @@ export default createStore({
   actions: {},
   modules: {
     activity,
+    user,
   }
 })
