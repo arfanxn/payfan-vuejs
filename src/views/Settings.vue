@@ -3,9 +3,17 @@
         <NavbarTop />
         <div class="row p-0 m-0">
             <div class="col-md-8 bg-white p-0">
-                <AccountSettings v-if="state.currentMenu == state.rightSideMenu[0].name" />
-                <SecuritySettings v-if="state.currentMenu == state.rightSideMenu[1].name" />
-                <PrivacyAndNotifications v-if="state.currentMenu == state.rightSideMenu[2].name" />
+                <keep-alive>
+                    <AccountSettings v-if="state.currentMenu == state.rightSideMenu[0].name" />
+                </keep-alive>
+                <keep-alive>
+                    <SecuritySettings v-if="state.currentMenu == state.rightSideMenu[1].name" />
+                </keep-alive>
+                <keep-alive>
+                    <PrivacyAndNotifications
+                        v-if="state.currentMenu == state.rightSideMenu[2].name"
+                    />
+                </keep-alive>
             </div>
             <div class="col-md-4">
                 <RightSideMenu :menus="state.rightSideMenu" @menuClicked="changeMenu" />
@@ -22,7 +30,9 @@ import AccountSettings from "@/components/Settings/AccountSettings.vue";
 import SecuritySettings from "@/components/Settings/SecuritySettings.vue";
 import PrivacyAndNotifications from '../components/Settings/PrivacyAndNotifications.vue';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 const route = useRoute();
+const store = useStore();
 
 defineComponent({
     NavbarTop, RightSideMenu, AccountSettings,
@@ -42,6 +52,7 @@ const state = reactive({
 onMounted(() => {
     (state.rightSideMenu).forEach(elem => elem.link.toLowerCase() == route.path.toLowerCase()
         ? state.currentMenu = elem.name : null);
+    store.dispatch("user/userSelf").then(r => console.log(r.data));
 });
 
 
