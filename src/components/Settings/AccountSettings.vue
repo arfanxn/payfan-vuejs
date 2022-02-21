@@ -5,10 +5,10 @@
             <div class="d-flex mt-3">
                 <div class="text-center pe-3">
                     <img
-                        v-if="state.user.self.profile_pict"
+                        v-if="userStore.self.profile_pict"
                         @click="updateProfilePict"
                         class="rounded-circle update-profile-pict-img mb-2"
-                        :src="state.user.self.profile_pict"
+                        :src="userStore.self.profile_pict"
                     />
                     <small
                         @click="updateProfilePict"
@@ -16,12 +16,12 @@
                     >Update&nbsp;Photo</small>
                 </div>
                 <div class="w-100">
-                    <h5 v-if="!state.current.isChangeName">{{ state.user.self.name }}</h5>
+                    <h5 v-if="!state.current.isChangeName">{{ userStore.self.name }}</h5>
                     <input
                         v-else
                         @blur="saveChangeName"
                         placeholder="Your new name"
-                        v-model="state.form.name"
+                        v-model="userStore.self.name"
                         class="form-control"
                         type="text"
                     />
@@ -31,7 +31,7 @@
                         :error="v$?.name?.$errors[0]?.$message"
                     ></AlertError>
                     <div class="d-flex justify-content-between">
-                        <span class="text-secondary">Joined in 2020</span>
+                        <span class="text-secondary">Joined at {{ userStore['self/joined_at'] }}</span>
                         <a
                             v-show="!state.current.isChangeName"
                             @click.prevent="state.current.isChangeName = true"
@@ -52,13 +52,13 @@
         <div class="pt-3 px-4 pb-4">
             <h5>Email</h5>
             <div class="d-flex mt-3 justify-content-between mb-2">
-                <span v-if="!state.current.isChangeEmail">{{ state.form.email }}</span>
+                <span v-if="!state.current.isChangeEmail">{{ userStore.self.email }}</span>
                 <div class="d-flex flex-column w-100">
                     <input
                         v-if="state.current.isChangeEmail"
                         @blur="saveChangeEmail"
                         placeholder="Your new email"
-                        v-model.lazy="state.form.email"
+                        v-model.lazy="userStore.self.email"
                         class="form-control"
                         type="text"
                     />
@@ -95,23 +95,18 @@ import useVuelidate from "@vuelidate/core";
 import { required, email, minLength, helpers } from '@vuelidate/validators';
 import { computed, defineComponent, reactive } from "vue";
 import AlertError from "../Errors/AlertError.vue";
-import ValidatorService from "@/services/ValidatorService";
+import ValidatorService from "../../services/ValidatorService";
 import SwalPlugin from "../../plugins/SwalPlugin";
 import AuthService from "../../services/AuthService";
 import UserService from "../../services/UserService";
 import UpdateProfilePictModal from "../Bootstrap5/Modals/UpdateProfilePictModal.vue";
 import Swal from "sweetalert2";
 import Helpers from "../../Helpers";
-import { useStore } from "vuex";
-defineComponent({ AlertError, UpdateProfilePictModal })
-const store = useStore();
+import { useUserStore } from "@/stores/UserStore.js";
+defineComponent({ AlertError, UpdateProfilePictModal });
+const userStore = useUserStore();
 
 const state = reactive({
-    user: { self: computed(() => store.state["user"].userSelf) },
-    form: {
-        name: computed(() => store.state["user"].userSelf.name),
-        email: computed(() => store.state["user"].userSelf.email),
-    },
     current: {
         isChangeName: false,
         isChangeEmail: false,
@@ -121,9 +116,9 @@ const v$ = useVuelidate({ // rules
     name: { required, minLength: minLength(2) },
     email: {
         required, email, $lazy: true, isUnique: helpers.withMessage("Email has been taken!",
-            helpers.withAsync(ValidatorService.isEmailTaken))
+            helpers.withAsync(ValidatorService.isEmailTakenExceptSelf))
     }
-}, state.form);
+}, computed(() => userStore.self));
 
 function updateProfilePict() {
     Helpers.triggerBSModal("#btn-modal-update-profile-pict");
@@ -133,9 +128,9 @@ async function saveChangeName() {
     const validator = await v$.value.$validate(); // validate
     if (!validator) return;
 
-    UserService.updateFullname(state.form.name).then(r => {
+    UserService.updateFullname(userStore.self.name).then(r => {
         if (r.status == 200) {
-            SwalPlugin.autoCloseAlert("Name updated successfully", null, "info", 1000);
+            SwalPlugin.autoCloseAlert("Name updated successfully", null, "success", 1000);
         }
     });
 
@@ -150,17 +145,17 @@ async function saveChangeEmail() {
     // set cureently is change email to false again 
     state.current.isChangeEmail = false;
 
-    AuthService.createVerificationCode(state.form.email).then(() => {
+    AuthService.createVerificationCode(userStore.self.email).then(() => {
         SwalPlugin.verificationCode("Verify your new Email", verificationCode => {
-            UserService.updateEmail(state.form.email, verificationCode).then(r => {
+            UserService.updateEmail(userStore.self.email, verificationCode).then(r => {
                 if (r.status == 200) {
-                    SwalPlugin.autoCloseAlert("Email updated successfully", null, "info", 1000);
+                    SwalPlugin.autoCloseAlert("Email updated successfully", null, "success", 1000);
                 } else if (ValidatorService.statusTextIsVerifyCodeMiddleware(r.statusText)) {
                     if ("verification_code_error_message" in r.data)
                         Swal.showValidationMessage(`${r.data.verification_code_error_message}`);
                 }
             });
-        }, state.form.email);
+        }, userStore.self.email);
     })
 }
 </script>
