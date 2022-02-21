@@ -35,7 +35,7 @@
 
                         <div class="d-flex justify-content-center">
                             <img
-                                src="@/assets/icons/default-profile-pict.png"
+                                :src="userStore.self.profile_pict"
                                 class="profile-pict-preview rounded-circle overflow-hidden"
                             />
                         </div>
@@ -84,6 +84,9 @@ import { reactive } from "vue-demi";
 import SwalPlugin from "../../../plugins/SwalPlugin";
 import FileService from "../../../services/FileService";
 import UserService from "../../../services/UserService";
+import { useUserStore } from "../../../stores/UserStore";
+const userStore = useUserStore();
+
 const state = reactive({
     form: {
         values: { profile_pict: null },
