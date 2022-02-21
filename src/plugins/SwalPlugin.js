@@ -7,10 +7,15 @@ export default class SwalPlugin {
         return Swal.close();
     }
 
-    static async alert(title = Helpers.ENV("APP_TITLE"), html = "") {
+    static async alert({
+        title,
+        html,
+        icon
+    }) {
         return await Swal.fire({
-            title,
+            title: title ? title : Helpers.ENV("APP_TITLE"),
             html,
+            icon,
             allowEscapeKey: true,
             allowOutsideClick: true,
             closeOnClickOutside: true,
