@@ -53,20 +53,20 @@
 
         <div class="d-flex mx-1">
             <div
-                v-if="state.selectedFilters.status"
+                v-if="ActivitiesStore.filter.by.status"
                 class="rounded-pill filter-tag-oval px-3 d-flex justify-content-between me-2"
             >
-                <small>{{ state.selectedFilters.status }}</small>
+                <small>{{ ActivitiesStore.filter.by.status }}</small>
                 <small
                     @click="closeFilterTag(`status`)"
                     class="ms-3 mb-auto p-0 cursor-pointer fw-bold"
                 >X</small>
             </div>
             <div
-                v-if="state.selectedFilters.transaction_type"
+                v-if="ActivitiesStore.filter.by.transaction_type"
                 class="rounded-pill filter-tag-oval px-3 d-flex justify-content-between"
             >
-                <small>{{ state.selectedFilters.transaction_type }}</small>
+                <small>{{ ActivitiesStore.filter.by.transaction_type }}</small>
                 <small
                     @click="closeFilterTag(`transaction_type`)"
                     class="ms-3 mb-auto p-0 cursor-pointer fw-bold"
@@ -77,25 +77,21 @@
 </template>
 
 <script setup>
-import { defineComponent, reactive, computed } from "@vue/runtime-core"
-import { useStore } from "vuex";
+import { defineComponent } from "@vue/runtime-core"
 import DropdownFiltersActivity from "./DropdownFiltersActivity.vue"
-const store = useStore();
+import { useActivitiesStore } from "@/stores/ActivitiesStore.js";
+const ActivitiesStore = useActivitiesStore();
+
 defineComponent({ DropdownFiltersActivity });
-const state = reactive({
-    selectedFilters: {
-        status: computed(() => store.state['activity'].filter_by.status),
-        transaction_type: computed(() => store.state['activity'].filter_by.transaction_type),
-    }
-})
+
 
 function closeFilterTag(filterBy) {
     switch (filterBy.toLowerCase()) {
         case "transaction_type":
-            store.commit("activity/updateFilterBy", { transaction_type: null });
+            ActivitiesStore.updateFilterBy({ transaction_type: null });
             break;
         default:
-            store.commit("activity/updateFilterBy", { status: null });
+            ActivitiesStore.updateFilterBy({ status: null });
             break;
     }
 }

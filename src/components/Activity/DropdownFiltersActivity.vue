@@ -13,10 +13,10 @@
                     <div class="text-center wrapper-filter-menu-lists">
                         <a
                             @click.prevent="filterByStatus($event)"
-                            v-for="(filterBy, index) in state.filter_options.status"
+                            v-for="(filterBy, index) in ActivitiesStore.filter.option.status"
                             :key="index"
                             class="option-filter-by-tx-type text-center border border-navy d-flex w-100 rounded-pill cursor-pointer text-dark mb-2 overflow-hidden"
-                            :class="{ 'option-filter-clicked': state.selectedFilters.status == filterBy }"
+                            :class="{ 'option-filter-clicked': ActivitiesStore.filter.by.status == filterBy }"
                         >
                             <span class="d-block w-100 h-100 text-center py-1">{{ filterBy }}</span>
                         </a>
@@ -31,10 +31,10 @@
                     <div class="text-center wrapper-filter-menu-lists">
                         <a
                             @click.prevent="filterByTxType($event)"
-                            v-for="(filterBy, index) in state.filter_options.transaction_type"
+                            v-for="(filterBy, index) in ActivitiesStore.filter.option.transaction_type"
                             :key="index"
                             class="option-filter-by-tx-type text-center border border-navy d-flex w-100 rounded-pill cursor-pointer text-dark mb-2 overflow-hidden"
-                            :class="{ 'option-filter-clicked': state.selectedFilters.transaction_type == filterBy }"
+                            :class="{ 'option-filter-clicked': ActivitiesStore.filter.by.transaction_type == filterBy }"
                         >
                             <span class="d-block w-100 h-100 text-center py-1">{{ filterBy }}</span>
                         </a>
@@ -47,24 +47,14 @@
 
 
 <script setup>
-import { useStore } from 'vuex';
-import { computed, reactive } from 'vue';
-const store = useStore();
-
-const state = reactive({
-    selectedFilters: {
-        status: computed(() => store.state['activity'].filter_by.status),
-        transaction_type: computed(() => store.state['activity'].filter_by.transaction_type),
-    },
-    filter_options: store.state["activity"].filter_options
-});
+import { useActivitiesStore } from "@/stores/ActivitiesStore.js";
+const ActivitiesStore = useActivitiesStore();
 
 function filterByStatus(event) {
-    store.commit("activity/updateFilterBy", { status: event.target.childNodes[0].textContent });
+    ActivitiesStore.updateFilterBy({ status: event.target.childNodes[0].textContent })
 }
 function filterByTxType(event) {
-    store.commit("activity/updateFilterBy",
-        { transaction_type: event.target.childNodes[0].textContent });
+    ActivitiesStore.updateFilterBy({ transaction_type: event.target.childNodes[0].textContent })
 }
 </script>
 
