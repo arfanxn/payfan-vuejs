@@ -5,11 +5,6 @@ import {
 import Helpers from "../Helpers";
 
 export const useActivitiesStore = defineStore("activities", {
-    // getters: {
-    //     userCredentials(state) {
-    //     },
-    // },
-
     state: () => ({
         filter: {
             by: {
@@ -22,12 +17,7 @@ export const useActivitiesStore = defineStore("activities", {
             }
         }
     }),
-    // getters: {
-    //     "self/joined_at": (state) => {
-    //         let crtdAt = new Date(state.self.created_at);
-    //         return crtdAt.toLocaleDateString();
-    //     }
-    // },
+
     actions: {
         updateFilterBy({
             status,
