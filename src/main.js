@@ -5,8 +5,6 @@ import {
     createPinia
 } from 'pinia';
 import App from './App.vue';
-import axios from 'axios';
-// axios.defaults.headers.common["Authorization"] = ""; //Cookies.get("Authorization");
 
 const pinia = createPinia();
 import './registerServiceWorker';
