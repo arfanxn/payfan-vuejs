@@ -45,7 +45,6 @@
 
         <ChangePasswordModal />
         <SecurityQuestionModal />
-        <CustomerServicePINSettingModal />
     </div>
 </template>
 
