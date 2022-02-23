@@ -103,8 +103,7 @@ async function updateSQ() {
     const validator = await v$.value.$validate();
     if (!validator) return;
 
-    const isVerifCodeCreated = await AuthService.createVerificationCode();
-    if (isVerifCodeCreated) {
+    AuthService.createVerificationCode().then(() => {
         Helpers.closeBSModal("#btn-close-modal-security-question").then(() => {
             SwalPlugin.verificationCode("Verify to continue", verificationCode => UserService.updateSecurityQuestion(UserStore['self/settings']["security_question"], security_answer.value, verificationCode).then(r => {
                 if (r.status == 200) {
@@ -117,6 +116,8 @@ async function updateSQ() {
                 return r;
             }));
         });
-    }
+    });
+
+
 }
 </script>
