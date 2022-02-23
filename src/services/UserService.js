@@ -38,6 +38,20 @@ export default class UserService {
         }
     }
 
+    static async updateSecurityQuestion(question, answer, code) {
+        try {
+            const response = await axios.patch("/api/user/settings/security-question/self", {
+                security_question: question,
+                security_answer: answer,
+                code
+            })
+
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
     static async updateProfilePict(formDataOrBLOB) {
         try {
             console.log(formDataOrBLOB instanceof FormData);
