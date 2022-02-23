@@ -100,7 +100,6 @@ import SwalPlugin from "../../plugins/SwalPlugin";
 import AuthService from "../../services/AuthService";
 import UserService from "../../services/UserService";
 import UpdateProfilePictModal from "../Bootstrap5/Modals/UpdateProfilePictModal.vue";
-import Swal from "sweetalert2";
 import Helpers from "../../Helpers";
 import { useUserStore } from "@/stores/UserStore.js";
 defineComponent({ AlertError, UpdateProfilePictModal });
@@ -150,10 +149,8 @@ async function saveChangeEmail() {
             UserService.updateEmail(userStore.self.email, verificationCode).then(r => {
                 if (r.status == 200) {
                     SwalPlugin.autoCloseAlert("Email updated successfully", null, "success", 1000);
-                } else if (ValidatorService.statusTextIsVerifyCodeMiddleware(r.statusText)) {
-                    if ("verification_code_error_message" in r.data)
-                        Swal.showValidationMessage(`${r.data.verification_code_error_message}`);
                 }
+                return r;
             });
         }, userStore.self.email);
     })

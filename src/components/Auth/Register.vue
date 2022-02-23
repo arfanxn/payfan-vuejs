@@ -69,7 +69,6 @@
 <script setup>
 import AlertError from '../Errors/AlertError.vue';
 import AuthService from '../../services/AuthService';
-import Swal from 'sweetalert2';
 import { reactive, defineComponent } from 'vue';
 import router from '../../router';
 import SwalPlugin from '../../plugins/SwalPlugin';
@@ -127,10 +126,8 @@ async function handleRegister() {
                                     router.go('/');
                                 }
                             });
-                    } else if (ValidatorService.statusTextIsVerifyCodeMiddleware(r.statusText)) {
-                        if ("verification_code_error_message" in r.data)
-                            Swal.showValidationMessage(`${r.data.verification_code_error_message}`);
                     }
+                    return r;
                 });
         }, formValues.email);
     });

@@ -1,6 +1,7 @@
 import Swal from "sweetalert2";
 import Helpers from "../Helpers";
 import AuthService from "../services/AuthService";
+import ValidatorService from "../services/ValidatorService";
 
 export default class SwalPlugin {
     static close() {
@@ -61,7 +62,13 @@ export default class SwalPlugin {
                     }
 
                     if (typeof onConfirmCallback == "function") {
-                        onConfirmCallback(inputVerificationCode.value);
+                        onConfirmCallback(inputVerificationCode.value).then(response => {
+                            if (ValidatorService.statusTextIsVerifyCodeMiddleware(response.statusText)) {
+                                if ("verification_code_error_message" in response.data)
+                                    Swal.showValidationMessage(`${response.data.verification_code_error_message}`);
+                            }
+                            return response;
+                        });
                     }
                 });
 
@@ -70,8 +77,7 @@ export default class SwalPlugin {
                     let response;
 
                     if (resendCallbackOrObjectOrEmail == null) {
-                        await AuthService.createVerificationCode();
-                        return;
+                        response = await AuthService.createVerificationCode();
                     } else if (typeof resendCallbackOrObjectOrEmail == "function") {
                         resendCallbackOrObjectOrEmail();
                     } else if (typeof resendCallbackOrObjectOrEmail == "object") {
@@ -82,8 +88,8 @@ export default class SwalPlugin {
                         null; // still on progress build  
                     }
 
-                    if ((response.statusText == "OK" || response.status == 429) &&
-                        typeof resendCallbackOrObjectOrEmail != "function") {
+                    if ((response.statusText == "OK" || resendCallbackOrObjectOrEmail == null || "status" in response ||
+                            response.status == 429) && typeof resendCallbackOrObjectOrEmail != "function") {
                         btnResendTimerCountdown();
                     }
                 });

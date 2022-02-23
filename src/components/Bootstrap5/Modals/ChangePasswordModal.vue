@@ -14,13 +14,14 @@
             class="modal fade"
             id="modal-change-password"
             tabindex="-1"
-            aria-labelledby="modal-contant-detail"
+            aria-labelledby="modal-change-password"
             aria-hidden="true"
         >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header border-0">
                         <button
+                            id="btn-close-modal-change-password"
                             type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
@@ -102,7 +103,7 @@ import AuthService from "../../../services/AuthService";
 import UserService from '../../../services/UserService';
 import SwalPlugin from '../../../plugins/SwalPlugin';
 import ValidatorService from '../../../services/ValidatorService';
-import Swal from 'sweetalert2';
+import Helpers from '../../../Helpers';
 defineComponent({
     AlertError
 });
@@ -131,17 +132,16 @@ async function changePassword() {
     if (!validator) return;
 
     AuthService.createVerificationCode().then(() => {
-        document.querySelector(".btn-close").click(); // close the modal and then open the verify modal 
-        SwalPlugin.verificationCode("Verify to update password", verificationCode => {
-            UserService.updatePassword(state.current_password, state.password, state.password_confirmation, verificationCode)
-                .then(r => {
-                    if (r.status == 200) {
-                        SwalPlugin.autoCloseAlert("Password updated successfully", null, "info", 1000);
-                    } else if (ValidatorService.statusTextIsVerifyCodeMiddleware(r.statusText)) {
-                        if ("verification_code_error_message" in r.data)
-                            Swal.showValidationMessage(`${r.data.verification_code_error_message}`);
-                    }
-                });
+        Helpers.closeBSModal(`#btn-close-modal-change-password`).then(() => {
+            SwalPlugin.verificationCode("Verify to update password", verificationCode => {
+                UserService.updatePassword(state.current_password, state.password, state.password_confirmation, verificationCode)
+                    .then(r => {
+                        if (r.status == 200) {
+                            SwalPlugin.autoCloseAlert("Password updated successfully", null, "success", 1000);
+                        }
+                        return r;
+                    });
+            })
         })
     });
 }
