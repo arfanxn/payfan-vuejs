@@ -28,6 +28,17 @@ export default class Helpers {
     static triggerBSModal(...key) {
         document.querySelectorAll(key).forEach(el => el.click());
     }
+    static async closeBSModal(key) {
+        return await new Promise(resolve => {
+            const closeBtn = document.querySelector(key);
+            closeBtn.addEventListener("click", () => {
+                closeBtn.removeEventListener(closeBtn, this);
+                resolve()
+            });
+            closeBtn.click();
+        });
+
+    }
 
     static arrayContains(array, contains, caseSensitivy = false) {
         let isContains = false;
@@ -39,5 +50,13 @@ export default class Helpers {
             else isContains = false;
         })
         return isContains;
+    }
+
+    static strCensor(numberOrStr) {
+        if (typeof numberOrStr == "string") {
+            return "*".repeat(numberOrStr.length);
+        } else if (typeof numberOrStr != "string") {
+            return "*".repeat(numberOrStr);
+        }
     }
 }
