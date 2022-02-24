@@ -145,8 +145,8 @@ async function saveChangeEmail() {
     state.current.isChangeEmail = false;
 
     AuthService.createVerificationCode(userStore.self.email).then(() => {
-        SwalPlugin.verificationCode("Verify your new Email", verificationCode => {
-            UserService.updateEmail(userStore.self.email, verificationCode).then(r => {
+        SwalPlugin.verificationCode("Verify your new Email", async verificationCode => {
+            return await UserService.updateEmail(userStore.self.email, verificationCode).then(r => {
                 if (r.status == 200) {
                     SwalPlugin.autoCloseAlert("Email updated successfully", null, "success", 1000);
                 }

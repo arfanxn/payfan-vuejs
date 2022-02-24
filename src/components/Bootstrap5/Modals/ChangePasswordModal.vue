@@ -133,8 +133,8 @@ async function changePassword() {
 
     AuthService.createVerificationCode().then(() => {
         Helpers.closeBSModal(`#btn-close-modal-change-password`).then(() => {
-            SwalPlugin.verificationCode("Verify to update password", verificationCode => {
-                UserService.updatePassword(state.current_password, state.password, state.password_confirmation, verificationCode)
+            SwalPlugin.verificationCode("Verify to update password", async verificationCode => {
+                return await UserService.updatePassword(state.current_password, state.password, state.password_confirmation, verificationCode)
                     .then(r => {
                         if (r.status == 200) {
                             SwalPlugin.autoCloseAlert("Password updated successfully", null, "success", 1000);

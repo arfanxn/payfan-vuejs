@@ -105,16 +105,17 @@ async function updateSQ() {
 
     AuthService.createVerificationCode().then(() => {
         Helpers.closeBSModal("#btn-close-modal-security-question").then(() => {
-            SwalPlugin.verificationCode("Verify to continue", verificationCode => UserService.updateSecurityQuestion(UserStore['self/settings']["security_question"], security_answer.value, verificationCode).then(r => {
-                if (r.status == 200) {
-                    SwalPlugin.autoCloseAlert(r.data["message"], null, "success", 1000);
-                    security_answer.value = null;
-                    v$.value.$reset();
-                } else if ("error_message" in r.data) {
-                    SwalPlugin.autoCloseAlert(r.data["error_message"], null, "error", 1000);
-                }
-                return r;
-            }));
+            SwalPlugin.verificationCode("Verify to continue", async verificationCode =>
+                await UserService.updateSecurityQuestion(UserStore['self/settings']["security_question"], security_answer.value, verificationCode).then(r => {
+                    if (r.status == 200) {
+                        SwalPlugin.autoCloseAlert(r.data["message"], null, "success", 1000);
+                        security_answer.value = null;
+                        v$.value.$reset();
+                    } else if ("error_message" in r.data) {
+                        SwalPlugin.autoCloseAlert(r.data["error_message"], null, "error", 1000);
+                    }
+                    return r;
+                }));
         });
     });
 

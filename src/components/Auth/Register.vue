@@ -114,8 +114,8 @@ async function handleRegister() {
     SwalPlugin.showLoading();
     AuthService.createVerificationCode(formValues.email).then(() => {
         SwalPlugin.close();
-        SwalPlugin.verificationCode("Verify your account", verificationCode => {
-            AuthService.register(formValues.fullname, formValues.email,
+        SwalPlugin.verificationCode("Verify your account", async verificationCode => {
+            return await AuthService.register(formValues.fullname, formValues.email,
                 formValues.password, formValues.password_confirmation,
                 verificationCode).then(r => {
                     if (r.status == 201) {
