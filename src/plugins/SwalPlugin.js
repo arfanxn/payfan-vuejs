@@ -1,7 +1,6 @@
 import Swal from "sweetalert2";
 import Helpers from "../Helpers";
 import AuthService from "../services/AuthService";
-import ValidatorService from "../services/ValidatorService";
 
 export default class SwalPlugin {
     static close() {
@@ -63,7 +62,7 @@ export default class SwalPlugin {
 
                     if (typeof onConfirmCallback == "function") {
                         onConfirmCallback(inputVerificationCode.value).then(response => {
-                            if (ValidatorService.statusTextIsVerifyCodeMiddleware(response.statusText)) {
+                            if (response.statusText.toLowerCase() == "verifyverificationcodemiddleware") {
                                 if ("verification_code_error_message" in response.data)
                                     Swal.showValidationMessage(`${response.data.verification_code_error_message}`);
                             }

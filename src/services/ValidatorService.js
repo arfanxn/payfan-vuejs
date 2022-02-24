@@ -1,11 +1,6 @@
 import axios from "axios";
 
 export default class ValidatorService {
-    static statusTextIsVerifyCodeMiddleware(statusText) {
-        statusText = statusText.toLowerCase();
-        return (statusText == "verifyverificationcodemiddleware has fails!" || statusText == "verifyverificationcodemiddleware");
-    }
-
     static async isEmailTaken(email, responseShouldBoolean = true) {
         try {
             if (!email) throw Error("Email is required");
