@@ -54,7 +54,6 @@ export default class UserService {
 
     static async updateProfilePict(formDataOrBLOB) {
         try {
-            console.log(formDataOrBLOB instanceof FormData);
             let response;
             const config = {
                 headers: {
@@ -68,6 +67,17 @@ export default class UserService {
                     profile_pict: formDataOrBLOB
                 }, config);
             }
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
+    static async disableOrEnable2FA(code) {
+        try {
+            const response = axios.patch("/api/user/settings/2fa/self", {
+                code
+            });
             return response;
         } catch (error) {
             return error.response;
