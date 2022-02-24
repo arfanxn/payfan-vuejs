@@ -70,11 +70,26 @@ async function handleLogin() {
     // refresh errors message 
     Object.keys(state.form.errors).forEach(key => state.form.errors[key] = null);
 
+    //cestructure the form values 
+    const { email, password } = state.form.values;
+
     SwalPlugin.showLoading(() =>
-        AuthService.login(state.form.values.email, state.form.values.password)
+        AuthService.login(email, password)
             .then((r) => {
                 if (r.status == 200) {
                     router.go("/");
+                } else if (r.statusText.toLowerCase() == "require2fa") {
+                    AuthService.createVerificationCode(email).then(() => {
+                        SwalPlugin.verificationCode("Verify to Login", async verificationCode => {
+                            return await AuthService.login(email, password, verificationCode).then(r => {
+                                if (r.status == 200) {
+                                    router.go("/");
+                                }
+
+                                return r;
+                            })
+                        }, email);
+                    })
                 } else {
                     state.form.errors.email = Helpers.errorMessageAccessor(r.data, "email");
                     state.form.errors.password =

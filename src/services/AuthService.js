@@ -1,11 +1,12 @@
 import axios from "axios";
 
 export default class AuthService {
-    static async login(email, password) {
+    static async login(email, password, code = null) {
         try {
             const response = await axios.post("/api/user/login", {
                 email,
-                password
+                password,
+                code
             });
             return response;
         } catch (error) {
