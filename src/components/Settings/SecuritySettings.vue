@@ -19,6 +19,7 @@
                         class="form-check-input"
                         type="checkbox"
                         id="swicthEnableOrDisable2FA"
+                        :checked="UserStore['self/settings']['two_factor_auth']"
                     />
                 </div>
             </div>
@@ -32,17 +33,6 @@
                 <a class="cursor-pointer hover-underline text-navy fw-bold ms-3">Create</a>
             </div>
         </div>
-        <!-- <div
-            @click="customerServicePINSetting"
-            class="cursor-pointer py-4 border-bottom border-secondary"
-        >
-            <h5>Customer service PIN</h5>
-            <div class="d-flex justify-content-between">
-                <span class="text-secondary">Customer service PIN.</span>
-                <a class="cursor-pointer hover-underline text-navy fw-bold">Update</a>
-            </div>
-        </div>-->
-
         <ChangePasswordModal />
         <SecurityQuestionModal />
     </div>
@@ -54,11 +44,12 @@ import ChangePasswordModal from "@/components/Bootstrap5/Modals/ChangePasswordMo
 import SecurityQuestionModal from "@/components/Bootstrap5/Modals/SecurityQuestionModal.vue";
 import Helpers from "../../Helpers";
 import Swal from "sweetalert2";
+import { useUserStore } from "../../stores/UserStore";
+import UserService from "../../services/UserService";
+import AuthService from "../../services/AuthService";
+import SwalPlugin from "../../plugins/SwalPlugin";
+const UserStore = useUserStore();
 defineComponent({ ChangePasswordModal, SecurityQuestionModal });
-
-// function customerServicePINSetting() {
-//     Helpers.triggerBSModal(`#btn-modal-customer-service-pin-setting`);
-// }
 
 function securityQuestion(event) {
     event;
@@ -66,7 +57,7 @@ function securityQuestion(event) {
 }
 
 function enableOrDisable2FA(event) {
-    // make sure the switch isn't getting clicked 
+    // make sure the switch isn't getting clicked / checked / unchecked 
     event.target.checked = !event.target.checked;
 
     //  do the operations 
@@ -79,7 +70,18 @@ function enableOrDisable2FA(event) {
 
         }).then(result => {
             if (result.isConfirmed) {
-                event.target.checked = false;
+                AuthService.createVerificationCode().then(() => {
+                    SwalPlugin.verificationCode("Verify to continue", async verificationCode => {
+                        return await UserService.disableOrEnable2FA(verificationCode).then(r => {
+                            if (r.status == 200) {
+                                event.target.checked = false;
+                                UserStore['self/settings']['two_factor_auth'] = false;
+                                SwalPlugin.autoCloseAlert(`2-step verification disabled.`, null, "success", 1000);
+                            }
+                            return r;
+                        });
+                    })
+                })
             }
         });
     } else {
@@ -92,7 +94,18 @@ function enableOrDisable2FA(event) {
 
         }).then(result => {
             if (result.isConfirmed) {
-                event.target.checked = true;
+                AuthService.createVerificationCode().then(() => {
+                    SwalPlugin.verificationCode("Verify to continue", async verificationCode => {
+                        return await UserService.disableOrEnable2FA(verificationCode).then(r => {
+                            if (r.status == 200) {
+                                event.target.checked = true;
+                                UserStore['self/settings']['two_factor_auth'] = true;
+                                SwalPlugin.autoCloseAlert(`2-step verification enabled.`, null, "success", 1000);
+                            }
+                            return r;
+                        });
+                    })
+                })
             }
         });
     }
