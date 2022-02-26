@@ -3,7 +3,7 @@ import axios from "axios";
 export default class UserService {
     static async updateEmail(email, code) {
         try {
-            const response = await axios.patch("/api/user/email/self", {
+            const response = await axios.patch("/api/user/self/email", {
                 email,
                 code
             });
@@ -15,7 +15,7 @@ export default class UserService {
 
     static async updateFullname(fullname) {
         try {
-            const response = await axios.patch("/api/user/name/self", {
+            const response = await axios.patch("/api/user/self/name", {
                 name: fullname
             });
             return response;
@@ -26,7 +26,7 @@ export default class UserService {
 
     static async updatePassword(current_password, password, password_confirmation, code) {
         try {
-            const response = await axios.patch("/api/user/password/self", {
+            const response = await axios.patch("/api/user/self/password", {
                 current_password,
                 password,
                 password_confirmation,
@@ -40,7 +40,7 @@ export default class UserService {
 
     static async updateSecurityQuestion(question, answer, code) {
         try {
-            const response = await axios.patch("/api/user/settings/security-question/self", {
+            const response = await axios.patch("/api/user/self/settings/security-question", {
                 security_question: question,
                 security_answer: answer,
                 code
@@ -61,9 +61,9 @@ export default class UserService {
                 }
             }
             if (formDataOrBLOB instanceof FormData) {
-                response = await axios.post("/api/user/profile-pict/self", formDataOrBLOB, config);
+                response = await axios.post("/api/user/self/profile-pict", formDataOrBLOB, config);
             } else {
-                response = await axios.post("/api/user/profile-pict/self", {
+                response = await axios.post("/api/user/self/profile-pict", {
                     profile_pict: formDataOrBLOB
                 }, config);
             }
@@ -75,7 +75,7 @@ export default class UserService {
 
     static async disableOrEnable2FA(code) {
         try {
-            const response = axios.patch("/api/user/settings/2fa/self", {
+            const response = axios.patch("/api/user/self/settings/2fa", {
                 code
             });
             return response;
