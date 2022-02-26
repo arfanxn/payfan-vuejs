@@ -72,21 +72,22 @@ function enableOrDisable2FA(event) {
             if (result.isConfirmed) {
                 AuthService.createVerificationCode().then(() => {
                     SwalPlugin.verificationCode("Verify to continue", async verificationCode => {
-                        return await UserService.disableOrEnable2FA(verificationCode).then(r => {
-                            if (r.status == 200) {
-                                event.target.checked = false;
-                                UserStore['self/settings']['two_factor_auth'] = false;
-                                SwalPlugin.autoCloseAlert(`2-step verification disabled.`, null, "success", 1000);
-                            }
-                            return r;
-                        });
+                        const r = await UserService.disableOrEnable2FA(verificationCode).then(r, e => console.log(e));
+
+                        if (r.status == 200) {
+                            event.target.checked = false;
+                            UserStore['self/settings']['two_factor_auth'] = false;
+                            SwalPlugin.autoCloseAlert(`2-step verification disabled.`, null, "success", 1000);
+                        }
+
+                        return r;
                     })
                 })
             }
         });
     } else {
         Swal.fire({
-            icon: "info",
+            icon: "question",
             title: "Enable 2-step verification ?",
             html: `<small class="text-secondary">Each time you log in, you’ll use a one-time code in addition to your password. Choose how you’ll get your code.</small>`,
             showCancelButton: true,
@@ -96,14 +97,15 @@ function enableOrDisable2FA(event) {
             if (result.isConfirmed) {
                 AuthService.createVerificationCode().then(() => {
                     SwalPlugin.verificationCode("Verify to continue", async verificationCode => {
-                        return await UserService.disableOrEnable2FA(verificationCode).then(r => {
-                            if (r.status == 200) {
-                                event.target.checked = true;
-                                UserStore['self/settings']['two_factor_auth'] = true;
-                                SwalPlugin.autoCloseAlert(`2-step verification enabled.`, null, "success", 1000);
-                            }
-                            return r;
-                        });
+                        const r = await UserService.disableOrEnable2FA(verificationCode);
+
+                        if (r.status == 200) {
+                            event.target.checked = true;
+                            UserStore['self/settings']['two_factor_auth'] = true;
+                            SwalPlugin.autoCloseAlert(`2-step verification enabled.`, null, "success", 1000);
+                        }
+
+                        return r;
                     })
                 })
             }
