@@ -5,7 +5,7 @@
             <FieldForSearchPeople showButton="false" />
         </div>
         <div class>
-            <small class="text-secondary">Top contacts</small>
+            <small class="text-secondary d-block mt-2">Top contacts</small>
             <div class="top-contacts-lists-wrapper scrollbar-thin mt-2">
                 <div
                     class="d-flex justify-content-between cursor-pointer my-4 px-3"
