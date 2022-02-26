@@ -29,3 +29,7 @@ a {
 .hover-underline:hover {
     text-decoration: underline !important;
 }
+
+.scrollbar-thin {
+    scrollbar-width: thin !important;
+}
