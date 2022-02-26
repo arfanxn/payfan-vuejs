@@ -59,4 +59,8 @@ export default class Helpers {
             return "*".repeat(numberOrStr);
         }
     }
+
+    static getFirstCharEachWord(string) {
+        return string.split(" ").map(word => word.charAt(0));
+    }
 }
