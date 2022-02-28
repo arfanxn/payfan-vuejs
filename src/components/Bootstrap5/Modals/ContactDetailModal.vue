@@ -30,12 +30,19 @@
                     <div class="modal-body px-5 pb-5 d-flex flex-column">
                         <div class="d-flex justify-content-center">
                             <div
-                                class="contact-icon-size shadow bg-warning rounded-circle d-flex justify-content-center"
+                                class="contact-icon-size shadow rounded-circle d-flex justify-content-center"
+                                :style="`background-color : ${props?.contact?.user?.profile_pict}!important ;`"
                             >
-                                <span class="fw-bold my-auto">AM</span>
+                                <span class="fw-bold my-auto text-white">
+                                    {{
+                                        props?.contact?.user?.name?.toUpperCase().slice(0, 2)
+                                    }}
+                                </span>
                             </div>
                             <div class="ps-3 my-auto text-secondary">
-                                <span class="d-block m-0 p-0 fw-bold">Alif Maulana</span>
+                                <span
+                                    class="d-block m-0 p-0 fw-bold"
+                                >{{ props?.contact?.user?.name }}</span>
                                 <a class="cursor-pointer d-flex text-dark m-0 p-0">
                                     <StarIcon width="20" height="20" />
                                     <span class="ms-1 text-secondary my-auto">Mark as a top contact</span>
@@ -90,10 +97,14 @@
 </template>
 
 <script setup>
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent, defineProps } from "@vue/runtime-core";
+import Helpers from "@/Helpers.js";
+Helpers
 import StarIcon from "@/components/Icons/StarIcon.vue";
-
 defineComponent({ StarIcon })
+const props = defineProps({
+    contact: {}
+});
 
 </script>
 
