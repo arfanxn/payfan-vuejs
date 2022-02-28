@@ -5,18 +5,12 @@ import {
 
 export const useContactStore = defineStore("contact", {
     state: () => ({
-        allAndNotBlocked: Array,
+        topContacts: Array,
         all: Array,
         added: Array,
         favorited: Array,
         blocked: Array
     }),
 
-    actions: {
-        searchContactsWhereNotBlocked({
-            keyword
-        }) {
-            keyword;
-        }
-    }
+    actions: {}
 });
