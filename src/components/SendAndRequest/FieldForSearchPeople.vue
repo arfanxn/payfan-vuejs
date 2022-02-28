@@ -1,8 +1,9 @@
 <template>
     <div class="form-floating">
         <input
+            @keyup.esc="hideResults"
+            @input="hideResultsIfKeywordNull"
             v-model="state.search.keyword"
-            @blur="hideResults"
             @focus="state.search.show_results = true"
             @keyup.enter="search"
             type="text"
@@ -12,13 +13,16 @@
         />
         <label class="text-secondary" for="inputSendTo">Name on your contacts or Email</label>
         <DropdownResultOfSearchPeople
+            :keyword="state.search.keyword"
             :show="state.search.show_results"
             :users="state.search.results.users"
             :contacts="state.search.results.contacts"
+            @contactClicked="onContactClicked"
+            @peopleClicked="onPeopleClicked"
         />
         <button
+            @keyup.esc="hideResults"
             v-show="!props.showButton"
-            @blur="hideResults"
             @click="search"
             class="btn btn-light border-dark rounded-pill py-2 px-4 mt-4"
         >Next</button>
@@ -26,10 +30,11 @@
 </template>
 
 <script setup>
-import { defineComponent, defineProps, reactive } from 'vue';
+import { defineComponent, defineEmits, defineProps, reactive } from 'vue';
 import { searchPeoplesOnPayfan } from '../../services/functions';
 import DropdownResultOfSearchPeople from './DropdownResultOfSearchPeople.vue';
 defineComponent({ DropdownResultOfSearchPeople });
+const emits = defineEmits(['peopleClicked', "contactClicked"]);
 const props = defineProps({
     showButton: null,
 });
@@ -69,5 +74,17 @@ function hideResults() {
         Object.keys(state.search.results).forEach(key => (state.search.results[key] = []));
         return;
     }
+}
+
+function hideResultsIfKeywordNull() {
+    if (state.search.keyword.length < 2)
+        hideResults();
+}
+
+function onPeopleClicked(people) {
+    emits("peopleClicked", people)
+}
+function onContactClicked(contact) {
+    emits("contactClicked", contact);
 }
 </script>
