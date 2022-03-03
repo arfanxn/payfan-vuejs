@@ -26,6 +26,28 @@ export default class SwalPlugin {
         });
     }
 
+    static async confirm({
+        title,
+        html,
+        icon,
+        cancelButtonText,
+        confirmButtonText,
+        allowEscapeKey,
+        allowOutsideClick
+    }) {
+        return await Swal.fire({
+            title,
+            html,
+            icon,
+            showCancelButton: true,
+            backdrop: true,
+            allowEscapeKey: allowEscapeKey || true,
+            allowOutsideClick: allowOutsideClick || true,
+            cancelButtonText: cancelButtonText || "Cancel",
+            confirmButtonText: confirmButtonText || "Confirm",
+        });
+    }
+
     static async verificationCode(title = 'Verify', onConfirmCallback, resendCallbackOrObjectOrEmail = null) {
         return await Swal.fire({
             title,
