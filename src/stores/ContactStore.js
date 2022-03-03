@@ -12,5 +12,9 @@ export const useContactStore = defineStore("contact", {
         blocked: Array
     }),
 
-    actions: {}
+    actions: {
+        removeContact(contactIDtoRemove) {
+            this.topContacts = this.topContacts.filter(contact => contact['id'] != contactIDtoRemove);
+        }
+    }
 });
