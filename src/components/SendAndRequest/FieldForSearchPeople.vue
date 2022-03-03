@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { defineComponent, defineEmits, defineProps, reactive } from 'vue';
+import { defineComponent, defineEmits, defineProps, onMounted, reactive } from 'vue';
 import { searchPeoplesOnPayfan } from '../../services/functions';
 import DropdownResultOfSearchPeople from './DropdownResultOfSearchPeople.vue';
 defineComponent({ DropdownResultOfSearchPeople });
@@ -49,6 +49,17 @@ const state = reactive({
         }
     }
 })
+
+onMounted(() => {
+    document.addEventListener("keyup", (event) => {
+        if (event.keyCode == 27 || event.key == "Escape") { // key code 27 == escape key
+            const isNotCombinedKey = !(event.ctrlKey || event.altKey || event.shiftKey);
+            if (isNotCombinedKey) {
+                hideResults();
+            }
+        }
+    });
+});
 
 function search() {
     state.search.show_results = true;
