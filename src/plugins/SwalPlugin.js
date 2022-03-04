@@ -26,6 +26,23 @@ export default class SwalPlugin {
         });
     }
 
+    static async alertPositioned({
+        title,
+        html,
+        icon,
+        position,
+        timer,
+    }) {
+        return await Swal.fire({
+            position: position || 'top-end',
+            html,
+            icon: icon || 'success',
+            title: title || Helpers.ENV("APP_TITLE"),
+            showConfirmButton: false,
+            timer: timer || 1500
+        })
+    }
+
     static async confirm({
         title,
         html,
