@@ -39,7 +39,7 @@ export default class SwalPlugin {
             icon: icon || 'success',
             title: title || Helpers.ENV("APP_TITLE"),
             showConfirmButton: false,
-            timer: timer || 1500
+            timer: timer || 1000
         })
     }
 
