@@ -30,13 +30,14 @@
 </template>
 
 <script setup>
-import { defineComponent, defineEmits, defineProps, onMounted, reactive } from 'vue';
+import { defineComponent, defineEmits, defineProps, onMounted, reactive, watch } from 'vue';
 import { searchPeoplesOnPayfan } from '../../services/functions';
 import DropdownResultOfSearchPeople from './DropdownResultOfSearchPeople.vue';
 defineComponent({ DropdownResultOfSearchPeople });
 const emits = defineEmits(['peopleClicked', "contactClicked"]);
 const props = defineProps({
     showButton: null,
+    refresh: null,
 });
 
 const state = reactive({
@@ -59,6 +60,12 @@ onMounted(() => {
             }
         }
     });
+});
+
+
+watch(() => props.refresh, () => {
+    // if props refresh value change -> refresh the search results 
+    search()
 });
 
 function search() {
