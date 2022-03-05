@@ -21,6 +21,7 @@
                 <div class="modal-content">
                     <div class="modal-header border-0">
                         <button
+                            id="btn-close-modal-contact-detail"
                             type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
@@ -30,22 +31,35 @@
                     <div class="modal-body px-5 pb-5 d-flex flex-column">
                         <div class="d-flex justify-content-center">
                             <div
-                                class="contact-icon-size shadow rounded-circle d-flex justify-content-center"
+                                class="contact-icon-size shadow rounded-circle d-flex justify-content-center overflow-hidden"
                                 :style="`background-color : ${props?.contact?.user?.profile_pict}!important ;`"
                             >
-                                <span class="fw-bold my-auto text-white">
+                                <span
+                                    v-if="props?.contact?.user?.profile_pict?.includes('#')"
+                                    class="fw-bold my-auto text-white"
+                                >
                                     {{
                                         props?.contact?.user?.name?.toUpperCase().slice(0, 2)
                                     }}
                                 </span>
+                                <img v-else :src="props?.contact?.user?.profile_pict" />
                             </div>
                             <div class="ps-3 my-auto text-secondary">
                                 <span
                                     class="d-block m-0 p-0 fw-bold"
                                 >{{ props?.contact?.user?.name }}</span>
-                                <a class="cursor-pointer d-flex text-dark m-0 p-0">
-                                    <StarIcon width="20" height="20" />
-                                    <span class="ms-1 text-secondary my-auto">Mark as a top contact</span>
+                                <a
+                                    @click.prevent="toggleFavorite"
+                                    class="cursor-pointer d-flex text-dark m-0 p-0"
+                                >
+                                    <StarIcon
+                                        :class="`${state.contact.isFavorited ? 'text-success' : 'text-dark'}`"
+                                        width="20"
+                                        height="20"
+                                    />
+                                    <span
+                                        class="ms-1 text-secondary my-auto"
+                                    >{{ state.contact.isFavorited ? `Remove from top contact` : 'Mark as a top contact' }}</span>
                                 </a>
                             </div>
                         </div>
@@ -67,27 +81,52 @@
                             <small class="fw-bold text-secondary mb-3 d-block">Recent activity</small>
                             <div
                                 class="bg-light cursor-pointer w-100 d-flex justify-content-between p-4"
+                                v-if="`completed_at` in state.contact.last_transaction.data"
                             >
                                 <div class="d-flex">
-                                    <small class="me-5">6 Dec</small>
+                                    <small class="me-5">{{ lastTransactionDateMonth }}</small>
                                     <div class="d-flex flex-column">
-                                        <span class>Send Money</span>
-                                        <small class="text-secondary mb-2">"Thanks mate!"</small>
+                                        <span class>{{ state.contact.last_transaction.data?.type }}</span>
+                                        <small class="text-secondary mb-2">
+                                            {{
+                                                state.contact.last_transaction.showFullNote ? state.contact.last_transaction.data?.note
+                                                    : state.contact.last_transaction?.data?.note?.slice(0, 120)
+                                            }}
+                                            <a
+                                                @click.prevent="state.contact.last_transaction.showFullNote = true"
+                                                v-if="state.contact.last_transaction.data?.note?.length >= (120) && !state.contact.last_transaction.showFullNote"
+                                                class="cursor-pointer text-navy hover-underline d-block"
+                                            >See more. . .</a>
+                                            <a
+                                                @click.prevent="state.contact.last_transaction.showFullNote = false"
+                                                v-if="state.contact.last_transaction.showFullNote"
+                                                class="cursor-pointer text-navy hover-underline d-block"
+                                            >Show less</a>
+                                        </small>
                                         <a class="cursor-pointer hover-underline text-navy">
                                             <small>Repeat this transaction</small>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="text-secondary">-&nbsp;100,00&nbsp;$&nbsp;USD</div>
+                                <div
+                                    class="text-secondary"
+                                >-&nbsp;{{ state.contact.last_transaction.data?.amount }},00&nbsp;$&nbsp;USD</div>
+                            </div>
+                            <div v-else class="text-center text-secondary">
+                                <span>No recent activity with {{ props?.contact?.user?.name }}</span>
                             </div>
                         </div>
 
                         <div class="text-center mt-4">
                             <a
                                 class="cursor-pointer text-navy hover-underline mb-2"
+                                @click="removeContact"
                             >Remove this contact</a>
                             <br />
-                            <a class="cursor-pointer text-navy hover-underline">Block this contact</a>
+                            <a
+                                @click.prevent="blockContact"
+                                class="cursor-pointer text-navy hover-underline"
+                            >Block this contact</a>
                         </div>
                     </div>
                 </div>
@@ -96,16 +135,114 @@
     </teleport>
 </template>
 
-<script setup>
-import { defineComponent, defineProps } from "@vue/runtime-core";
-import Helpers from "@/Helpers.js";
-Helpers
+<script  setup>
+import { defineComponent, defineProps, computed, watch, reactive } from "vue";
+import ContactService from "@/services/ContactService";
+import DateHelper from "@/helpers/DateHelper.js";
 import StarIcon from "@/components/Icons/StarIcon.vue";
-defineComponent({ StarIcon })
+import SwalPlugin from "../../../plugins/SwalPlugin";
+import Helpers from "../../../Helpers";
+import { useContactStore } from '@/stores/ContactStore.js';
+import { searchPeoplesOnPayfan } from "../../../services/functions";
+import { useSearchPeopleStore } from "../../../stores/SearchPeopleStore";
+const SearchPeopleStore = useSearchPeopleStore();
+const ContactStore = useContactStore();
+defineComponent({ StarIcon });
 const props = defineProps({
-    contact: {}
+    contact: {},
+});
+const state = reactive({
+    contact: {
+        isFavorited: !Boolean,
+        last_transaction: {
+            data: {},
+            showFullNote: false
+        },
+    }
+})
+const lastTransactionDateMonth = computed(() => {
+    if ("completed_at" in state.contact.last_transaction.data) {
+        const completedAt = new Date(state.contact.last_transaction.data['completed_at']);
+        return `${completedAt.getDate()} ${DateHelper.numericMonthtoString(completedAt.getMonth(), 3)}`;
+    }
+    return null;
 });
 
+watch(() => props.contact, async contactValue => {
+    if ("id" in contactValue) {
+        const response = await ContactService.lastTransactionDetail(contactValue['id'])
+        if (response.status == 200) {
+            state.contact.last_transaction.data = await response.data.last_transaction || {};
+            state.contact.isFavorited = props.contact["status"] == "FAVORITED" ? true : false;
+        }
+    }
+})
+
+function toggleFavorite() {
+    const contact = props.contact;
+    ContactService.toggleFavorite(contact['id']).then(r => {
+        if (r.data.message == "FAVORITED") {
+            SwalPlugin.alertPositioned({ title: `"${contact['user']['name']}" <strong>marked</strong> as top contacts` });
+            state.contact.isFavorited = true;
+        } else if (r.data.message == 'UNFAVORITED') {
+            SwalPlugin.alertPositioned({ title: `"${contact['user']['name']}" <strong>removed</strong> from top contacts` })
+            state.contact.isFavorited = false;
+        }
+    });
+}
+
+function removeContact() {
+    SwalPlugin.confirm({
+        title: `Remove contact`,
+        html: `Remove ${props.contact['user']['name']} from contact?`,
+        icon: `warning`,
+    }).then(result => {
+        if (result.isConfirmed) {
+            ContactService.addOrRm(props.contact['user']['id']).then(r => {
+                const rMsg = r.data.message.toLowerCase();
+                if (rMsg == "removed") {
+                    ContactStore.remove(props.contact['id']);
+                    Helpers.closeBSModal(`#btn-close-modal-contact-detail`)
+                    SwalPlugin.alertPositioned({
+                        title: `"${props.contact['user']['name']}" removed from contacts`,
+                        icon: "success",
+                        timer: 1000,
+                    });
+                    searchPeoplesOnPayfan(SearchPeopleStore.searchKeyword).then(r => {
+                        if (r.status == 200) {
+                            SearchPeopleStore.refillResults(r.data);
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+function blockContact() {
+    SwalPlugin.confirm({
+        title: `Block contact`,
+        html: `Block ${props.contact['user']['name']} ?`,
+        icon: `question`,
+    }).then(result => {
+        if (result.isConfirmed) {
+            ContactService.block(props.contact['id']).then(() => {
+                ContactStore.block(props.contact['id']);
+                Helpers.closeBSModal(`#btn-close-modal-contact-detail`);
+                SwalPlugin.alertPositioned({
+                    title: `"${props.contact['user']['name']}" has been blocked`,
+                    icon: "info",
+                    timer: 1000,
+                })
+                searchPeoplesOnPayfan(SearchPeopleStore.searchKeyword).then(r => {
+                    if (r.status == 200) {
+                        SearchPeopleStore.refillResults(r.data);
+                    }
+                });
+            });
+        }
+    });
+}
 </script>
 
 <style scoped>

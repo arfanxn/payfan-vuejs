@@ -1,0 +1,86 @@
+<template>
+    <div class="form-floating">
+        <input
+            @keyup.esc="hideResults"
+            @input="hideResultsIfKeywordLessThan"
+            v-model="SearchPeopleStore.searchKeyword"
+            @focus="SearchPeopleStore['results/toggleShow'] = true"
+            @keyup.enter="search"
+            type="text"
+            class="form-control"
+            id="inputSendTo"
+            placeholder="Name on your contacts or Email"
+        />
+        <label class="text-secondary" for="inputSendTo">Name on your contacts or Email</label>
+        <ResultsSearchPeople @contactClicked="onContactClicked" @peopleClicked="onPeopleClicked" />
+        <button
+            @keyup.esc="hideResults"
+            v-show="props.showButton"
+            @click="search"
+            class="btn btn-light border-dark rounded-pill py-2 px-4 mt-4"
+        >Next</button>
+    </div>
+</template>
+
+<script setup>
+import { defineComponent, defineEmits, defineProps, onMounted } from 'vue';
+import { searchPeoplesOnPayfan } from '../../services/functions';
+import { useSearchPeopleStore } from '../../stores/SearchPeopleStore';
+import ResultsSearchPeople from './ResultsSearchPeople.vue';
+const SearchPeopleStore = useSearchPeopleStore();
+defineComponent({ ResultsSearchPeople });
+const emits = defineEmits(['peopleClicked', "contactClicked"]);
+const props = defineProps({
+    showButton: null,
+});
+
+onMounted(() => {
+    document.addEventListener("keyup", (event) => {
+        if (event.keyCode == 27 || event.key == "Escape") { // key code 27 == escape key
+            const isNotCombinedKey = !(event.ctrlKey || event.altKey || event.shiftKey);
+            if (isNotCombinedKey) {
+                hideResults();
+            }
+        }
+    });
+});
+
+function search() {
+    SearchPeopleStore['results/toggleShow'] = true;
+    const keyword = SearchPeopleStore.searchKeyword;
+
+    if (!hideResultsIfKeywordLessThan()) return;
+
+    searchPeoplesOnPayfan(keyword).then(r => {
+        if (r.status == 200) {
+            SearchPeopleStore.refillResults(r.data)
+        }
+    });
+}
+
+function hideResultsIfKeywordLessThan() {
+    if (SearchPeopleStore.searchKeyword.length <= 2) {
+        hideResults()
+        return false
+    }
+    return true;
+}
+function hideResults() {
+    SearchPeopleStore['results/toggleShow'] = false;
+}
+
+
+
+
+
+
+
+
+
+function onPeopleClicked(people) {
+    emits("peopleClicked", people)
+}
+function onContactClicked(contact) {
+    emits("contactClicked", contact);
+}
+</script>
