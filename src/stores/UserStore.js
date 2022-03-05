@@ -10,8 +10,8 @@ export const useUserStore = defineStore("user", {
     // },
 
     state: () => ({
-        self: Object,
-        "self/settings": Object
+        self: {},
+        "self/settings": {}
     }),
     getters: {
         "self/joined_at": (state) => {
