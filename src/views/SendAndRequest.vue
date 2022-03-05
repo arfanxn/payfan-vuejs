@@ -4,10 +4,10 @@
         <div class="row p-0 m-0">
             <div class="col-md-8 bg-white">
                 <keep-alive>
-                    <SendPaymentTo v-if="state.currentMenu == state.rightSideMenu[0].name" />
+                    <SendPayment v-if="state.currentMenu == state.rightSideMenu[0].name" />
                 </keep-alive>
                 <keep-alive>
-                    <RequestPaymentFrom v-if="state.currentMenu == state.rightSideMenu[1].name" />
+                    <RequestPayment v-if="state.currentMenu == state.rightSideMenu[1].name" />
                 </keep-alive>
                 <keep-alive>
                     <Contacts v-if="state.currentMenu == state.rightSideMenu[2].name" />
@@ -22,10 +22,13 @@
 
 <script setup>
 import NavbarTop from '../components/NavbarTop.vue';
-import SendPaymentTo from '../components/SendAndRequest/SendPaymentTo.vue';
-import RequestPaymentFrom from '../components/SendAndRequest/RequestPaymentFrom.vue';
+import SendPayment from '../components/SendAndRequest/SendPayment.vue';
+import RequestPayment from '../components/SendAndRequest/RequestPayment.vue';
 import RightSideMenu from '../components/RightSideMenu.vue';
 import Contacts from "@/components/SendAndRequest/Contacts.vue";
+import { useContactStore } from '@/stores/ContactStore';
+import ContactService from '@/services/ContactService';
+const ContactStore = useContactStore();
 import { useRoute } from 'vue-router';
 import { defineComponent, onMounted, onBeforeMount, reactive, onUpdated } from 'vue';
 const route = useRoute();
@@ -40,7 +43,7 @@ const state = reactive({
     }],
 });
 defineComponent({
-    NavbarTop, SendPaymentTo, RequestPaymentFrom, Contacts, RightSideMenu
+    NavbarTop, SendPayment, RequestPayment, Contacts, RightSideMenu
 });
 onBeforeMount(() => {
     changeMenu(state.rightSideMenu[0].name);
@@ -51,6 +54,10 @@ onMounted(() => {
     // keep the nav link active after click menus (components)
     document.getElementById("NavLinkSendandRequest").classList.add("router-link-active")
     document.body.style.height = "1000px";
+
+    ContactService.topContacts().then(r => {
+        ContactStore.topContacts = r.data['contacts'];
+    });
 });
 onUpdated(() => {
     // keep the nav link active after click menus (components )
