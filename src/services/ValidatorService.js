@@ -45,4 +45,9 @@ export default class ValidatorService {
         return allowedExts.some(el => img.endsWith(el));
     }
 
+    static isCurrency(amount) {
+        // Regex description => Allows a decimal, requires commas
+        return !!amount.match(/(?=.*\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?(\.\d{1,2})?$/g);
+    }
+
 }
