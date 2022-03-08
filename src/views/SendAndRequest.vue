@@ -3,15 +3,11 @@
         <NavbarTop />
         <div class="row p-0 m-0">
             <div class="col-md-8 bg-white">
-                <keep-alive>
-                    <SendPayment v-if="state.currentMenu == state.rightSideMenu[0].name" />
-                </keep-alive>
-                <keep-alive>
-                    <RequestPayment v-if="state.currentMenu == state.rightSideMenu[1].name" />
-                </keep-alive>
-                <keep-alive>
-                    <Contacts v-if="state.currentMenu == state.rightSideMenu[2].name" />
-                </keep-alive>
+                <SendPayment v-if="state.currentMenu == state.rightSideMenu[0].name" />
+
+                <RequestPayment v-if="state.currentMenu == state.rightSideMenu[1].name" />
+
+                <Contacts v-if="state.currentMenu == state.rightSideMenu[2].name" />
             </div>
             <div class="col-md-4">
                 <RightSideMenu :menus="state.rightSideMenu" @menuClicked="changeMenu" />
@@ -21,6 +17,8 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
+import { defineComponent, onMounted, onBeforeMount, reactive, onUpdated } from 'vue';
 import NavbarTop from '../components/NavbarTop.vue';
 import SendPayment from '../components/SendAndRequest/SendPayment.vue';
 import RequestPayment from '../components/SendAndRequest/RequestPayment.vue';
@@ -29,8 +27,6 @@ import Contacts from "@/components/SendAndRequest/Contacts.vue";
 import { useContactStore } from '@/stores/ContactStore';
 import ContactService from '@/services/ContactService';
 const ContactStore = useContactStore();
-import { useRoute } from 'vue-router';
-import { defineComponent, onMounted, onBeforeMount, reactive, onUpdated } from 'vue';
 const route = useRoute();
 const state = reactive({
     currentMenu: "Send Money",
