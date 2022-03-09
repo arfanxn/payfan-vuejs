@@ -56,7 +56,7 @@ export default class SwalPlugin {
         allowOutsideClick
     }) {
         return await Swal.fire({
-            title,
+            title: title || Helpers.ENV("APP_TITLE"),
             html,
             icon,
             showDenyButton: showDenyButton || false,
