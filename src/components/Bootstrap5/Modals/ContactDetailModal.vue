@@ -66,11 +66,13 @@
 
                         <div class="d-flex justify-content-center mt-4">
                             <a
+                                @click="triggerTransferPreviewModal(`SEND`)"
                                 class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-5 py-2"
                             >
                                 <span class="fw-bold">Send</span>
                             </a>
                             <a
+                                @click="triggerTransferPreviewModal(`REQUEST`)"
                                 class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-5 py-2"
                             >
                                 <span class="fw-bold">Request</span>
@@ -108,9 +110,9 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div
-                                    class="text-secondary"
-                                >-&nbsp;{{ state.contact.last_transaction.data?.amount }},00&nbsp;$&nbsp;USD</div>
+                                <div class="text-secondary">
+                                    <span>-&nbsp;{{ state.contact.last_transaction.data?.amount }}&nbsp;$&nbsp;USD</span>
+                                </div>
                             </div>
                             <div v-else class="text-center text-secondary">
                                 <span>No recent activity with {{ props?.contact?.user?.name }}</span>
@@ -132,6 +134,15 @@
                 </div>
             </div>
         </div>
+
+        <TransferPreviewModal
+            @nextClicked="(obj) => state.transferPreviewModal.currentStep == `SEND` ? handleSendPayment(obj) : handleRequestPayment(obj)"
+            :user="props.contact?.user"
+        >
+            <template
+                #nextButtonText
+            >{{ state.transferPreviewModal.currentStep == "SEND" ? "Send payment" : "Make a request" }}</template>
+        </TransferPreviewModal>
     </teleport>
 </template>
 
@@ -145,9 +156,11 @@ import Helpers from "../../../Helpers";
 import { useContactStore } from '@/stores/ContactStore.js';
 import { searchPeoplesOnPayfan } from "../../../services/functions";
 import { useSearchPeopleStore } from "../../../stores/SearchPeopleStore";
+import TransferPreviewModal from "./TransferPreviewModal.vue";
+import { handleSendPayment } from "@/services/functions.js";
 const SearchPeopleStore = useSearchPeopleStore();
 const ContactStore = useContactStore();
-defineComponent({ StarIcon });
+defineComponent({ StarIcon, TransferPreviewModal });
 const props = defineProps({
     contact: {},
 });
@@ -158,19 +171,26 @@ const state = reactive({
             data: {},
             showFullNote: false
         },
+    },
+    transferPreviewModal: {
+        currentStep: null,
     }
 })
 const lastTransactionDateMonth = computed(() => {
-    if ("completed_at" in state.contact.last_transaction.data) {
+    if (state.contact.last_transaction.data?.completed_at) {
         const completedAt = new Date(state.contact.last_transaction.data['completed_at']);
         return `${completedAt.getDate()} ${DateHelper.numericMonthtoString(completedAt.getMonth(), 3)}`;
+    } else if (state.contact.last_transaction.data?.status) {
+        return state.contact.last_transaction.data?.status;
     }
-    return null;
+
+    return 'Pending';
 });
 
 watch(() => props.contact, async contactValue => {
     if ("id" in contactValue) {
         const response = await ContactService.lastTransactionDetail(contactValue['id'])
+        console.log(response.data);
         if (response.status == 200) {
             state.contact.last_transaction.data = await response.data.last_transaction || {};
             state.contact.isFavorited = props.contact["status"] == "FAVORITED" ? true : false;
@@ -242,6 +262,11 @@ function blockContact() {
             });
         }
     });
+}
+
+function triggerTransferPreviewModal(operation) {
+    state.transferPreviewModal.currentStep = operation.toUpperCase();
+    Helpers.triggerBSModal(`#btn-modal-transfer-preview`);
 }
 </script>
 
