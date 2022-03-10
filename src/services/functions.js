@@ -51,3 +51,37 @@ export const handleSendPayment = ({
         }
     });
 };
+
+export const handleMakeRequestPayment = ({
+    amount,
+    wallet,
+    note,
+    name,
+    amountInUSD
+}) => {
+    SwalPlugin.confirm({
+        title: 'Make a request',
+        html: `Request a money for ${amountInUSD} from "${name}" ?`,
+        icon: 'question'
+    }).then(result => {
+        if (result.isConfirmed) {
+            Helpers.closeBSModal(`#btn-close-modal-transfer-preview`).then(() => {
+                TransactionService.makeRequestMoney({
+                    amount,
+                    note,
+                    to_wallet: wallet['address'],
+                }).then(r => {
+                    if (r.status == 200) {
+                        SwalPlugin.alertPositioned({
+                            title: "Request sent",
+                            html: `Request a money for ${amountInUSD} from "${name}" has been sent, and waiting for approval from "${name}".`,
+                            icon: 'success',
+                            timer: 5000,
+                        });
+                    }
+                    return r;
+                })
+            });
+        }
+    });
+};
