@@ -136,7 +136,7 @@
         </div>
 
         <TransferPreviewModal
-            @nextClicked="(obj) => state.transferPreviewModal.currentStep == `SEND` ? handleSendPayment(obj) : handleRequestPayment(obj)"
+            @nextClicked="(obj) => state.transferPreviewModal.currentStep == `SEND` ? handleSendPayment(obj) : handleMakeRequestPayment(obj)"
             :user="props.contact?.user"
         >
             <template
@@ -154,10 +154,9 @@ import StarIcon from "@/components/Icons/StarIcon.vue";
 import SwalPlugin from "../../../plugins/SwalPlugin";
 import Helpers from "../../../Helpers";
 import { useContactStore } from '@/stores/ContactStore.js';
-import { searchPeoplesOnPayfan } from "../../../services/functions";
+import { searchPeoplesOnPayfan, handleSendPayment, handleMakeRequestPayment } from "../../../services/functions";
 import { useSearchPeopleStore } from "../../../stores/SearchPeopleStore";
 import TransferPreviewModal from "./TransferPreviewModal.vue";
-import { handleSendPayment } from "@/services/functions.js";
 const SearchPeopleStore = useSearchPeopleStore();
 const ContactStore = useContactStore();
 defineComponent({ StarIcon, TransferPreviewModal });
