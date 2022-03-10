@@ -25,6 +25,7 @@
                         <h5 class="modal-title" id="modal-transfer-previewLabel"></h5>
                         <button
                             type="button"
+                            id="btn-close-modal-transfer-preview"
                             class="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
@@ -59,14 +60,14 @@
                             <input
                                 @change="amountToUSD"
                                 placeholder="Amount in USD"
-                                v-model="transfer.amount"
+                                v-model="transfer.amountInUSD"
                                 type="text"
                                 class="form-control fw-bold fs-5 text-center"
                             />
                             <AlertError
                                 class="mt-1"
                                 @close="v$.$reset()"
-                                :error="v$?.amount?.$errors[0]?.$message"
+                                :error="v$?.amountInUSD?.$errors[0]?.$message || v$?.amount?.$errors[0]?.$message"
                             />
                         </div>
 
@@ -96,7 +97,9 @@
                             @click="onNextClicked"
                             type="button"
                             class="btn w-100 rounded-pill btn-light fw-bold text-secondary"
-                        >{{ props.nextButtonText || "Continue" }}</button>
+                        >
+                            <slot name="nextButtonText">Continue</slot>
+                        </button>
                         <a
                             class="btn rounded-pill px-4 text-navy fw-bold hover-underline"
                             data-bs-dismiss="modal"
@@ -110,50 +113,55 @@
 
 <script setup>
 import useVuelidate from "@vuelidate/core";
-import { maxLength, helpers, /* helpers , */ } from '@vuelidate/validators';
-import { defineProps, defineEmits, reactive, defineComponent } from "vue";
+import { maxLength, helpers, maxValue, minValue } from '@vuelidate/validators';
+import { defineProps, defineEmits, reactive, defineComponent, watch } from "vue";
 import AlertError from "../../Errors/AlertError.vue";
 import ValidatorService from "../../../services/ValidatorService";
 defineComponent({ AlertError })
 const props = defineProps({
     user: {},
-    nextButtonText: String,
 });
 const emits = defineEmits(["nextClicked",]);
 const transfer = reactive({
-    amount: null, note: ""
+    amountInUSD: null, amount: 0, note: ""
 })
+
+watch(() => props.user, () => {
+    transfer.amountInUSD = null, transfer.amount = 0, transfer.note = '';
+});
+
 const v$ = useVuelidate({ // rules  
-    amount: { $lazy: true, validCurrency: helpers.withMessage("Value must be a valid USD currency.", ValidatorService.isCurrency), },
+    amountInUSD: {
+        $lazy: true, validCurrency: helpers.withMessage("Value must be a valid USD currency.", ValidatorService.isCurrency),
+    }, amount: {
+        minValue: helpers.withMessage("Minimum transaction is $0.10", minValue(0.10)),
+        maxValue: helpers.withMessage("Maximum transaction is $100,000,000.00 ", maxValue(100000000))
+    },
     note: { maxLength: maxLength(255) },
 },  /*state */ transfer)
 
 function amountToUSD() {
-    if (!transfer.amount) return
+    if (!transfer.amountInUSD) return
 
     //remove dollar sign and commas , and replace duplicate "." with only a single "." ; 
-    const amount = transfer.amount.replace(/[$,]/g, "").replace(/[.]+/g, ".");
+    const amount = transfer.amountInUSD.replace(/[$,]/g, "").replace(/[.]+/g, ".");
 
     // amount string -> parse to float (if not the ".toFixed" funtion below will not work ) ; 
-    const amountParsedFloat = parseFloat(amount);
+    transfer.amount = parseFloat(amount);
 
     // make the parsedFloat (amount) to USD currency format ;
-    const converted = amountParsedFloat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    const converted = transfer.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
-    transfer.amount = converted.toString().toLowerCase() != "nan" ? "$" + converted : null;
+    return (transfer.amountInUSD = converted.toString().toLowerCase() != "nan" ? "$" + converted : null);
 }
 
 async function onNextClicked() {
     amountToUSD()
     const validator = await v$.value.$validate()
-    if (!validator) {
-        return;
-    }
-
+    if (!validator) return;
 
     emits('nextClicked', { ...props.user, ...transfer, });
 }
-
 </script>
 
 <style scoped>
