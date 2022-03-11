@@ -227,11 +227,6 @@ function removeContact() {
                         icon: "success",
                         timer: 1000,
                     });
-                    searchPeoplesOnPayfan(SearchPeopleStore.searchKeyword).then(r => {
-                        if (r.status == 200) {
-                            SearchPeopleStore.refillResults(r.data);
-                        }
-                    });
                 }
             });
         }
