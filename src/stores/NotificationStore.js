@@ -5,7 +5,8 @@ import {
 
 export const useNotificationStore = defineStore("notification", {
     state: () => ({
-        latest: {}
+        "latest/pagintion": {},
+        "latest/data": {},
     }),
 
     actions: {
