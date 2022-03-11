@@ -83,4 +83,19 @@ export default class UserService {
             return error.response;
         }
     }
+
+    static async updateNotificationSettings({
+        request_notification,
+        receive_notification
+    }) {
+        try {
+            const response = axios.patch("/api/user/self/settings/notifications", {
+                request_notification,
+                receive_notification
+            });
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
 }
