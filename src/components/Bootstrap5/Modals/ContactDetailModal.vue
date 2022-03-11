@@ -189,7 +189,6 @@ const lastTransactionDateMonth = computed(() => {
 watch(() => props.contact, async contactValue => {
     if ("id" in contactValue) {
         const response = await ContactService.lastTransactionDetail(contactValue['id'])
-        console.log(response.data);
         if (response.status == 200) {
             state.contact.last_transaction.data = await response.data.last_transaction || {};
             state.contact.isFavorited = props.contact["status"] == "FAVORITED" ? true : false;
