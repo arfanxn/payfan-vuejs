@@ -21,4 +21,21 @@ export default class TransactionService {
             return error.response;
         }
     }
+
+    static async makeRequestMoney({
+        amount,
+        to_wallet,
+        note
+    }) {
+        try {
+            const response = await axios.post("/api/user/self/transaction/request-money/make", {
+                amount,
+                note,
+                to_wallet,
+            });
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
 }
