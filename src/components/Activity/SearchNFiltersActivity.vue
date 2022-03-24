@@ -1,9 +1,10 @@
 <template>
     <div class>
-        <form class="row p-0 m-0">
+        <form @submit.prevent class="row p-0 m-0">
             <div class="col-2 px-1">
                 <div class="form-floating mb-3">
                     <input
+                        @change="(e) => ActivitiesStore.updateFilterBy({ start_at: e.target.value })"
                         id="inputStartAt"
                         type="date"
                         class="form-control"
@@ -16,6 +17,7 @@
             <div class="col-2 px-1">
                 <div class="form-floating mb-3">
                     <input
+                        @change="(e) => ActivitiesStore.updateFilterBy({ end_at: e.target.value })"
                         type="date"
                         class="form-control"
                         id="inputEndAt"
@@ -28,6 +30,8 @@
             <div class="col-7 px-1">
                 <div class="ps-0 form-floating mb-3 d-flex">
                     <input
+                        @blur="filterByKeyword"
+                        @keyup.enter="filterByKeyword"
                         id="inputSearch"
                         type="text"
                         class="form-control rounded-0 rounded-start"
@@ -35,6 +39,7 @@
                     />
                     <label for="inputSearch">Search Activities</label>
                     <button
+                        @click="filterByKeyword"
                         class="btn btn-outline-primary rounded-0 rounded-end"
                         type="button"
                         id="button-addon2"
@@ -94,6 +99,11 @@ function closeFilterTag(filterBy) {
             ActivitiesStore.updateFilterBy({ status: null });
             break;
     }
+}
+
+function filterByKeyword(event) {
+    const keyword = event.target.value;
+    ActivitiesStore.updateFilterBy({ keyword: keyword })
 }
 </script>
 
