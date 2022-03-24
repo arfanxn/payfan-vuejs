@@ -30,9 +30,7 @@ import AccountSettings from "@/components/Settings/AccountSettings.vue";
 import SecuritySettings from "@/components/Settings/SecuritySettings.vue";
 import PrivacyAndNotifications from '../components/Settings/PrivacyAndNotifications.vue';
 import { useRoute } from 'vue-router';
-import { useUserStore } from "../stores/UserStore.js";
 const route = useRoute();
-const userStore = useUserStore();
 
 defineComponent({
     NavbarTop, RightSideMenu, AccountSettings,
@@ -52,7 +50,6 @@ const state = reactive({
 onMounted(() => {
     (state.rightSideMenu).forEach(elem => elem.link.toLowerCase() == route.path.toLowerCase()
         ? state.currentMenu = elem.name : null);
-    userStore.fetchSelf();
 });
 
 
