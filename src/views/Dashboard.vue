@@ -24,18 +24,13 @@ import WalletCard from '../components/Dashboard/WalletCard.vue';
 import TransferMenu from '../components/Dashboard/TransferMenu.vue';
 import RecentActivity from '../components/Dashboard/RecentActivity.vue';
 import SendAgain from '../components/Dashboard/SendAgain.vue';
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent } from 'vue';
 import { useUserStore } from '@/stores/UserStore.js';
 const UserStore = useUserStore();
 
 defineComponent({
   NavbarTop, TransferMenu, WalletCard, RecentActivity, SendAgain
 })
-
-onMounted(() => {
-  UserStore.fetchSelf()
-});
-
 </script>
 
 <style scoped>
