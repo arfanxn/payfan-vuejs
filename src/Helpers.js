@@ -63,4 +63,8 @@ export default class Helpers {
     static getFirstCharEachWord(string) {
         return string.split(" ").map(word => word.charAt(0));
     }
+
+    static tap($variable, callback) {
+        return callback($variable);
+    }
 }
