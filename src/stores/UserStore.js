@@ -1,17 +1,18 @@
 import axios from "axios";
+// import {
+//     watch
+// } from "vue";
 import {
     defineStore
 } from "pinia";
 
 export const useUserStore = defineStore("user", {
-    // getters: {
-    //     userCredentials(state) {
-    //     },
-    // },
+
 
     state: () => ({
         self: {},
-        "self/settings": {}
+        "self/settings": {},
+        "self/isLoggedIn": Boolean,
     }),
     getters: {
         "self/joined_at": (state) => {
