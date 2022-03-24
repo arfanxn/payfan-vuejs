@@ -2,12 +2,12 @@ import {
   createRouter,
   createWebHistory
 } from 'vue-router';
-import store from '../store';
 import Dashboard from '../views/Dashboard.vue';
 import Auth from '../views/Auth.vue';
 import AuthService from '../services/AuthService';
-store;
-
+import {
+  useUserStore
+} from '@/stores/UserStore.js';
 
 const routes = [{
     path: '/',
@@ -66,6 +66,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const UserStore = useUserStore();
   let docTitle = String();
 
   if (to.name) {
@@ -79,15 +80,24 @@ router.beforeEach((to, from, next) => {
 
   window.scrollTo(0, 0);
 
-  if (to.name && to.name.toLowerCase() == "auth") {
+  // this if statement is used to prevent already loged in user to accessing the "auth" page (login/register page)
+  if (to.name && to.name.toLowerCase() == "auth") { // if redirect to "auth" page then check for user already loged in or not logged in
     AuthService.check().then(response => {
-      response.status != 401 ? window.location = '/' : null;
+      if (response.status != 401 && response.status == 200) { // if response status != 401 that means that user is already logged in 
+        window.location = '/'; // if already logged in then redirect to "dashboard" page 
+      }
     });
   }
 
-  if (!("guest" in to.meta)) {
+  if (!("guest" in to.meta)) { // if "guest" is not in the "to.meta" object (that's mean the routes require Authentication)
     AuthService.check().then(response => {
-      response.status != 401 ? next() : window.location = "/auth";
+      if (response.status != 401 && response.status == 200) {
+        UserStore['self/isLoggedIn'] = true;
+        next() // next if user is already logged in
+      } else { // if not logged in/authenticated then redirect to "auth" page
+        UserStore['self/isLoggedIn'] = false;
+        window.location = "/auth";
+      }
     });
   } else next();
 
