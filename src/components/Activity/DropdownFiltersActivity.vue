@@ -5,7 +5,10 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
         >Filters</a>
-        <div class="dropdown-menu py-3 px-4 dropdown-menu-filters">
+        <div
+            class="dropdown-menu py-3 px-4 dropdown-menu-filters"
+            @click="e => e.stopPropagation()"
+        >
             <main class="d-flex justify-content-between">
                 <div class="w-100 me-1">
                     <header class="mb-3">Filter by status</header>
