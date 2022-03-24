@@ -4,44 +4,26 @@
         <SearchNFiltersActivity />
 
         <div class="bg-white mx-1 border rounded p-4 mt-4">
-            <p class="fw-bold">All Activities</p>
+            <p class="fw-bold">Activities</p>
 
             <div class="p-0 m-0">
-                <div class="px-3 mb-4">
-                    <!-- <small class="fw-bold">No activities yet.</small> -->
-                    <small class="fw-bold">Dec 2021</small>
-                </div>
-                <router-link
-                    to="/"
-                    class="wrapper-activity d-flex justify-content-between cursor-pointer py-3 px-4"
-                    v-for="(item, index) in [1, 5]"
+                <small
+                    v-if="!Object.keys(ActivitiesStore['pagination/data']).length"
+                    class="px-3 fw-bold"
+                >No activities yet.</small>
+
+                <div
+                    v-for="(activities, keyYearAndMonth, index) in ActivitiesStore['pagination/data']"
                     :key="index"
                 >
-                    <div class="d-flex text-dark w-100">
-                        <div
-                            class="contact-icon-size bg-warning rounded-circle d-flex justify-content-center"
-                        >
-                            <span class="fw-bold my-auto">AM</span>
-                        </div>
-                        <div class="ms-3 text-secondary">
-                            <p class="fw-bold my-auto text-dark">Alif Maulana</p>
-
-                            <small class="d-block">6 Dec</small>
-                            <small class="d-block">Send Money</small>
-                            <small class="d-block">"Thanks mate!"</small>
-
-                            <div
-                                class="rounded-pill border-navy border text-navy fw-bold d-flex justify-content-center px-2 mt-2"
-                            >
-                                <span class="my-auto">Repeat this transaction</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-dark">
-                        <p class="fw-bold">-&nbsp;100,00&nbsp;$</p>
-                    </div>
-                </router-link>
+                    <small class="px-3 mb-3 d-block fw-bold">
+                        {{
+                            Helpers.tap(new Date(keyYearAndMonth), date => `${DateHelper
+                                .numericMonthtoString(date.getMonth()/**/, 3)} ${date.getFullYear()} `)
+                        }}
+                    </small>
+                    <ActivityList :key="index" :activities="activities" />
+                </div>
             </div>
         </div>
     </main>
@@ -50,9 +32,21 @@
 <script setup>
 import NavbarTop from '../components/NavbarTop.vue';
 import SearchNFiltersActivity from '@/components/Activity/SearchNFiltersActivity.vue';
-import { defineComponent } from 'vue';
-defineComponent({ NavbarTop, SearchNFiltersActivity });
+import Helpers from '@/Helpers.js';
+import DateHelper from '@/helpers/DateHelper.js';
+import ActivityList from '@/components/Activity/ActivityList.vue';
+import { defineComponent, onMounted, watch } from 'vue';
+import { useActivitiesStore } from '../stores/ActivitiesStore';
+const ActivitiesStore = useActivitiesStore();
+defineComponent({ NavbarTop, SearchNFiltersActivity, ActivityList });
 
+onMounted(() => {
+    ActivitiesStore.fetch();
+});
+
+watch(() => ActivitiesStore.filter.by, () => {
+    ActivitiesStore.fetch();
+}, { deep: true })
 
 </script>
 
