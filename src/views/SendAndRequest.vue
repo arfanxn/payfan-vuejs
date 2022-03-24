@@ -52,7 +52,8 @@ onMounted(() => {
     document.body.style.height = "1000px";
 
     ContactService.topContacts().then(r => {
-        ContactStore.topContacts = r.data['contacts'];
+        if (r.status == 200)
+            ContactStore.topContacts = r.data['contacts'];
     });
 });
 onUpdated(() => {
