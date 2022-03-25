@@ -18,8 +18,8 @@ export const useActivitiesStore = defineStore("activities", {
                 status: null
             },
             option: {
-                status: ["Completed", "Pending", "Failed"],
-                transaction_type: ["Send", "Request", "Reward"]
+                status: ["Completed", "Pending", "Rejected", "Failed"],
+                transaction_type: ["Sending", "Receiving", "Requesting", "Requested", `${Helpers.ENV("APP_NAME")} Gift`]
             }
         }
     }),
@@ -54,7 +54,7 @@ export const useActivitiesStore = defineStore("activities", {
                     this.filter.by.status = status;
             }
         },
-        async fetch() {
+        async fetch(page = 1) {
             try {
                 const {
                     keyword,
@@ -66,6 +66,7 @@ export const useActivitiesStore = defineStore("activities", {
                 const response = await axios.get("/api/user/self/orders", {
                     // const response = await axios.get("/api/orders", {
                     params: {
+                        page,
                         keyword: keyword || "",
                         start_at: start_at || null,
                         end_at: end_at || null,
