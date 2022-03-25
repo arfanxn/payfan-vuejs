@@ -53,9 +53,13 @@
                                 <span>Request a payment</span>
                                 <div class="form-check form-switch">
                                     <input
+                                        @change="updateNotificationSettings({
+                                            request_notification: !UserStore['self/settings']['request_notification']
+                                        })"
                                         class="form-check-input"
                                         type="checkbox"
                                         id="flexSwitchCheckChecked"
+                                        :checked="UserStore['self/settings']['request_notification']"
                                     />
                                 </div>
                             </div>
@@ -66,10 +70,11 @@
 
                                 <div class="form-check form-switch">
                                     <input
+                                        @change="updateNotificationSettings({ receive_notification: !UserStore['self/settings']['receive_notification'] })"
                                         class="form-check-input"
                                         type="checkbox"
                                         id="flexSwitchCheckChecked"
-                                        checked
+                                        :checked="UserStore['self/settings']['receive_notification']"
                                     />
                                 </div>
                             </div>
@@ -80,3 +85,31 @@
         </div>
     </teleport>
 </template>
+
+<script setup>
+import { useUserStore } from '../../../stores/UserStore';
+import UserService from '../../../services/UserService'
+import SwalPlugin from '../../../plugins/SwalPlugin';
+const UserStore = useUserStore();
+
+const updateNotificationSettings = async ({ request_notification, receive_notification }) => {
+    UserService.updateNotificationSettings({ request_notification, receive_notification }).then(r => {
+        if (r.status == 200) {
+            if (request_notification) {
+                UserStore['self/settings']['request_notification'] = request_notification;
+            } else if (receive_notification) {
+                UserStore['self/settings']['receive_notification'] = receive_notification;
+            }
+
+            if ("message" in r.data && typeof r.data["message"] == "object") {
+                const messageKeys = Object.keys(r.data.message);
+                SwalPlugin.alertPositioned({ title: r.data.message[messageKeys[0]], icon: "success", timer: 1500 });
+            }
+        }
+    });
+};
+
+
+
+
+</script>

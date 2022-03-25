@@ -21,7 +21,12 @@
             <li class="dropdown-header-wrapper d-flex py-1 justify-content-center">
                 <h5 class="dropdown-header text-white fs-6 fw-bold my-auto">
                     Notifications
-                    <span>({{ NotificationStore['latest/total_unread'] }})</span>
+                    <span>
+                        ({{
+                            parseInt(NotificationStore['latest/total_unread']) >= 100 ?
+                                "100+" : NotificationStore['latest/total_unread']
+                        }})
+                    </span>
                 </h5>
             </li>
             <li
