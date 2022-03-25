@@ -53,7 +53,7 @@
                                     :error="v$?.security_question?.$errors[0]?.$message"
                                 />
                                 <input
-                                    :placeholder="Helpers.strCensor(20)"
+                                    :placeholder="StrHelper.make().censor(20).get()"
                                     type="text"
                                     class="form-control mt-3 mb-1"
                                     id="inputSecurityAnswer"
@@ -80,6 +80,7 @@
 <script setup>
 import { computed, defineComponent, ref } from 'vue-demi';
 import Helpers from '../../../Helpers';
+import StrHelper from '../../../helpers/StrHelper';
 import SwalPlugin from '../../../plugins/SwalPlugin';
 import UserService from '../../../services/UserService';
 import { useUserStore } from '../../../stores/UserStore';

@@ -20,7 +20,7 @@
                             <span
                                 v-if="contact['user']['profile_pict'].includes('#')"
                                 class="fw-bold my-auto text-white"
-                            >{{ Helpers.getFirstCharEachWord(contact["user"]["name"]).join("").slice(0, 2) }}</span>
+                            >{{ StrHelper.make(contact["user"]["name"]).firstCharEachWord().get().slice(0, 2) }}</span>
                             <img v-else :src="contact['user']['profile_pict']" alt />
                         </div>
                         <span class="ms-3 my-auto">{{ contact["user"]["name"] }}</span>
@@ -62,6 +62,7 @@ import StarIcon from '@/components/Icons/StarIcon.vue';
 import ContactDetailModal from '../Bootstrap5/Modals/ContactDetailModal.vue';
 import { defineComponent } from '@vue/runtime-core';
 import Helpers from '../../Helpers';
+import StrHelper from '../../helpers/StrHelper';
 import ContactService from "@/services/ContactService.js";
 import { useContactStore } from '../../stores/ContactStore';
 import { useSearchPeopleStore } from '../../stores/SearchPeopleStore';

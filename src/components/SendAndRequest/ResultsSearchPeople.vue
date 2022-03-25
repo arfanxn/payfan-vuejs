@@ -25,14 +25,14 @@
                         <span
                             v-if="contact['user']['profile_pict'].includes(`#`)"
                             class="fw-bold my-auto text-white"
-                        >{{ Helpers.getFirstCharEachWord(contact['user']['name']).join("").slice(0, 2) }}</span>
+                        >{{ StrHelper.make(contact['user']['name']).firstCharEachWord().get().slice(0, 2) }}</span>
                         <img v-else :src="contact['user']['profile_pict']" />
                     </div>
                     <div class="ms-3">
                         <small class="fw-bold d-block">{{ contact['user']['name'] }}</small>
                         <small
                             class="fw-light"
-                        >{{ contact["user"]["email"].includes(SearchPeopleStore['searchKeyword']) ? contact["user"]["email"] : Helpers.strCensor(contact["user"]["email"]) }}</small>
+                        >{{ contact["user"]["email"].includes(SearchPeopleStore['searchKeyword']) ? contact["user"]["email"] : StrHelper.make(contact["user"]["email"]).censor().get() }}</small>
                     </div>
                 </div>
             </div>
@@ -60,14 +60,14 @@
                         <span
                             v-if="user['profile_pict'].includes(`#`)"
                             class="fw-bold my-auto text-white"
-                        >{{ Helpers.getFirstCharEachWord(user['name']).join("").slice(0, 2) }}</span>
+                        >{{ StrHelper.make(user['name']).firstCharEachWord().get().slice(0, 2) }}</span>
                         <img v-else :src="user['profile_pict']" />
                     </div>
                     <div class="ms-3">
                         <small class="fw-bold d-block">{{ user['name'] }}</small>
                         <small
                             class="fw-light"
-                        >{{ user["email"].includes(SearchPeopleStore.searchKeyword) ? user["email"] : Helpers.strCensor(user["email"]) }}</small>
+                        >{{ user["email"].includes(SearchPeopleStore.searchKeyword) ? user["email"] : StrHelper.make(user["email"]).censor().get() }}</small>
                     </div>
                 </div>
             </div>
@@ -83,6 +83,7 @@
 
 <script setup>
 import Helpers from '../../Helpers';
+import StrHelper from '../../helpers/StrHelper';
 import { defineEmits } from "vue";
 import { useSearchPeopleStore } from '../../stores/SearchPeopleStore';
 const SearchPeopleStore = useSearchPeopleStore();

@@ -17,7 +17,7 @@
                             class="fw-bold my-auto text-white"
                         >
                             {{
-                                Helpers.getFirstCharEachWord(order?.to_wallet?.user?.name).join("").slice(0, 2)
+                                StrHelper.make(order?.to_wallet?.user?.name).firstCharEachWord().get().slice(0, 2)
                             }}
                         </span>
                         <img v-else :src="order.to_wallet.user.profile_pict" />
@@ -32,7 +32,7 @@
                             class="fw-bold my-auto text-white"
                         >
                             {{
-                                Helpers.getFirstCharEachWord(order?.from_wallet?.user?.name).join("").slice(0, 2)
+                                StrHelper.make(order?.from_wallet?.user?.name).firstCharEachWord().get().slice(0, 2)
                             }}
                         </span>
                         <img v-else :src="order.from_wallet.user.profile_pict" />
@@ -52,7 +52,13 @@
                             <p class="fw-bold my-auto text-dark">{{ order.amount }}&nbsp;$</p>
                         </div>
 
-                        <small class="d-block">{{ order.started_at }}</small>
+                        <small class="d-block">
+                            {{
+                                Helpers.tap(new Date(order.started_at), date => {
+                                    return date.getDate() + " " + DateHelper.numericMonthtoString(date.getMonth());
+                                })
+                            }}
+                        </small>
                         <small class="d-block">{{ order.type }}</small>
                         <small class="d-block">{{ `"${order.note.substring(0, 100)}"` }}</small>
 
@@ -137,6 +143,8 @@
 <script setup>
 import { defineComponent, defineProps, ref } from 'vue';
 import Helpers from "@/Helpers.js";
+import StrHelper from "@/helpers/StrHelper.js";
+import DateHelper from "@/helpers/DateHelper.js";
 import ActivityDetails from './ActivityDetails.vue';
 defineComponent({ ActivityDetails });
 const props = defineProps({

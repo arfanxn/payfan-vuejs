@@ -52,18 +52,6 @@ export default class Helpers {
         return isContains;
     }
 
-    static strCensor(numberOrStr) {
-        if (typeof numberOrStr == "string") {
-            return "*".repeat(numberOrStr.length);
-        } else if (typeof numberOrStr != "string") {
-            return "*".repeat(numberOrStr);
-        }
-    }
-
-    static getFirstCharEachWord(string) {
-        return string.split(" ").map(word => word.charAt(0));
-    }
-
     static tap($variable, callback) {
         return callback($variable);
     }

@@ -8,7 +8,6 @@
                         id="inputStartAt"
                         type="date"
                         class="form-control"
-                        placeholder="name@example.com"
                     />
                     <label for="inputStartAt">Start</label>
                 </div>
@@ -21,7 +20,7 @@
                         type="date"
                         class="form-control"
                         id="inputEndAt"
-                        placeholder="name@example.com"
+                        :value="(new Date())"
                     />
                     <label for="inputEndAt">End</label>
                 </div>
@@ -103,6 +102,7 @@ function closeFilterTag(filterBy) {
 
 function filterByKeyword(event) {
     const keyword = event.target.value;
+    console.log(keyword);
     ActivitiesStore.updateFilterBy({ keyword: keyword })
 }
 </script>

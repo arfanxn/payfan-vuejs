@@ -11,8 +11,12 @@ export default class StrHelper {
         return this.string;
     }
 
-    censor() {
-        this.string = "*".repeat(this.string).length;
+    censor(ifStringNotProvidedUseCensorLength = null) {
+        //  if string is provided get the length of the string and repeat the censor by string length  
+        this.string = (!ifStringNotProvidedUseCensorLength && this.string.length) ?
+            "*".repeat(this.string.length) :
+            // otherwise if string isn't provided get the censor length from method argument
+            "*".repeat(ifStringNotProvidedUseCensorLength);
         return this;
     }
 
@@ -25,5 +29,10 @@ export default class StrHelper {
         this.string = this.string.replace(/\\/g, "");
         return this;
 
+    }
+
+    firstCharEachWord() {
+        this.string = this.string.split(" ").map(word => word.charAt(0)).join("");
+        return this;
     }
 }
