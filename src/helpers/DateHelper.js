@@ -1,7 +1,7 @@
 class DateHelper {
     numericMonthtoString(month, length = Infinity) {
-        if (typeof month != "number" || (month < 1 || month > 12)) {
-            throw Error("Month must be a number 1 - 12");
+        if (typeof month != "number" || (month < 0 || month > 11)) {
+            throw Error("Month must be a number 0 - 11");
         }
 
         const monthNames = [
