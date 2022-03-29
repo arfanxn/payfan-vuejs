@@ -31,11 +31,15 @@ export default class Helpers {
     static async closeBSModal(key) {
         return await new Promise(resolve => {
             const closeBtn = document.querySelector(key);
+            if (!closeBtn)
+                resolve()
+
             closeBtn.addEventListener("click", () => {
                 closeBtn.removeEventListener(closeBtn, this);
                 resolve()
             });
             closeBtn.click();
+
         });
 
     }
