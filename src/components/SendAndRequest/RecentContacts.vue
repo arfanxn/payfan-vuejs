@@ -33,8 +33,8 @@
 
 <script setup>
 import { defineEmits } from "vue";
-const emits = defineEmits(["contactClicked"]);
 import { useContactStore } from '../../stores/ContactStore';
+const emits = defineEmits(["contactClicked"]);
 const ContactStore = useContactStore();
 
 function onContactClicked(contact) {
