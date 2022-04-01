@@ -66,11 +66,14 @@ import Helpers from '@/Helpers.js';
 import DateHelper from '@/helpers/DateHelper.js';
 import ActivityList from '@/components/Activity/ActivityList.vue';
 import { defineComponent, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useActivitiesStore } from '../stores/ActivitiesStore';
 const ActivitiesStore = useActivitiesStore();
+const route = useRoute();
 defineComponent({ NavbarTop, SearchNFiltersActivity, ActivityList });
 
 onMounted(() => {
+    ActivitiesStore.updateFilterBy({ ...route.query });
     ActivitiesStore.fetch();
 });
 
@@ -83,7 +86,7 @@ function loadActivitiesPagination(page) {
 }
 </script>
 
-<style scoped>
+    <style scoped>
 .icon-search {
     width: 25px;
     height: 25px;
