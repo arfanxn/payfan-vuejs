@@ -102,8 +102,7 @@ function closeFilterTag(filterBy) {
 
 function filterByKeyword(event) {
     const keyword = event.target.value;
-    console.log(keyword);
-    ActivitiesStore.updateFilterBy({ keyword: keyword })
+    ActivitiesStore.updateFilterBy({ keyword: keyword });
 }
 </script>
 
