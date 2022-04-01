@@ -49,14 +49,42 @@
                                 }}
                             </p>
                             <!--  -->
-                            <p class="fw-bold my-auto text-dark">{{ order.amount }}&nbsp;$</p>
+                            <div class="fw-bold my-auto m-0 p-0">
+                                <!-- if the status still pending make the text amount color gray (ambigous) -->
+                                <p
+                                    class="text-secondary"
+                                    v-if="order.status?.toUpperCase()?.includes(`PENDING`)"
+                                >{{ order.amount }}&nbsp;$</p>
+                                <!-- if the status completed and order type is either SEND or REQUESTED  make the text amount color red (subtraction) -->
+                                <p
+                                    class="text-danger"
+                                    v-else-if="
+                                    (order.type?.toUpperCase()?.includes(`SEND`)
+                                        || order.type?.toUpperCase()?.includes(`REQUESTED`))
+                                    && order.status?.toUpperCase()?.includes(`COMPLETE`)"
+                                >- {{ order.amount }}&nbsp;$</p>
+                                <!-- if the status completed and order type is either REQUESTING or RECEIVINF or GIFT  make the text amount color green (addaction) -->
+                                <p
+                                    class="text-success"
+                                    v-else-if="(order.type?.toUpperCase()?.includes(`REQUESTING`)
+                                    || order.type?.toUpperCase()?.includes(`RECEIV`)
+                                    || order.type?.toUpperCase()?.includes(`GIFT`))
+                                    && order.status?.toUpperCase()?.includes(`COMPLETE`)"
+                                >+ {{ order.amount }}&nbsp;$</p>
+                                <!-- if the status FAILED or REJECTED make the text amount color danger  -->
+                                <p
+                                    class="text-danger"
+                                    v-else-if="order.status?.toUpperCase()?.includes(`FAIL`)
+                                    || order.status?.toUpperCase()?.includes(`REJECT`)"
+                                >x {{ order.amount }}&nbsp;$</p>
+                            </div>
                         </div>
 
                         <small class="d-block">
                             {{
-                                Helpers.tap(new Date(order.started_at), date => {
-                                    return date.getDate() + " " + DateHelper.numericMonthtoString(date.getMonth());
-                                })
+                                Helpers.tap(new Date(order.started_at), date =>
+                                    date.getDate() + " " + DateHelper.numericMonthtoString(date.getMonth())
+                                )
                             }}
                         </small>
                         <small class="d-block">{{ order.type }}</small>
@@ -64,10 +92,16 @@
 
                         <div class="d-flex justify-content-between mt-2">
                             <div class>
-                                <!-- show this if order type is sending money -->
+                                <!-- show this if order type is send money -->
                                 <button
-                                    @click.stop="test"
                                     v-if="(order.type?.toUpperCase()?.includes(`SEND`))"
+                                    @click.stop="handleSendPayment({
+                                        amount: order.amount,
+                                        name: order.to_wallet.user.name,
+                                        note: order.note,
+                                        wallet: order.to_wallet.address,
+                                        amountInUSD: StrHelper.make(order.amount).toUSD().get()
+                                    })"
                                     class="btn btn-outline-primary d-flex rounded-pill fw-bold px-3 text-center py-0"
                                 >
                                     <small class="my-auto">Repeat this transaction</small>
@@ -75,23 +109,39 @@
 
                                 <!-- show this if order type is requesting and order status is pending and waiting for approval from the related order wallet (to_wallet)-->
                                 <button
-                                    @click.stop
-                                    v-else-if="(order.type?.toUpperCase()?.includes(`REQUESTING`))"
+                                    @click.stop="handleMakeRequestPayment({
+                                        amount: order.amount,
+                                        wallet: order.to_wallet.address,
+                                        note: order.note,
+                                        name: order.to_wallet.user.name,
+                                        amountInUSD: StrHelper.make(order.amount).toUSD().get()
+                                    })"
+                                    v-else-if="(order.type?.toUpperCase()?.includes(`REQUESTING`))
+                                    && !(order.status.toUpperCase().includes(`PENDING`))"
                                     class="btn btn-outline-primary d-flex rounded-pill fw-bold px-3 text-center py-0"
                                 >
                                     <small class="my-auto">Repeat this request</small>
                                 </button>
 
-                                <!-- show this if order type is requested and order status is pending and not accepted/approved yet -->
-                                <button
-                                    @click.stop
+                                <!-- show this if order type is requested and order status is pending and not approved or rejected yet -->
+                                <div
                                     v-else-if="(order.type?.toUpperCase()?.includes(`REQUESTED`)) &&
-                                    !(order.status?.toUpperCase()?.includes(`COMPLETE`))"
-                                    class="btn btn-outline-primary d-flex rounded-pill fw-bold px-3 text-center py-0"
+                                    (order.status?.toUpperCase()?.includes(`PENDING`))"
+                                    class="d-flex justify-content-between"
                                 >
-                                    <small class="my-auto">Approve request money</small>
-                                </button>
-
+                                    <button
+                                        @click.stop="approveRequestMoney(order)"
+                                        class="btn btn-outline-primary d-flex rounded-pill fw-bold px-3 text-center py-0"
+                                    >
+                                        <small class="my-auto">Approve request</small>
+                                    </button>
+                                    <button
+                                        @click.stop="rejectRequestMoney(order)"
+                                        class="btn btn-outline-danger d-flex rounded-pill ms-1 fw-bold px-3 text-center py-0"
+                                    >
+                                        <small class="my-auto">Reject request</small>
+                                    </button>
+                                </div>
                                 <!-- show this if order type is requested and order is already completed and already accepted/approved -->
                                 <small
                                     v-else-if="(order.type?.toUpperCase()?.includes(`REQUESTED`)) &&
@@ -115,6 +165,10 @@
                                     }} has been already rejected by
                                     you
                                 </small>
+                                <small
+                                    v-else-if="(order.status?.toUpperCase()?.includes(`FAIL`))"
+                                    class="my-auto fw-bold text-center py-0 text-danger"
+                                >Order or transaction is Failed</small>
                             </div>
 
                             <div class>
@@ -133,19 +187,25 @@
                         />
                     </div>
                 </div>
-
                 <!--  -->
             </div>
         </div>
+        <!--  -->
     </div>
 </template>
 
 <script setup>
 import { defineComponent, defineProps, ref } from 'vue';
+import { handleSendPayment, handleMakeRequestPayment } from '@/services/functions.js';
 import Helpers from "@/Helpers.js";
 import StrHelper from "@/helpers/StrHelper.js";
 import DateHelper from "@/helpers/DateHelper.js";
 import ActivityDetails from './ActivityDetails.vue';
+import TransactionService from '../../services/TransactionService';
+import SwalPlugin from '../../plugins/SwalPlugin';
+import AuthService from '../../services/AuthService';
+import { useActivitiesStore } from '../../stores/ActivitiesStore';
+const ActivitiesStore = useActivitiesStore();
 defineComponent({ ActivityDetails });
 const props = defineProps({
     activities: Array
@@ -163,8 +223,58 @@ function isActivityTypeIsSendingOrRequesting(order) {
 }
 
 
-function test(event) {
-    console.log(event);
+function approveRequestMoney(order) {
+    const amountInUSD = StrHelper.make(order.amount).toUSD().get();
+
+    SwalPlugin.confirm({
+        title: `Confirm your payment`,
+        html: `Approve request from "${order.from_wallet.user.name}" ? <br>
+        Requested amount ${amountInUSD}`,
+        icon: 'question'
+    }).then(result => {
+        if (result.isConfirmed) {
+            AuthService.createVerificationCode().then(() => {
+                SwalPlugin.verificationCode("Verify to continue", async verificationCode => {
+                    return await TransactionService.approveRequestMoney(order, verificationCode)
+                        .then(r => {
+                            if (r.status == 200) {
+                                SwalPlugin.autoCloseAlert('Request approved successfully', `Request from "${name}", amount 
+                                    ${amountInUSD} has been approved.`, "success", 2000);
+                                ActivitiesStore.fetch();
+                            } else if ("error_message" in r.data) {
+                                SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
+                            }
+                            return r;
+                        })
+                })
+            })
+        }
+    });
+}
+
+
+function rejectRequestMoney(order) {
+    const amountInUSD = StrHelper.make(order.amount).toUSD().get();
+
+    SwalPlugin.confirm({
+        title: `Reject pending request`,
+        html: `Reject request from "${order.from_wallet.user.name}" ? <br>
+        Requested amount ${amountInUSD}`,
+        icon: 'question'
+    }).then(result => {
+        if (result.isConfirmed) {
+            TransactionService.rejectRequestMoney(order)
+                .then(r => {
+                    if (r.status == 200) {
+                        SwalPlugin.autoCloseAlert('Request rejected successfully', `Request from "${name}", amount ${amountInUSD} has been rejected.`, "info", 2000);
+                        ActivitiesStore.fetch();
+                    } else if ("error_message" in r.data) {
+                        SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
+                    }
+                    return r;
+                })
+        }
+    });
 }
 
 </script>
