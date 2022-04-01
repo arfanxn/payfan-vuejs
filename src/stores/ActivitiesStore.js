@@ -4,6 +4,7 @@ import {
 } from "pinia";
 import axios from "axios";
 import Helpers from "../Helpers";
+import router from "../router/index.js";
 
 export const useActivitiesStore = defineStore("activities", {
     state: () => ({
@@ -53,6 +54,11 @@ export const useActivitiesStore = defineStore("activities", {
                 else if (Helpers.arrayContains(this.filter.option.status, status))
                     this.filter.by.status = status;
             }
+            router.replace({
+                ...router.currentRoute,
+                // remove all object keys with falsy value 
+                query: Object.entries(this.filter.by).reduce((a, [k, v]) => (v ? (a[k] = v, a) : a), {}),
+            });
         },
         async fetch(page = 1) {
             try {
