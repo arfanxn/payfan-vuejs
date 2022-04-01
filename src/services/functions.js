@@ -1,5 +1,7 @@
 import axios from "axios";
 import SwalPlugin from '@/plugins/SwalPlugin.js'
+// import Swal from "sweetalert2";
+
 import TransactionService from '@/services/TransactionService.js'
 import Helpers from '@/Helpers.js'
 import AuthService from '@/services/AuthService.js'
@@ -25,6 +27,8 @@ export const handleSendPayment = ({
     wallet,
     amountInUSD
 }) => {
+    const walletAddress = typeof wallet === 'string' ? wallet : wallet['address'];
+
     SwalPlugin.confirm({
         title: 'Confirm your payment',
         html: `Send money ${amountInUSD} to "${name}" ?`,
@@ -37,11 +41,14 @@ export const handleSendPayment = ({
                         return await TransactionService.sendMoney({
                             amount,
                             note,
-                            to_wallet: wallet['address'],
+                            to_wallet: walletAddress,
                             code: verificationCode,
                         }).then(r => {
                             if (r.status == 200) {
                                 SwalPlugin.autoCloseAlert('Send Money success', `Send money to "${name}", amount ${amountInUSD} successfully.`, "success", 2000);
+                            } else if ("error_message" in r.data) {
+                                // Swal.showValidationMessage(r.data.error_message);
+                                SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
                             }
                             return r;
                         })
@@ -59,6 +66,8 @@ export const handleMakeRequestPayment = ({
     name,
     amountInUSD
 }) => {
+    const walletAddress = typeof wallet === 'string' ? wallet : wallet['address'];
+
     SwalPlugin.confirm({
         title: 'Make a request',
         html: `Request a money for ${amountInUSD} from "${name}" ?`,
@@ -69,7 +78,7 @@ export const handleMakeRequestPayment = ({
                 TransactionService.makeRequestMoney({
                     amount,
                     note,
-                    to_wallet: wallet['address'],
+                    to_wallet: walletAddress,
                 }).then(r => {
                     if (r.status == 200) {
                         SwalPlugin.alertPositioned({
