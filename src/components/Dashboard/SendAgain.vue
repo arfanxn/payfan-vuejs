@@ -31,10 +31,10 @@
                 </div>
                 <small class>Alif Maulana</small>
             </div>
-            <div class="text-center mb-4">
+            <router-link to="/transfer/contacts" class="text-center text-dark mb-4">
                 <img class="contact-icon-size p-1" src="@/assets/icons/search.png" />
                 <small class="d-block">Search</small>
-            </div>
+            </router-link>
         </div>
     </div>
 </template>

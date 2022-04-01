@@ -1,5 +1,6 @@
 import axios from "axios";
 import SwalPlugin from '@/plugins/SwalPlugin.js'
+import StrHelper from "@/helpers/StrHelper.js";
 // import Swal from "sweetalert2";
 
 import TransactionService from '@/services/TransactionService.js'
@@ -28,6 +29,7 @@ export const handleSendPayment = ({
     amountInUSD
 }) => {
     const walletAddress = typeof wallet === 'string' ? wallet : wallet['address'];
+    amountInUSD = amountInUSD ? amountInUSD : StrHelper.make(amount).toUSD().get();
 
     SwalPlugin.confirm({
         title: 'Confirm your payment',
@@ -47,7 +49,6 @@ export const handleSendPayment = ({
                             if (r.status == 200) {
                                 SwalPlugin.autoCloseAlert('Send Money success', `Send money to "${name}", amount ${amountInUSD} successfully.`, "success", 2000);
                             } else if ("error_message" in r.data) {
-                                // Swal.showValidationMessage(r.data.error_message);
                                 SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
                             }
                             return r;
@@ -67,6 +68,7 @@ export const handleMakeRequestPayment = ({
     amountInUSD
 }) => {
     const walletAddress = typeof wallet === 'string' ? wallet : wallet['address'];
+    amountInUSD = amountInUSD ? amountInUSD : StrHelper.make(amount).toUSD().get();
 
     SwalPlugin.confirm({
         title: 'Make a request',
@@ -87,6 +89,8 @@ export const handleMakeRequestPayment = ({
                             icon: 'success',
                             timer: 5000,
                         });
+                    } else if ("error_message" in r.data) {
+                        SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
                     }
                     return r;
                 })

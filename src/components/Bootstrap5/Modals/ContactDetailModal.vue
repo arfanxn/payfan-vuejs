@@ -86,7 +86,13 @@
                                 v-if="`completed_at` in state.contact.last_transaction.data"
                             >
                                 <div class="d-flex">
-                                    <small class="me-5">{{ lastTransactionDateMonth }}</small>
+                                    <small class="me-5">
+                                        {{
+                                            Helpers.tap(new Date(state.contact.last_transaction.data['completed_at']),
+                                                completedAt => `${completedAt.getDate()} ${DateHelper
+                                                    .numericMonthtoString(completedAt.getMonth(), 3)}`)
+                                        }}
+                                    </small>
                                     <div class="d-flex flex-column">
                                         <span class>{{ state.contact.last_transaction.data?.type }}</span>
                                         <small class="text-secondary mb-2">
@@ -105,8 +111,33 @@
                                                 class="cursor-pointer text-navy hover-underline d-block"
                                             >Show less</a>
                                         </small>
-                                        <a class="cursor-pointer hover-underline text-navy">
+                                        <a
+                                            v-if="state.contact.last_transaction.data['type']?.toUpperCase().includes('SEND')"
+                                            @click="handleSendPayment({
+                                                amount: state.contact.last_transaction.data['amount'],
+                                                name: contact?.user?.name,
+                                                note: state.contact.last_transaction.data['amount'],
+                                                wallet: props?.contact?.user?.wallet?.address,
+                                                amountInUSD: StrHelper
+                                                    .make(state.contact.last_transaction.data['amount'])
+                                                    .toUSD().get()
+                                                ,
+                                            })"
+                                            class="cursor-pointer hover-underline text-navy"
+                                        >
                                             <small>Repeat this transaction</small>
+                                        </a>
+                                        <a
+                                            v-else
+                                            class="cursor-pointer hover-underline text-navy"
+                                            @click="handleMakeRequestPayment({
+                                                amount: state.contact.last_transaction.data['amount'],
+                                                name: contact?.user?.name,
+                                                note: state.contact.last_transaction.data['amount'],
+                                                wallet: props?.contact?.user?.wallet?.address
+                                            })"
+                                        >
+                                            <small>Repeat this request</small>
                                         </a>
                                     </div>
                                 </div>
@@ -147,9 +178,10 @@
 </template>
 
 <script  setup>
-import { defineComponent, defineProps, computed, watch, reactive } from "vue";
+import { defineComponent, defineProps, watch, reactive } from "vue";
 import ContactService from "@/services/ContactService";
 import DateHelper from "@/helpers/DateHelper.js";
+import StrHelper from "@/helpers/StrHelper.js";
 import StarIcon from "@/components/Icons/StarIcon.vue";
 import SwalPlugin from "../../../plugins/SwalPlugin";
 import Helpers from "../../../Helpers";
@@ -175,16 +207,6 @@ const state = reactive({
         currentStep: null,
     }
 })
-const lastTransactionDateMonth = computed(() => {
-    if (state.contact.last_transaction.data?.completed_at) {
-        const completedAt = new Date(state.contact.last_transaction.data['completed_at']);
-        return `${completedAt.getDate()} ${DateHelper.numericMonthtoString(completedAt.getMonth(), 3)}`;
-    } else if (state.contact.last_transaction.data?.status) {
-        return state.contact.last_transaction.data?.status;
-    }
-
-    return 'Pending';
-});
 
 watch(() => props.contact, async contactValue => {
     if ("id" in contactValue) {
