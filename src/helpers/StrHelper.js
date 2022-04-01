@@ -28,7 +28,23 @@ export default class StrHelper {
     removeBackslashes() {
         this.string = this.string.replace(/\\/g, "");
         return this;
+    }
 
+    toUSD(withDollarSign = true) {
+        //remove dollar sign and commas , and replace duplicate "." with only a single "." ; 
+        let amount = this.string.replace(/[$,]/g, "").replace(/[.]+/g, ".");
+
+        // amount string -> parse to float (if not the ".toFixed" funtion below will not work ) ; 
+        amount = parseFloat(amount);
+
+        // make the parsedFloat (amount) to USD currency format ;
+        const converted = amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+        this.string = converted.toString().toLowerCase() != "nan" ?
+            (withDollarSign ? "$" + converted : converted) :
+            null;
+
+        return this;
     }
 
     firstCharEachWord() {
