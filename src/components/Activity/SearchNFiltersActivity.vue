@@ -8,6 +8,7 @@
                         id="inputStartAt"
                         type="date"
                         class="form-control"
+                        :value="route.query.start_at"
                     />
                     <label for="inputStartAt">Start</label>
                 </div>
@@ -20,7 +21,7 @@
                         type="date"
                         class="form-control"
                         id="inputEndAt"
-                        :value="(new Date())"
+                        :value="route.query.end_at"
                     />
                     <label for="inputEndAt">End</label>
                 </div>
@@ -34,7 +35,7 @@
                         id="inputSearch"
                         type="text"
                         class="form-control rounded-0 rounded-start"
-                        placeholder="name@example.com"
+                        :value="route.query.keyword || route.query.keywords"
                     />
                     <label for="inputSearch">Search Activities</label>
                     <button
@@ -84,7 +85,10 @@
 import { defineComponent } from "@vue/runtime-core"
 import DropdownFiltersActivity from "./DropdownFiltersActivity.vue"
 import { useActivitiesStore } from "@/stores/ActivitiesStore.js";
+import { useRoute } from "vue-router";
 const ActivitiesStore = useActivitiesStore();
+const route = useRoute();
+
 
 defineComponent({ DropdownFiltersActivity });
 
