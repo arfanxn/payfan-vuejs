@@ -37,18 +37,19 @@
                 <a class="dropdown-item text-start text-wrap py-2">
                     <div :class="notification.read_at ? `text-secondary` : `text-dark`">
                         <h6 class="fw-bold my-0 py-0">
-                            {{
+                            <!-- {{
                                 StrHelper.make(notification.type.substring(notification.type.lastIndexOf("\\") + 1)).removeBackslashes().addSpaceBeforeCapitals().get().replace(/(notificatio[n|ns]+)/ig, "")
-                            }}
+                            }}-->
+                            {{ notification.data.header }}
                         </h6>
-                        <span class="text-break" href="#">{{ notification.data.text }}</span>
+                        <span class="text-break" href="#">{{ notification.data.body }}</span>
                     </div>
 
                     <button
                         v-if="notification.data?.link && notification.data?.action"
                         class="d-flex justify-content-start me-1 btn btn-outline-primary mt-1 py-0 px-2 rounded-pill"
                     >
-                        <small class="my-auto">{{ notification.data.action }}</small>
+                        <small class="my-auto">{{ notification.data.action.text }}</small>
                     </button>
                     <button
                         @click="toogleNotificationRead(notification)"
@@ -73,7 +74,8 @@
 import { onMounted, reactive, } from 'vue';
 import { useNotificationStore } from '../../stores/NotificationStore';
 import NotificationService from "@/services/NotificationService.js";
-import StrHelper from "@/helpers/StrHelper.js"
+import StrHelper from "@/helpers/StrHelper.js";
+StrHelper;
 const NotificationStore = useNotificationStore()
 const notification = reactive({
     alreadyLoadedPageList: [],
