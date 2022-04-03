@@ -238,7 +238,7 @@ function approveRequestMoney(order) {
                     return await TransactionService.approveRequestMoney(order, verificationCode)
                         .then(r => {
                             if (r.status == 200) {
-                                SwalPlugin.autoCloseAlert('Request approved successfully', `Request from "${name}", amount 
+                                SwalPlugin.autoCloseAlert('Request approved successfully', `Request from "${order.from_wallet.user.name}", amount 
                                     ${amountInUSD} has been approved.`, "success", 2000);
                                 ActivitiesStore.fetch();
                             } else if ("error_message" in r.data) {
@@ -266,7 +266,7 @@ function rejectRequestMoney(order) {
             TransactionService.rejectRequestMoney(order)
                 .then(r => {
                     if (r.status == 200) {
-                        SwalPlugin.autoCloseAlert('Request rejected successfully', `Request from "${name}", amount ${amountInUSD} has been rejected.`, "info", 2000);
+                        SwalPlugin.autoCloseAlert('Request rejected successfully', `Request from "${order.from_wallet.user.name}", amount ${amountInUSD} has been rejected.`, "success", 2000);
                         ActivitiesStore.fetch();
                     } else if ("error_message" in r.data) {
                         SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
