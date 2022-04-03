@@ -12,7 +12,7 @@
                     class="px-3 fw-bold"
                 >
                     No activities
-                    yet.
+                    yet / activities on loading.
                 </small>
 
                 <div
