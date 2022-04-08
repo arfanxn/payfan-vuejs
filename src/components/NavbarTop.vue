@@ -35,7 +35,7 @@
                         </router-link>
                     </div>
                     <div class="navbar-nav">
-                        <DropdownNotifications />
+                        <NotificationsDropdown />
                         <router-link
                             active-class="none"
                             exact-active-class="none"
@@ -67,9 +67,9 @@ import Swal from 'sweetalert2';
 import { reactive, defineComponent } from 'vue';
 import Helpers from '../Helpers';
 import AuthService from '../services/AuthService';
-import DropdownNotifications from './Navbar/DropdownNotifications.vue';
+import NotificationsDropdown from './Navbar/NotificationsDropdown.vue';
 defineComponent({
-    DropdownNotifications
+    NotificationsDropdown
 })
 const state = reactive({
     "navbars": [

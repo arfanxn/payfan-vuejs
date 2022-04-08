@@ -2,7 +2,7 @@
     <div class="ms-4 p-5">
         <div class>
             <h5 class="text-dark mb-4">Contacts</h5>
-            <FieldSearchPeople @peopleClicked="showPeoplePreview" @contactClicked="contactDetail" />
+            <SearchPeoples @peopleClicked="showPeoplePreview" @contactClicked="contactDetail" />
         </div>
         <div class>
             <small class="text-secondary d-block mt-2">Top contacts</small>
@@ -53,27 +53,27 @@
                 </router-link>
             </div>
         </div>
-        <ContactDetailModal :contact="state.modal.contactDetail.contact" />
+        <ContactDetailsModal :contact="state.modal.contactDetail.contact" />
     </div>
 </template>
 
 <script setup>
 import StarIcon from '@/components/Icons/StarIcon.vue';
-import ContactDetailModal from '../Bootstrap5/Modals/ContactDetailModal.vue';
+import ContactDetailsModal from '../Bootstrap5/Modals/ContactDetailsModal.vue';
 import { defineComponent } from '@vue/runtime-core';
 import Helpers from '../../Helpers';
 import StrHelper from '../../helpers/StrHelper';
 import ContactService from "@/services/ContactService.js";
 import { useContactsStore } from '../../stores/ContactsStore';
 import { useSearchPeoplesStore } from '../../stores/SearchPeoplesStore';
-import FieldSearchPeople from './FieldSearchPeople.vue';
+import SearchPeoples from './SearchPeoples.vue';
 import { reactive } from 'vue';
 import SwalPlugin from '../../plugins/SwalPlugin';
 import { searchPeoplesOnPayfan } from '../../services/functions';
 const ContactsStore = useContactsStore();
 const SearchPeoplesStore = useSearchPeoplesStore();
 
-defineComponent({ StarIcon, ContactDetailModal, FieldSearchPeople });
+defineComponent({ StarIcon, ContactDetailsModal, SearchPeoples });
 const state = reactive({
     modal: {
         contactDetail: {

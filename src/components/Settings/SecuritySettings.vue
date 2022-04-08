@@ -34,14 +34,14 @@
             </div>
         </div>
         <ChangePasswordModal />
-        <SecurityQuestionModal />
+        <SecurityQuestionSettingModal />
     </div>
 </template>
 
 <script setup>
 import { defineComponent } from "vue";
 import ChangePasswordModal from "@/components/Bootstrap5/Modals/ChangePasswordModal.vue";
-import SecurityQuestionModal from "@/components/Bootstrap5/Modals/SecurityQuestionModal.vue";
+import SecurityQuestionSettingModal from "@/components/Bootstrap5/Modals/SecurityQuestionSettingModal.vue";
 import Helpers from "../../Helpers";
 import Swal from "sweetalert2";
 import { useAuthUserStore } from "../../stores/auth/AuthUserStore";
@@ -49,7 +49,7 @@ import UserService from "../../services/UserService";
 import AuthService from "../../services/AuthService";
 import SwalPlugin from "../../plugins/SwalPlugin";
 const AuthUserStore = useAuthUserStore();
-defineComponent({ ChangePasswordModal, SecurityQuestionModal });
+defineComponent({ ChangePasswordModal, SecurityQuestionSettingModal });
 
 function securityQuestion(event) {
     event;

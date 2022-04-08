@@ -50,7 +50,7 @@
 
             <div class="col-1">
                 <div class="d-flex justify-content-center my-2">
-                    <DropdownFiltersActivity />
+                    <ActivityDropdownFilterOptions />
                 </div>
             </div>
         </form>
@@ -82,12 +82,12 @@
 
 <script setup>
 import { defineComponent, ref, watch } from "vue";
-import DropdownFiltersActivity from "./DropdownFiltersActivity.vue";
+import ActivityDropdownFilterOptions from "./ActivityDropdownFilterOptions.vue";
 import { useActivitiesStore } from "@/stores/ActivitiesStore.js";
 import { useRoute } from "vue-router";
 const ActivitiesStore = useActivitiesStore();
 const route = useRoute();
-defineComponent({ DropdownFiltersActivity });
+defineComponent({ ActivityDropdownFilterOptions });
 
 const searchKeyword = ref(route.query.keyword || route.query.keywords || "");
 

@@ -1,7 +1,7 @@
 <template>
     <div class="ms-4 p-5">
         <h5 class="text-dark mb-4">Request Payment From</h5>
-        <FieldSearchPeople
+        <SearchPeoples
             :showButton="true"
             @contactClicked="(contact) => requestPaymentPreview(contact['user'])"
             @peopleClicked="requestPaymentPreview"
@@ -20,13 +20,13 @@
 </template>
 
 <script setup>
-import FieldSearchPeople from './FieldSearchPeople.vue';
+import SearchPeoples from './SearchPeoples.vue';
 import { defineComponent, reactive } from "vue";
 import { handleMakeRequestPayment } from "@/services/functions.js";
 import TransferPreviewModal from "@/components/Bootstrap5/Modals/TransferPreviewModal.vue"
 import RecentContacts from './RecentContacts.vue';
 import Helpers from '../../Helpers';
-defineComponent({ FieldSearchPeople, RecentContacts, TransferPreviewModal });
+defineComponent({ SearchPeoples, RecentContacts, TransferPreviewModal });
 const state = reactive({
     modal: { transferPreviewModal: { user: {} }, }
 })

@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <BlockedContactsModal />
+        <BlockedContactsListModal />
         <NotificationSettingsModal />
     </div>
 </template>
@@ -35,10 +35,10 @@
 <script setup>
 import { defineComponent } from "vue";
 import ChevronRightIcon from "@/components/Icons/ChevronRight.vue";
-import BlockedContactsModal from "@/components/Bootstrap5/Modals/BlockedContactsModal.vue";
+import BlockedContactsListModal from "@/components/Bootstrap5/Modals/BlockedContactsListModal.vue";
 import NotificationSettingsModal from "@/components/Bootstrap5/Modals/NotificationSettingsModal.vue";
 import Helpers from "../../Helpers";
-defineComponent({ ChevronRightIcon, BlockedContactsModal, NotificationSettingsModal });
+defineComponent({ ChevronRightIcon, BlockedContactsListModal, NotificationSettingsModal });
 
 function blockedContacts() {
     Helpers.triggerBSModal(`#btn-modal-blocked-contacts`);

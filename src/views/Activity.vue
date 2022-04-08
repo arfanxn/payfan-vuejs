@@ -1,7 +1,7 @@
 <template>
     <main>
         <NavbarTop />
-        <SearchNFiltersActivity />
+        <ActivitySearchAndFilters />
 
         <div class="bg-white mx-1 border rounded p-4 mt-4 mb-5">
             <p class="fw-bold">Activities</p>
@@ -25,7 +25,7 @@
                                 .numericMonthtoString(date.getMonth()/**/, 3)} ${date.getFullYear()} `)
                         }}
                     </small>
-                    <ActivityList :key="index" :activities="activities" />
+                    <ActivityLists :key="index" :activities="activities" />
                 </div>
             </div>
             <!--  -->
@@ -63,16 +63,16 @@
 
 <script setup>
 import NavbarTop from '../components/NavbarTop.vue';
-import SearchNFiltersActivity from '@/components/Activity/SearchNFiltersActivity.vue';
+import ActivitySearchAndFilters from '@/components/Activity/ActivitySearchAndFilters.vue';
 import Helpers from '@/Helpers.js';
 import DateHelper from '@/helpers/DateHelper.js';
-import ActivityList from '@/components/Activity/ActivityList.vue';
+import ActivityLists from '@/components/Activity/ActivityLists.vue';
 import { defineComponent, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useActivitiesStore } from '../stores/ActivitiesStore';
 const ActivitiesStore = useActivitiesStore();
 const route = useRoute();
-defineComponent({ NavbarTop, SearchNFiltersActivity, ActivityList });
+defineComponent({ NavbarTop, ActivitySearchAndFilters, ActivityLists });
 
 onMounted(() => {
     ActivitiesStore.updateFilterBy({ ...route.query });
