@@ -54,7 +54,7 @@
                                 <p
                                     class="text-secondary"
                                     v-if="order.status?.toUpperCase()?.includes(`PENDING`)"
-                                >{{ order.amount }}&nbsp;$</p>
+                                >{{ StrHelper.make(order.amount).toUSD(false).get() }}&nbsp;$</p>
                                 <!-- if the status completed and order type is either SEND or REQUESTED  make the text amount color red (subtraction) -->
                                 <p
                                     class="text-danger"
@@ -62,7 +62,7 @@
                                     (order.type?.toUpperCase()?.includes(`SEND`)
                                         || order.type?.toUpperCase()?.includes(`REQUESTED`))
                                     && order.status?.toUpperCase()?.includes(`COMPLETE`)"
-                                >- {{ order.amount }}&nbsp;$</p>
+                                >- {{ StrHelper.make(order.amount).toUSD(false).get() }}&nbsp;$</p>
                                 <!-- if the status completed and order type is either REQUESTING or RECEIVINF or GIFT  make the text amount color green (addaction) -->
                                 <p
                                     class="text-success"
@@ -70,13 +70,13 @@
                                     || order.type?.toUpperCase()?.includes(`RECEIV`)
                                     || order.type?.toUpperCase()?.includes(`GIFT`))
                                     && order.status?.toUpperCase()?.includes(`COMPLETE`)"
-                                >+ {{ order.amount }}&nbsp;$</p>
+                                >+ {{ StrHelper.make(order.amount).toUSD(false).get() }}&nbsp;$</p>
                                 <!-- if the status FAILED or REJECTED make the text amount color danger  -->
                                 <p
                                     class="text-danger"
                                     v-else-if="order.status?.toUpperCase()?.includes(`FAIL`)
                                     || order.status?.toUpperCase()?.includes(`REJECT`)"
-                                >x {{ order.amount }}&nbsp;$</p>
+                                >x {{ StrHelper.make(order.amount).toUSD(false).get() }}&nbsp;$</p>
                             </div>
                         </div>
 

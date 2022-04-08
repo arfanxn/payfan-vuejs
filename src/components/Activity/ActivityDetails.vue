@@ -32,7 +32,11 @@
                 <div class="w-100">
                     <div class="d-flex justify-content-between">
                         <small class="fw-bold">Amount</small>
-                        <small>{{ props.order.amount }} $</small>
+                        <small>
+                            {{
+                                StrHelper.make(props.order.amount).toUSD(false).get()
+                            }} $
+                        </small>
                     </div>
                     <div class="d-flex justify-content-between">
                         <small class="fw-bold">Charge</small>
@@ -44,8 +48,11 @@
                         <small>Total</small>
                         <small>
                             {{
-                                props.order.charge ? (parseFloat(props.order.amount) + parseFloat(props.order.charge))
-                                    : props.order.amount
+                                props.order.charge ?
+                                    StrHelper
+                                        .make(/**/parseFloat(props.order.amount) + parseFloat(props.order.charge)/**/)
+                                        .toUSD(false).get()
+                                    : StrHelper.make(props.order.amount).toUSD(false).get()
                             }} $
                         </small>
                     </div>
@@ -59,6 +66,7 @@
 
 <script setup>
 import { defineProps } from 'vue';
+import StrHelper from '../../helpers/StrHelper';
 const props = defineProps({
     order: {},
 });
