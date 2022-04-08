@@ -14,12 +14,6 @@ export const useUserStore = defineStore("user", {
         "self/settings": {},
         "self/isLoggedIn": Boolean,
     }),
-    getters: {
-        "self/joined_at": (state) => {
-            let crtdAt = new Date(state.self.created_at);
-            return crtdAt.toLocaleDateString();
-        },
-    },
     actions: {
         async fetchSelf() {
             try {
