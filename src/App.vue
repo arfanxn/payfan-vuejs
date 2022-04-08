@@ -4,22 +4,16 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { useUserStore } from '@/stores/UserStore.js';
-import { useWalletStore } from './stores/WalletStore';
-const UserStore = useUserStore();
-const WalletStore = useWalletStore();
+import { useAuthUserStore } from './stores/auth/AuthUserStore.js';
+const AuthUserStore = useAuthUserStore();
 
 onMounted(() => {
   document.body.classList.add("bg-light");
 
-  if (UserStore['self/isLoggedIn']) {
-    UserStore.fetchSelf().then(r => {
-      if (r.status == 200) {
-        WalletStore.self = r.data.data.wallet;
-      }
-    });
-  }
+  if (AuthUserStore.isLoggedIn) {
+    AuthUserStore.fetch();
 
+  }
 
 });
 

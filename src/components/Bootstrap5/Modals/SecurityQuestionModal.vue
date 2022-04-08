@@ -46,7 +46,7 @@
                                     type="text"
                                     class="form-control mb-1"
                                     id="inputSecurityQuestion"
-                                    v-model="UserStore['self/settings']['security_question']"
+                                    v-model="AuthUserStore['setting']['data']['security_question']"
                                 />
                                 <AlertError
                                     @close="v$.$reset()"
@@ -83,20 +83,20 @@ import Helpers from '../../../Helpers';
 import StrHelper from '../../../helpers/StrHelper';
 import SwalPlugin from '../../../plugins/SwalPlugin';
 import UserService from '../../../services/UserService';
-import { useUserStore } from '../../../stores/UserStore';
+import { useAuthUserStore } from '../../../stores/auth/AuthUserStore';
 import useVuelidate from '@vuelidate/core';
 import { required, minLength, maxLength } from '@vuelidate/validators';
 import AlertError from '../../Errors/AlertError.vue';
 import AuthService from '../../../services/AuthService';
 defineComponent({ AlertError });
-const UserStore = useUserStore();
+const AuthUserStore = useAuthUserStore();
 const security_answer = ref(null);
 
 const v$ = useVuelidate({ // rules 
     security_question: { required, minLength: minLength(8), maxLength: maxLength(50) },
     security_answer: { required, minLength: minLength(8), maxLength: maxLength(50) }
 }, computed(() => ({
-    security_question: UserStore['self/settings']["security_question"],
+    security_question: AuthUserStore['setting']['data']["security_question"],
     security_answer: security_answer.value
 })))
 
@@ -107,7 +107,7 @@ async function updateSQ() {
     AuthService.createVerificationCode().then(() => {
         Helpers.closeBSModal("#btn-close-modal-security-question").then(() => {
             SwalPlugin.verificationCode("Verify to continue", async verificationCode =>
-                await UserService.updateSecurityQuestion(UserStore['self/settings']["security_question"], security_answer.value, verificationCode).then(r => {
+                await UserService.updateSecurityQuestion(AuthUserStore['setting']['data']["security_question"], security_answer.value, verificationCode).then(r => {
                     if (r.status == 200) {
                         SwalPlugin.autoCloseAlert(r.data["message"], null, "success", 1000);
                         security_answer.value = null;

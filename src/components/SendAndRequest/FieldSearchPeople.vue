@@ -3,8 +3,8 @@
         <input
             @keyup.esc="hideResults"
             @input="hideResultsIfKeywordLessThan"
-            v-model="SearchPeopleStore.searchKeyword"
-            @focus="SearchPeopleStore['results/toggleShow'] = true"
+            v-model="SearchPeoplesStore.searchKeyword"
+            @focus="SearchPeoplesStore['results/toggleShow'] = true"
             @keyup.enter="search"
             type="text"
             class="form-control"
@@ -25,9 +25,9 @@
 <script setup>
 import { defineComponent, defineEmits, defineProps, onMounted } from 'vue';
 import { searchPeoplesOnPayfan } from '../../services/functions';
-import { useSearchPeopleStore } from '../../stores/SearchPeopleStore';
+import { useSearchPeoplesStore } from '../../stores/SearchPeoplesStore';
 import ResultsSearchPeople from './ResultsSearchPeople.vue';
-const SearchPeopleStore = useSearchPeopleStore();
+const SearchPeoplesStore = useSearchPeoplesStore();
 defineComponent({ ResultsSearchPeople });
 const emits = defineEmits(['peopleClicked', "contactClicked"]);
 const props = defineProps({
@@ -46,27 +46,27 @@ onMounted(() => {
 });
 
 function search() {
-    SearchPeopleStore['results/toggleShow'] = true;
-    const keyword = SearchPeopleStore.searchKeyword;
+    SearchPeoplesStore['results/toggleShow'] = true;
+    const keyword = SearchPeoplesStore.searchKeyword;
 
     if (!hideResultsIfKeywordLessThan()) return;
 
     searchPeoplesOnPayfan(keyword).then(r => {
         if (r.status == 200) {
-            SearchPeopleStore.refillResults(r.data)
+            SearchPeoplesStore.refillResults(r.data)
         }
     });
 }
 
 function hideResultsIfKeywordLessThan() {
-    if (SearchPeopleStore.searchKeyword.length <= 2) {
+    if (SearchPeoplesStore.searchKeyword.length <= 2) {
         hideResults()
         return false
     }
     return true;
 }
 function hideResults() {
-    SearchPeopleStore['results/toggleShow'] = false;
+    SearchPeoplesStore['results/toggleShow'] = false;
 }
 
 

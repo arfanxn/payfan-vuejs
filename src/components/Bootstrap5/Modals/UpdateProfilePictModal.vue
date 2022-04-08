@@ -35,7 +35,7 @@
 
                         <div class="d-flex justify-content-center">
                             <img
-                                :src="userStore.self.profile_pict"
+                                :src="AuthUserStore.data.profile_pict"
                                 class="profile-pict-preview rounded-circle overflow-hidden"
                             />
                         </div>
@@ -84,8 +84,8 @@ import { reactive } from "vue-demi";
 import SwalPlugin from "../../../plugins/SwalPlugin";
 import FileService from "../../../services/FileService";
 import UserService from "../../../services/UserService";
-import { useUserStore } from "../../../stores/UserStore";
-const userStore = useUserStore();
+import { useAuthUserStore } from "../../../stores/auth/AuthUserStore";
+const AuthUserStore = useAuthUserStore();
 
 const state = reactive({
     form: {

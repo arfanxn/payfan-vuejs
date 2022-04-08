@@ -54,12 +54,12 @@
                                 <div class="form-check form-switch">
                                     <input
                                         @change="updateNotificationSettings({
-                                            request_notification: !UserStore['self/settings']['request_notification']
+                                            request_notification: !AuthUserStore['setting']['data']['request_notification']
                                         })"
                                         class="form-check-input"
                                         type="checkbox"
                                         id="flexSwitchCheckChecked"
-                                        :checked="UserStore['self/settings']['request_notification']"
+                                        :checked="AuthUserStore['setting']['data']['request_notification']"
                                     />
                                 </div>
                             </div>
@@ -70,11 +70,11 @@
 
                                 <div class="form-check form-switch">
                                     <input
-                                        @change="updateNotificationSettings({ receive_notification: !UserStore['self/settings']['receive_notification'] })"
+                                        @change="updateNotificationSettings({ receive_notification: !AuthUserStore['setting']['data']['receive_notification'] })"
                                         class="form-check-input"
                                         type="checkbox"
                                         id="flexSwitchCheckChecked"
-                                        :checked="UserStore['self/settings']['receive_notification']"
+                                        :checked="AuthUserStore['setting']['data']['receive_notification']"
                                     />
                                 </div>
                             </div>
@@ -87,18 +87,18 @@
 </template>
 
 <script setup>
-import { useUserStore } from '../../../stores/UserStore';
+import { useAuthUserStore } from '../../../stores/auth/AuthUserStore';
 import UserService from '../../../services/UserService'
 import SwalPlugin from '../../../plugins/SwalPlugin';
-const UserStore = useUserStore();
+const AuthUserStore = useAuthUserStore();
 
 const updateNotificationSettings = async ({ request_notification, receive_notification }) => {
     UserService.updateNotificationSettings({ request_notification, receive_notification }).then(r => {
         if (r.status == 200) {
             if (request_notification) {
-                UserStore['self/settings']['request_notification'] = request_notification;
+                AuthUserStore['setting']['data']['request_notification'] = request_notification;
             } else if (receive_notification) {
-                UserStore['self/settings']['receive_notification'] = receive_notification;
+                AuthUserStore['setting']['data']['receive_notification'] = receive_notification;
             }
 
             if ("message" in r.data && typeof r.data["message"] == "object") {

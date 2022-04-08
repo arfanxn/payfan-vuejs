@@ -1,7 +1,7 @@
 <template>
     <div class>
         <div class="d-flex justify-content-center">
-            <div v-for="(contact, index ) in ContactStore.topContacts.slice(0, 3)" :key="index">
+            <div v-for="(contact, index ) in ContactsStore.topContacts.slice(0, 3)" :key="index">
                 <div
                     class="cursor-pointer d-flex flex-column text-center mx-4"
                     @click="onContactClicked(contact)"
@@ -33,9 +33,9 @@
 
 <script setup>
 import { defineEmits } from "vue";
-import { useContactStore } from '../../stores/ContactStore';
+import { useContactsStore } from '../../stores/ContactsStore';
 const emits = defineEmits(["contactClicked"]);
-const ContactStore = useContactStore();
+const ContactsStore = useContactsStore();
 
 function onContactClicked(contact) {
     emits("contactClicked", contact);

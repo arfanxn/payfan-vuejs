@@ -19,7 +19,7 @@
                         class="form-check-input"
                         type="checkbox"
                         id="swicthEnableOrDisable2FA"
-                        :checked="UserStore['self/settings']['two_factor_auth']"
+                        :checked="AuthUserStore['setting']['data']['two_factor_auth']"
                     />
                 </div>
             </div>
@@ -44,11 +44,11 @@ import ChangePasswordModal from "@/components/Bootstrap5/Modals/ChangePasswordMo
 import SecurityQuestionModal from "@/components/Bootstrap5/Modals/SecurityQuestionModal.vue";
 import Helpers from "../../Helpers";
 import Swal from "sweetalert2";
-import { useUserStore } from "../../stores/UserStore";
+import { useAuthUserStore } from "../../stores/auth/AuthUserStore";
 import UserService from "../../services/UserService";
 import AuthService from "../../services/AuthService";
 import SwalPlugin from "../../plugins/SwalPlugin";
-const UserStore = useUserStore();
+const AuthUserStore = useAuthUserStore();
 defineComponent({ ChangePasswordModal, SecurityQuestionModal });
 
 function securityQuestion(event) {
@@ -76,7 +76,7 @@ function enableOrDisable2FA(event) {
 
                         if (r.status == 200) {
                             event.target.checked = false;
-                            UserStore['self/settings']['two_factor_auth'] = false;
+                            AuthUserStore['setting']['data']['two_factor_auth'] = false;
                             SwalPlugin.autoCloseAlert(`2-step verification disabled.`, null, "success", 1000);
                         }
 
@@ -101,7 +101,7 @@ function enableOrDisable2FA(event) {
 
                         if (r.status == 200) {
                             event.target.checked = true;
-                            UserStore['self/settings']['two_factor_auth'] = true;
+                            AuthUserStore['setting']['data']['two_factor_auth'] = true;
                             SwalPlugin.autoCloseAlert(`2-step verification enabled.`, null, "success", 1000);
                         }
 

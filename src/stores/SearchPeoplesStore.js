@@ -3,7 +3,7 @@ import {
     defineStore
 } from "pinia";
 
-export const useSearchPeopleStore = defineStore("searchPeople", {
+export const useSearchPeoplesStore = defineStore("searchPeoples", {
     state: () => ({
         "results/users": [],
         "results/contacts": [],

@@ -2,7 +2,7 @@
   <div class="bg-white shadow-sm rounded-3 pt-3 pb-4 px-4 d-flex justify-content-between">
     <div class>
       <h5 class="text-navy fw-bold mb-3">{{ Helpers.ENV("APP_TITLE") }} balance</h5>
-      <h1 class="fw-light my-0 py-0">0,00 $</h1>
+      <h1 class="fw-light my-0 py-0">{{ AuthUserStore.wallet?.data?.balance }} $</h1>
       <small class="text-secondary d-block mb-3">Available</small>
       <router-link
         to="/transfer/send"
@@ -28,6 +28,8 @@
 
 <script setup>
 import Helpers from '../../Helpers';
+import { useAuthUserStore } from '@/stores/auth/AuthUserStore.js';
+const AuthUserStore = useAuthUserStore();
 </script>
 
 <style scoped>

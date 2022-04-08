@@ -185,12 +185,12 @@ import StrHelper from "@/helpers/StrHelper.js";
 import StarIcon from "@/components/Icons/StarIcon.vue";
 import SwalPlugin from "../../../plugins/SwalPlugin";
 import Helpers from "../../../Helpers";
-import { useContactStore } from '@/stores/ContactStore.js';
+import { useContactsStore } from '@/stores/ContactsStore.js';
 import { searchPeoplesOnPayfan, handleSendPayment, handleMakeRequestPayment } from "../../../services/functions";
-import { useSearchPeopleStore } from "../../../stores/SearchPeopleStore";
+import { useSearchPeoplesStore } from "../../../stores/SearchPeoplesStore";
 import TransferPreviewModal from "./TransferPreviewModal.vue";
-const SearchPeopleStore = useSearchPeopleStore();
-const ContactStore = useContactStore();
+const SearchPeoplesStore = useSearchPeoplesStore();
+const ContactsStore = useContactsStore();
 defineComponent({ StarIcon, TransferPreviewModal });
 const props = defineProps({
     contact: {},
@@ -241,7 +241,7 @@ function removeContact() {
             ContactService.addOrRm(props.contact['user']['id']).then(r => {
                 const rMsg = r.data.message.toLowerCase();
                 if (rMsg == "removed") {
-                    ContactStore.remove(props.contact['id']);
+                    ContactsStore.remove(props.contact['id']);
                     Helpers.closeBSModal(`#btn-close-modal-contact-detail`)
                     SwalPlugin.alertPositioned({
                         title: `"${props.contact['user']['name']}" removed from contacts`,
@@ -262,16 +262,16 @@ function blockContact() {
     }).then(result => {
         if (result.isConfirmed) {
             ContactService.block(props.contact['id']).then(() => {
-                ContactStore.block(props.contact['id']);
+                ContactsStore.block(props.contact['id']);
                 Helpers.closeBSModal(`#btn-close-modal-contact-detail`);
                 SwalPlugin.alertPositioned({
                     title: `"${props.contact['user']['name']}" has been blocked`,
                     icon: "info",
                     timer: 1000,
                 })
-                searchPeoplesOnPayfan(SearchPeopleStore.searchKeyword).then(r => {
+                searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
                     if (r.status == 200) {
-                        SearchPeopleStore.refillResults(r.data);
+                        SearchPeoplesStore.refillResults(r.data);
                     }
                 });
             });

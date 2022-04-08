@@ -3,7 +3,7 @@ import {
     defineStore
 } from "pinia";
 
-export const useContactStore = defineStore("contact", {
+export const useContactsStore = defineStore("contacts", {
     state: () => ({
         topContacts: [],
         all: [],
@@ -32,8 +32,6 @@ export const useContactStore = defineStore("contact", {
                 }
                 return contact
             })
-
-            console.log(this.topContacts);
         }
     }
 });

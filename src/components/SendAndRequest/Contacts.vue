@@ -9,7 +9,7 @@
             <div class="top-contacts-lists-wrapper scrollbar-thin mt-2">
                 <div
                     class="d-flex justify-content-between cursor-pointer my-4 px-3"
-                    v-for="(contact, index) in ContactStore.topContacts"
+                    v-for="(contact, index) in ContactsStore.topContacts"
                     :key="index"
                 >
                     <a @click.prevent="contactDetail(contact)" class="d-flex text-dark w-100 me-2">
@@ -37,14 +37,14 @@
 
                 <div class="bg-white d-flex px-4 py-3">
                     <span
-                        v-if="ContactStore.topContacts.length"
+                        v-if="ContactsStore.topContacts.length"
                         class="my-auto lh-sm"
-                    >Top contacts are limited to {{ ContactStore.topContacts.length }} only, use search instead of scrolling.</span>
+                    >Top contacts are limited to {{ ContactsStore.topContacts.length }} only, use search instead of scrolling.</span>
                     <span v-else class="my-auto lh-sm">No Contacts yet.</span>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center mt-5" v-if="ContactStore.topContacts.length">
+            <div class="d-flex justify-content-center mt-5" v-if="ContactsStore.topContacts.length">
                 <router-link
                     to="/account/settings/privacy-and-notifications"
                     class="fw-bold text-navy hover-underline cursor-pointer text-center"
@@ -64,14 +64,14 @@ import { defineComponent } from '@vue/runtime-core';
 import Helpers from '../../Helpers';
 import StrHelper from '../../helpers/StrHelper';
 import ContactService from "@/services/ContactService.js";
-import { useContactStore } from '../../stores/ContactStore';
-import { useSearchPeopleStore } from '../../stores/SearchPeopleStore';
+import { useContactsStore } from '../../stores/ContactsStore';
+import { useSearchPeoplesStore } from '../../stores/SearchPeoplesStore';
 import FieldSearchPeople from './FieldSearchPeople.vue';
 import { reactive } from 'vue';
 import SwalPlugin from '../../plugins/SwalPlugin';
 import { searchPeoplesOnPayfan } from '../../services/functions';
-const ContactStore = useContactStore();
-const SearchPeopleStore = useSearchPeopleStore();
+const ContactsStore = useContactsStore();
+const SearchPeoplesStore = useSearchPeoplesStore();
 
 defineComponent({ StarIcon, ContactDetailModal, FieldSearchPeople });
 const state = reactive({
@@ -94,9 +94,9 @@ function showPeoplePreview(user) {
                 if (r.data.message.toLowerCase() == "added") {
                     SwalPlugin.autoCloseAlert(`"${user.name}" added to contacts`, null, "success", 1000)
                         ;
-                    searchPeoplesOnPayfan(SearchPeopleStore.searchKeyword).then(r => {
+                    searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
                         if (r.status == 200) {
-                            SearchPeopleStore.refillResults(r.data);
+                            SearchPeoplesStore.refillResults(r.data);
                         }
                     });
                 } else {

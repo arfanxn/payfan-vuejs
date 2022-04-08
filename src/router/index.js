@@ -6,8 +6,9 @@ import Dashboard from '../views/Dashboard.vue';
 import Auth from '../views/Auth.vue';
 import AuthService from '../services/AuthService';
 import {
-  useUserStore
-} from '@/stores/UserStore.js';
+  useAuthUserStore
+}
+from '@/stores/auth/AuthUserStore.js';
 
 const routes = [{
     path: '/',
@@ -66,7 +67,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const UserStore = useUserStore();
+  const AuthUserStore = useAuthUserStore();
   let docTitle = String();
 
   if (to.name) {
@@ -92,10 +93,10 @@ router.beforeEach((to, from, next) => {
   if (!("guest" in to.meta)) { // if "guest" is not in the "to.meta" object (that's mean the routes require Authentication)
     AuthService.check().then(response => {
       if (response.status != 401 && response.status == 200) {
-        UserStore['self/isLoggedIn'] = true;
+        AuthUserStore['isLoggedIn'] = true;
         next() // next if user is already logged in
       } else { // if not logged in/authenticated then redirect to "auth" page
-        UserStore['self/isLoggedIn'] = false;
+        AuthUserStore['isLoggedIn'] = false;
         window.location = "/auth";
       }
     });

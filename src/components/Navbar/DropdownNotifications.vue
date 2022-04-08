@@ -28,15 +28,15 @@
                     Notifications
                     <span>
                         ({{
-                            parseInt(NotificationStore['latest/total_unread']) >= 100 ?
-                                "100+" : NotificationStore['latest/total_unread']
+                            parseInt(NotificationsStore['latest/total_unread']) >= 100 ?
+                                "100+" : NotificationsStore['latest/total_unread']
                         }})
                     </span>
                 </h5>
             </li>
             <li
                 class="text-wrap cursor-pointer my-1"
-                v-for="(notification, index ) in NotificationStore[`latest/data`]"
+                v-for="(notification, index ) in NotificationsStore[`latest/data`]"
                 :key="index"
             >
                 <a class="dropdown-item text-start text-wrap py-2">
@@ -69,12 +69,12 @@
 
 <script setup>
 import { onMounted, reactive, watch } from 'vue';
-import { useNotificationStore } from '../../stores/NotificationStore';
+import { useNotificationsStore } from '../../stores/NotificationsStore';
 import router from '../../router';
 import NotificationService from "@/services/NotificationService.js";
 import StrHelper from "@/helpers/StrHelper.js";
 StrHelper;
-const NotificationStore = useNotificationStore()
+const NotificationsStore = useNotificationsStore()
 const notification = reactive({
     alreadyLoadedPageList: [],
     isLoadingMore: false,
@@ -85,8 +85,8 @@ onMounted(() => {
     NotificationService.latest().then(r => {
         if (r.status == 200) {
             notification.alreadyLoadedPageList.push(r.data.notifications['current_page']);
-            NotificationStore.pushLatest(r.data.notifications);
-            if (NotificationStore['latest/total_unread'] > 0)
+            NotificationsStore.pushLatest(r.data.notifications);
+            if (NotificationsStore['latest/total_unread'] > 0)
                 notification.showBadge = true;
 
         }
@@ -94,11 +94,11 @@ onMounted(() => {
 
     // listen live notifications
     window.Echo.private('users.2').notification(notification => {
-        NotificationStore.realtimeLatest(notification);
+        NotificationsStore.realtimeLatest(notification);
     } /**/);
 })
 
-watch(() => NotificationStore['latest/total_unread'], (newValue, oldValue) => {
+watch(() => NotificationsStore['latest/total_unread'], (newValue, oldValue) => {
     newValue = parseInt(newValue);
     oldValue = parseInt(oldValue);
 
@@ -121,7 +121,7 @@ function notificationAction(notification, action) {
 
     if (!notification.read_at)
         NotificationService.markAsRead(notification.id).then(r => {
-            if (r.status == 200) NotificationStore.markAsRead(notification.id);
+            if (r.status == 200) NotificationsStore.markAsRead(notification.id);
             goToAction();
         });
     else goToAction()
@@ -130,25 +130,25 @@ function notificationAction(notification, action) {
 function loadMoreNotifications(event) {
     if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) { // if scrolled to bottom 
         notification.isLoadingMore = true;
-        const nextPage = NotificationStore['latest/meta']["current_page"] + 1;
+        const nextPage = NotificationsStore['latest/meta']["current_page"] + 1;
         if (notification.alreadyLoadedPageList.indexOf(nextPage) <= -1) { // if next page isn't loaded 
             NotificationService.latest(nextPage).then(r => {
                 if (r.status == 200) {
                     const notificationsDataLength = r.data?.notifications?.data?.length;
                     const middleIndexOfNotificationsData = notificationsDataLength > 0 ? Math.floor(notificationsDataLength / 2) : null;
 
-                    const isAlreadyInsertedToNotificationStore = () => {
+                    const isAlreadyInsertedToNotificationsStore = () => {
                         if (!notificationsDataLength)
                             return false
 
-                        return NotificationStore['latest/data']
+                        return NotificationsStore['latest/data']
                             .filter(notification => notification.id ==
                                 r.data['notifications']['data'][middleIndexOfNotificationsData]["id"])
                             .length;
                     }
 
-                    if (notificationsDataLength && !isAlreadyInsertedToNotificationStore()) {
-                        NotificationStore.pushLatest(r.data.notifications);
+                    if (notificationsDataLength && !isAlreadyInsertedToNotificationsStore()) {
+                        NotificationsStore.pushLatest(r.data.notifications);
                         notification.alreadyLoadedPageList.push(r.data.notifications['current_page']);
                     }
 
@@ -167,13 +167,13 @@ const toogleNotificationRead = (event, notification) => {
     if (notification.read_at) {
         NotificationService.markAsUnread(notification.id).then(r => {
             if (r.status == 200) {
-                NotificationStore.markAsUnread(notification.id);
+                NotificationsStore.markAsUnread(notification.id);
             }
         });
     } else {
         NotificationService.markAsRead(notification.id).then(r => {
             if (r.status == 200) {
-                NotificationStore.markAsRead(notification.id)
+                NotificationsStore.markAsRead(notification.id)
             }
         });
     }

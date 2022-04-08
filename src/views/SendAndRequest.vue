@@ -24,9 +24,9 @@ import SendPayment from '../components/SendAndRequest/SendPayment.vue';
 import RequestPayment from '../components/SendAndRequest/RequestPayment.vue';
 import RightSideMenu from '../components/RightSideMenu.vue';
 import Contacts from "@/components/SendAndRequest/Contacts.vue";
-import { useContactStore } from '@/stores/ContactStore';
+import { useContactsStore } from '@/stores/ContactsStore';
 import ContactService from '@/services/ContactService';
-const ContactStore = useContactStore();
+const ContactsStore = useContactsStore();
 const route = useRoute();
 const state = reactive({
     currentMenu: "Send Money",
@@ -53,7 +53,7 @@ onMounted(() => {
 
     ContactService.topContacts().then(r => {
         if (r.status == 200)
-            ContactStore.topContacts = r.data['contacts'];
+            ContactsStore.topContacts = r.data['contacts'];
     });
 });
 onUpdated(() => {

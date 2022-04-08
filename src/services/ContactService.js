@@ -1,8 +1,8 @@
 import axios from "axios";
 import {
-    useContactStore
-} from "../stores/ContactStore";
-const ContactStore = useContactStore();
+    useContactsStore
+} from "../stores/ContactsStore";
+const ContactsStore = useContactsStore();
 
 export default class ContactService {
     static async topContacts() {
@@ -43,7 +43,7 @@ export default class ContactService {
         try {
             const response = await axios.get(`/api/user/self/contact/${contactID}/toggle-favorite`);
             if (response) {
-                ContactStore.toggleFavorite(contactID)
+                ContactsStore.toggleFavorite(contactID)
             }
             return response;
         } catch (error) {
