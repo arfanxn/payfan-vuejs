@@ -12,16 +12,9 @@ class DateHelper {
         return (monthNames[month]).slice(0, length)
     }
 
-    now(format = null) {
-        if (format == "carbon" || !format) {
-            const now = new Date();
-            let carbonFormat = `${now.getFullYear()}-${now.getMonth().length < 2 ?
-                "0" + now.getMonth() : now.getMonth()}-${now.getDate().length < 2 ?
-                "0" + now.getDate() : now.getDate()} ${now.getHours().length < 2 ?
-                "0" + now.getHours() : now.getHours()}:${now.getMinutes().length < 2 ?
-                "0" + now.getMinutes() : now.getMinutes()}:${now.getSeconds()}`;
-            return carbonFormat;
-        }
+    nowISOstring() {
+        var date = new Date(); // get current datetime
+        return date.toISOString(); //return as  ISOstring format -> "2011-12-19T15:28:46.493Z"
     }
 }
 

@@ -44,7 +44,7 @@ export const useNotificationsStore = defineStore("notifications", {
         markAsRead(notificationID) {
             this['latest/data'] = this['latest/data'].map(notification => {
                 if (notification.id == notificationID) {
-                    notification.read_at = DateHelper.now();
+                    notification.read_at = DateHelper.nowISOstring();
                     this['latest/meta'][`total_unread`] =
                         parseInt(
                             this['latest/meta'][`total_unread`]) - 1; // subtract the total unread notifications
