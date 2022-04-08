@@ -102,7 +102,7 @@ function closeFilterTag(filterBy) {
     }
 }
 
-// if there is any  in "searchKeyword" update the filterKeyword
+// if there is any chnages in "searchKeyword" update the filterKeyword
 watch(searchKeyword, () => filterByKeyword(), { deep: true });
 
 //  if the url query contains "keyword" / "keywords" and some changes detected then update the "searchKeyword"

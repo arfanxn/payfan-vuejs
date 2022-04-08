@@ -18,7 +18,7 @@ export const useActivitiesStore = defineStore("activities", {
                 transaction_type: null,
                 status: null
             },
-            option: {
+            options: {
                 status: ["Completed", "Pending", "Rejected", "Failed"],
                 transaction_type: ["Sending", "Receiving", "Requesting", "Requested", `${Helpers.ENV("APP_NAME")} Gift`]
             }

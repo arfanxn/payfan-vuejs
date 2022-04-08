@@ -16,7 +16,7 @@
                     <div class="text-center wrapper-filter-menu-lists">
                         <a
                             @click.prevent="filterByStatus($event)"
-                            v-for="(filterBy, index) in ActivitiesStore.filter.option.status"
+                            v-for="(filterBy, index) in ActivitiesStore.filter.options.status"
                             :key="index"
                             class="option-filter-by-tx-type text-center border border-navy d-flex w-100 rounded-pill cursor-pointer text-dark mb-2 overflow-hidden"
                             :class="{ 'option-filter-clicked': ActivitiesStore.filter.by.status == filterBy }"
@@ -34,7 +34,7 @@
                     <div class="text-center wrapper-filter-menu-lists">
                         <a
                             @click.prevent="filterByTxType($event)"
-                            v-for="(filterBy, index) in ActivitiesStore.filter.option.transaction_type"
+                            v-for="(filterBy, index) in ActivitiesStore.filter.options.transaction_type"
                             :key="index"
                             class="option-filter-by-tx-type text-center border border-navy d-flex w-100 rounded-pill cursor-pointer text-dark mb-2 overflow-hidden"
                             :class="{ 'option-filter-clicked': ActivitiesStore.filter.by.transaction_type == filterBy }"
