@@ -53,7 +53,7 @@ onMounted(() => {
 
     ContactService.topContacts().then(r => {
         if (r.status == 200)
-            ContactsStore.topContacts = r.data['contacts'];
+            ContactsStore.top = r.data['contacts'];
     });
 });
 onUpdated(() => {

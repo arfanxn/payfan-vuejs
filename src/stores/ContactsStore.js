@@ -5,17 +5,17 @@ import {
 
 export const useContactsStore = defineStore("contacts", {
     state: () => ({
-        topContacts: [],
+        top: [],
         all: [],
         blocked: [],
     }),
 
     actions: {
         remove(contactIDtoRemove) {
-            this.topContacts = this.topContacts.filter(contact => contact['id'] != contactIDtoRemove);
+            this.top = this.top.filter(contact => contact['id'] != contactIDtoRemove);
         },
         block(contactIDtoBlock) {
-            this.topContacts = this.topContacts.filter(contact => {
+            this.top = this.top.filter(contact => {
                 if (contact['id'] == contactIDtoBlock) {
                     this.blocked.push(contact)
                     console.log(() => this.blocked);
@@ -24,7 +24,7 @@ export const useContactsStore = defineStore("contacts", {
             });
         },
         toggleFavorite(contactID) {
-            this.topContacts = this.topContacts.map(contact => {
+            this.top = this.top.map(contact => {
                 if (contact['id'] == contactID) {
                     return Object.assign(contact, {
                         status: contact['status'] == "FAVORITED" ? "ADDED" : "FAVORITED"

@@ -9,7 +9,7 @@
             <div class="top-contacts-lists-wrapper scrollbar-thin mt-2">
                 <div
                     class="d-flex justify-content-between cursor-pointer my-4 px-3"
-                    v-for="(contact, index) in ContactsStore.topContacts"
+                    v-for="(contact, index) in ContactsStore.top"
                     :key="index"
                 >
                     <a @click.prevent="contactDetail(contact)" class="d-flex text-dark w-100 me-2">
@@ -37,14 +37,14 @@
 
                 <div class="bg-white d-flex px-4 py-3">
                     <span
-                        v-if="ContactsStore.topContacts.length"
+                        v-if="ContactsStore.top.length"
                         class="my-auto lh-sm"
-                    >Top contacts are limited to {{ ContactsStore.topContacts.length }} only, use search instead of scrolling.</span>
+                    >Top contacts are limited to {{ ContactsStore.top.length }} only, use search instead of scrolling.</span>
                     <span v-else class="my-auto lh-sm">No Contacts yet.</span>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center mt-5" v-if="ContactsStore.topContacts.length">
+            <div class="d-flex justify-content-center mt-5" v-if="ContactsStore.top.length">
                 <router-link
                     to="/account/settings/privacy-and-notifications"
                     class="fw-bold text-navy hover-underline cursor-pointer text-center"
