@@ -6,7 +6,7 @@
                     class="navbar-brand fw-bold fs-3"
                     active-class="none"
                     exact-active-class="none"
-                    to="/"
+                    :to="state.navbars[0]['link']"
                 >{{ Helpers.ENV("APP_TITLE") }}</router-link>
                 <button
                     class="navbar-toggler"
@@ -40,7 +40,7 @@
                             active-class="none"
                             exact-active-class="none"
                             to="/account/settings"
-                            class="cursor-pointer nav-link fw-bold fs-6 d-flex"
+                            class="cursor-pointer nav-link fw-bold fs-6 d-flex px-0 mx-1"
                         >
                             <img
                                 class="nav-link-icon my-auto"
@@ -49,7 +49,7 @@
                             />
                         </router-link>
                         <a
-                            class="cursor-pointer nav-link fw-bold fs-6"
+                            class="cursor-pointer nav-link fw-bold fs-6 px-0 mx-1"
                             @click.prevent="handleLogout()"
                         >
                             <small>LOG OUT</small>
@@ -74,7 +74,7 @@ defineComponent({
 const state = reactive({
     "navbars": [
         {
-            "link": "/",
+            "link": { path: "/" },
             "text": "Dashboard"
         },
         {
