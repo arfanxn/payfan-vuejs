@@ -271,7 +271,7 @@ function blockContact() {
                 })
                 searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
                     if (r.status == 200) {
-                        SearchPeoplesStore.refillResults(r.data);
+                        SearchPeoplesStore.refreshResults(r.data);
                     }
                 });
             });
