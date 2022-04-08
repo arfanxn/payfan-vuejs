@@ -30,12 +30,11 @@
             <div class="col-7 px-1">
                 <div class="ps-0 form-floating mb-3 d-flex">
                     <input
-                        @blur="filterByKeyword"
+                        v-model.lazy.trim="searchKeyword"
                         @keyup.enter="filterByKeyword"
                         id="inputSearch"
                         type="text"
                         class="form-control rounded-0 rounded-start"
-                        :value="route.query.keyword || route.query.keywords"
                     />
                     <label for="inputSearch">Search Activities</label>
                     <button
@@ -82,16 +81,15 @@
 </template>
 
 <script setup>
-import { defineComponent } from "@vue/runtime-core"
-import DropdownFiltersActivity from "./DropdownFiltersActivity.vue"
+import { defineComponent, ref, watch } from "vue";
+import DropdownFiltersActivity from "./DropdownFiltersActivity.vue";
 import { useActivitiesStore } from "@/stores/ActivitiesStore.js";
 import { useRoute } from "vue-router";
 const ActivitiesStore = useActivitiesStore();
 const route = useRoute();
-
-
 defineComponent({ DropdownFiltersActivity });
 
+const searchKeyword = ref(route.query.keyword || route.query.keywords || "");
 
 function closeFilterTag(filterBy) {
     switch (filterBy.toLowerCase()) {
@@ -104,9 +102,17 @@ function closeFilterTag(filterBy) {
     }
 }
 
-function filterByKeyword(event) {
-    const keyword = event.target.value;
-    ActivitiesStore.updateFilterBy({ keyword: keyword });
+// if there is any  in "searchKeyword" update the filterKeyword
+watch(searchKeyword, () => filterByKeyword(), { deep: true });
+
+//  if the url query contains "keyword" / "keywords" and some changes detected then update the "searchKeyword"
+watch(() => [route.query.keyword, route.query.keywords], () => {
+    searchKeyword.value = route.query.keyword || route.query.keywords;
+}, { deep: true });
+
+// a function to update the filterByKeyword 
+function filterByKeyword() {
+    ActivitiesStore.updateFilterBy({ keyword: searchKeyword.value });
 }
 </script>
 
