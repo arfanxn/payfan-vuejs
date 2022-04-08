@@ -33,3 +33,7 @@ a {
 .scrollbar-thin {
     scrollbar-width: thin !important;
 }
+
+.fs-7 {
+    font-size: .85rem;
+}
