@@ -1364,7 +1364,7 @@
     mocha "^6.2.2"
     mochapack "^1.1.15"
 
-"@vue/cli-plugin-vuex@^4.5.15", "@vue/cli-plugin-vuex@~4.5.0":
+"@vue/cli-plugin-vuex@^4.5.15":
   version "4.5.15"
   resolved "https://registry.yarnpkg.com/@vue/cli-plugin-vuex/-/cli-plugin-vuex-4.5.15.tgz#466c1f02777d02fef53a9bb49a36cc3a3bcfec4e"
   integrity sha512-fqap+4HN+w+InDxlA3hZTOGE0tzBTgXhKLoDydhywqgmhQ1D9JA6Feh94ze6tG8DsWX58/ujYUqA8jAz17FJtg==
@@ -5680,6 +5680,11 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
+laravel-echo@^1.11.4:
+  version "1.11.4"
+  resolved "https://registry.yarnpkg.com/laravel-echo/-/laravel-echo-1.11.4.tgz#eb5f07dd36dbd0b54a374b3084e47746e83817fa"
+  integrity sha512-zoWMT7Cb3QVYEq+gyZ/hQvE3sSIiFxZH6c2Wg6tAwg9hukwyOLbDLpy9XT5U1mIC0lK+HFLzetnbfCtrl00jEg==
+
 launch-editor-middleware@^2.2.1:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/launch-editor-middleware/-/launch-editor-middleware-2.3.0.tgz#edd0ed45a46f5f1cf27540f93346b5de9e8c3be0"
@@ -7397,6 +7402,13 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
+pusher-js@^7.0.6:
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/pusher-js/-/pusher-js-7.0.6.tgz#4ff0066eda7eb99e1ba48c3e211189e72329ce2d"
+  integrity sha512-I44FTlF2OfGNg/4xcxmFq/JqFzJswoQWtWCPq+DkCh31MFg3Qkm3bNFvTXU+c5KR19TyBZ9SYlYq2rrpJZzbIA==
+  dependencies:
+    tweetnacl "^1.0.3"
+
 q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
@@ -8730,6 +8742,11 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
+
+tweetnacl@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
+  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@~0.3.2:
   version "0.3.2"
