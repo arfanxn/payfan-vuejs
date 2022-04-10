@@ -1,28 +1,15 @@
 <template>
     <div class="dropdown text-break">
-        <a
-            @click="notification.showBadge = false/* if clicked hide unread notifications badge */"
-            href="#"
-            class="nav-link fw-bold fs-6 d-flex position-relative p-0 mt-2 mx-1"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-        >
-            <img
-                class="nav-link-icon my-auto"
-                src="@/assets/icons/bell-ring.png"
-                alt="Notifications"
-            />
-            <span
-                v-show="notification.showBadge"
-                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
-            ></span>
+        <a @click="notification.showBadge = false/* if clicked hide unread notifications badge */" href="#"
+            class="nav-link fw-bold fs-6 d-flex position-relative p-0 mt-2 mx-1" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <img class="nav-link-icon my-auto" src="@/assets/icons/bell-ring.png" alt="Notifications" />
+            <span v-show="notification.showBadge"
+                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
         </a>
-        <ul
-            class="dropdown-menu pt-0 notification-dropdown-menu overflow-auto"
+        <ul class="dropdown-menu pt-0 notification-dropdown-menu overflow-auto"
             @click="e => e.stopPropagation() /* preventing closing dropdown when clicked  */"
-            @scroll="loadMoreNotifications"
-            aria-labelledby="dropdownMenuButton"
-        >
+            @scroll="loadMoreNotifications" aria-labelledby="dropdownMenuButton">
             <li class="dropdown-header-wrapper d-flex py-1 justify-content-center">
                 <h5 class="dropdown-header text-white fs-6 fw-bold my-auto">
                     Notifications
@@ -34,37 +21,31 @@
                     </span>
                 </h5>
             </li>
-            <li
-                class="text-wrap cursor-pointer my-1"
-                v-for="(notification, index ) in NotificationsStore[`latest/data`]"
-                :key="index"
-            >
+            <li class="text-wrap cursor-pointer my-1"
+                v-for="(notification, index ) in NotificationsStore[`latest/data`]" :key="index">
                 <a class="dropdown-item text-start text-wrap py-2">
                     <div :class="notification.read_at ? `text-secondary` : `text-dark`">
                         <h6 class="fw-bold my-0 py-0">{{ notification.data.header }}</h6>
                         <span class="text-break" href="#">{{ notification.data.body }}</span>
                     </div>
 
-                    <button
-                        @click="notificationAction(notification, notification.data.action)"
-                        v-if="notification.data?.action &&
-                            (notification.data?.action?.link || notification.data?.action?.url || notification.data?.action?.endpoint)
-                        "
-                        class="me-1 btn btn-outline-primary mt-1 py-0 px-2 rounded-pill fs-7 d-inline-block"
-                    >{{ notification.data.action.text }}</button>
-                    <button
-                        @click.stop="toogleNotificationRead($event, notification)"
-                        class="btn btn-outline-primary mt-1 py-0 px-2 rounded-pill fs-7 d-inline-block"
-                    >{{ notification.read_at ? "Mark as unread" : "Mark as read" }}</button>
+                    <button @click="notificationAction(notification, notification.data.action)" v-if="notification.data?.action &&
+                        (notification.data?.action?.link || notification.data?.action?.url || notification.data?.action?.endpoint)
+                    " class="me-1 btn btn-outline-primary mt-1 py-0 px-2 rounded-pill fs-7 d-inline-block">
+                        {{ notification.data.action.text }}</button>
+                    <button @click.stop="toogleNotificationRead($event, notification)"
+                        class="btn btn-outline-primary mt-1 py-0 px-2 rounded-pill fs-7 d-inline-block">{{
+                            notification.read_at ? "Mark as unread" : "Mark as read"
+                        }}</button>
                 </a>
             </li>
 
             <!-- blank li for adding a range between  -->
-            <li
-                class="pb-5 pt-3 mb-5 bg-transparent text-center fw-bold"
-            >{{ notification.isLoadingMore ? `Loading more notifications....` : `No more notifications yet.` }}</li>
-        </ul>
-    </div>
+            <li class="pb-5 pt-3 mb-5 bg-transparent text-center fw-bold">{{
+                notification.isLoadingMore ? `Loading more
+                            notifications....` : `No more notifications yet.`
+            }}</li>
+        </ul>  </div>
 </template>
 
 <script setup>
@@ -73,6 +54,8 @@ import { useNotificationsStore } from '../../stores/NotificationsStore';
 import router from '../../router';
 import NotificationService from "@/services/NotificationService.js";
 import StrHelper from "@/helpers/StrHelper.js";
+import { useAuthUserStore } from "../../stores/auth/AuthUserStore.js"
+const AuthUserStore = useAuthUserStore();
 StrHelper;
 const NotificationsStore = useNotificationsStore()
 const notification = reactive({
@@ -93,7 +76,7 @@ onMounted(() => {
     })
 
     // listen live notifications
-    window.Echo.private('users.2').notification(notification => {
+    window.Echo.private('users.' + AuthUserStore.data['id']).notification(notification => {
         NotificationsStore.realtimeLatest(notification);
     } /**/);
 })
