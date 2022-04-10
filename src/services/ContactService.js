@@ -5,16 +5,6 @@ import {
 const ContactsStore = useContactsStore();
 
 export default class ContactService {
-    static async topContacts() {
-        try {
-            const response = await axios.get("/api/user/self/contacts/top-contacts");
-
-            return response;
-        } catch (error) {
-            return error.response;
-        }
-    }
-
     static async lastTransactionDetail(contactID) {
         try {
             return await axios.get(`/api/user/self/contact/${contactID}/last-transaction`);
