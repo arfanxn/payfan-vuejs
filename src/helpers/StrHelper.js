@@ -32,7 +32,7 @@ export default class StrHelper {
 
     toUSD(withDollarSign = true) {
         //remove dollar sign and commas , and replace duplicate "." with only a single "." ; 
-        let amount = this.string.replace(/[$,]/g, "").replace(/[.]+/g, ".");
+        let amount = this.string.toString().replace(/[$,]/g, "").replace(/[.]+/g, ".");
 
         // amount string -> parse to float (if not the ".toFixed" funtion below will not work ) ; 
         amount = parseFloat(amount);
