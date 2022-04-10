@@ -7,60 +7,48 @@
         <div class>
             <small class="text-secondary d-block mt-2">Top contacts</small>
             <div class="top-contacts-lists-wrapper scrollbar-thin mt-2">
-                <div
-                    class="d-flex justify-content-between cursor-pointer my-4 px-3"
-                    v-for="(contact, index) in ContactsStore.top"
-                    :key="index"
-                >
+                <div class="d-flex justify-content-between cursor-pointer my-4 px-3"
+                    v-for="(contact, index) in ContactsStore['pagination/data']" :key="index">
                     <a @click.prevent="contactDetail(contact)" class="d-flex text-dark w-100 me-2">
-                        <div
-                            class="contact-icon-size shadow rounded-circle d-flex overflow-hidden justify-content-center"
-                            :style="`background-color : ${contact['user']['profile_pict']} !important; `"
-                        >
-                            <span
-                                v-if="contact['user']['profile_pict'].includes('#')"
-                                class="fw-bold my-auto text-white"
-                            >{{ StrHelper.make(contact["user"]["name"]).firstCharEachWord().get().slice(0, 2) }}</span>
+                        <div class="contact-icon-size shadow rounded-circle d-flex overflow-hidden justify-content-center"
+                            :style="`background-color : ${contact['user']['profile_pict']} !important; `">
+                            <span v-if="contact['user']['profile_pict'].includes('#')"
+                                class="fw-bold my-auto text-white">{{
+                                    StrHelper.make(contact["user"]["name"]).firstCharEachWord().get().slice(0, 2)
+                                }}</span>
                             <img v-else :src="contact['user']['profile_pict']" alt />
                         </div>
                         <span class="ms-3 my-auto">{{ contact["user"]["name"] }}</span>
                     </a>
 
-                    <div
-                        @click="toggleFavoriteContact($event, contact)"
-                        class="my-auto"
-                        :class="`${contact['status'] == 'FAVORITED' ? 'text-success' : 'text-dark'}`"
-                    >
+                    <div @click="toggleFavoriteContact($event, contact)" class="my-auto"
+                        :class="`${contact['status'] == 'FAVORITED' ? 'text-success' : 'text-dark'}`">
                         <StarIcon width="24" height="24" />
                     </div>
                 </div>
 
                 <div class="bg-white d-flex px-4 py-3">
-                    <span
-                        v-if="ContactsStore.top.length"
-                        class="my-auto lh-sm"
-                    >Top contacts are limited to {{ ContactsStore.top.length }} only, use search instead of scrolling.</span>
-                    <span v-else class="my-auto lh-sm">No Contacts yet.</span>
+                    <span v-if="ContactsStore['pagination/data'].length" class="my-auto lh-sm">Top contacts are limited
+                        to {{ ContactsStore['pagination/data'].length }} only, use search instead of scrolling.</span>
+                    <span v-if="ContactsStore['pagination/data'].length <= 0" class="my-auto lh-sm">No Contacts
+                        yet.</span>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center mt-5" v-if="ContactsStore.top.length">
-                <router-link
-                    to="/account/settings/privacy-and-notifications"
-                    class="fw-bold text-navy hover-underline cursor-pointer text-center"
-                >
+            <div class="d-flex justify-content-center mt-5" v-if="ContactsStore['pagination/data'].length">
+                <router-link to="/account/settings/privacy-and-notifications"
+                    class="fw-bold text-navy hover-underline cursor-pointer text-center">
                     <small>View blocked contacts</small>
                 </router-link>
             </div>
         </div>
-        <ContactDetailsModal :contact="state.modal.contactDetail.contact" />
-    </div>
+        <ContactDetailsModal :contact="state.modal.contactDetail.contact" />  </div>
 </template>
 
 <script setup>
 import StarIcon from '@/components/Icons/StarIcon.vue';
 import ContactDetailsModal from '../Bootstrap5/Modals/ContactDetailsModal.vue';
-import { defineComponent } from '@vue/runtime-core';
+import { defineComponent, onMounted } from 'vue';
 import Helpers from '../../Helpers';
 import StrHelper from '../../helpers/StrHelper';
 import ContactService from "@/services/ContactService.js";
@@ -81,6 +69,10 @@ const state = reactive({
         }
     }
 });
+
+onMounted(() => {
+    ContactsStore.fetch({ per_page: 30 });
+})
 
 function showPeoplePreview(user) {
     SwalPlugin.confirm({

@@ -1,7 +1,10 @@
 <template>
     <div class>
         <div class="d-flex justify-content-center">
-            <div v-for="(contact, index ) in ContactsStore.top.slice(0, 3)" :key="index">
+            <div
+                v-for="(contact, index ) in ContactsStore['pagination/data'].slice(0, 3)"
+                :key="index"
+            >
                 <div
                     class="cursor-pointer d-flex flex-column text-center mx-4"
                     @click="onContactClicked(contact)"

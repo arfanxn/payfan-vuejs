@@ -12,8 +12,7 @@
             <div class="col-md-4">
                 <RightSideMenu :menus="state.rightSideMenu" @menuClicked="changeMenu" />
             </div>
-        </div>
-    </div>
+        </div>  </div>
 </template>
 
 <script setup>
@@ -24,9 +23,6 @@ import SendPayment from '../components/SendAndRequest/SendPayment.vue';
 import RequestPayment from '../components/SendAndRequest/RequestPayment.vue';
 import RightSideMenu from '../components/RightSideMenu.vue';
 import Contacts from "@/components/SendAndRequest/Contacts.vue";
-import { useContactsStore } from '@/stores/ContactsStore';
-import ContactService from '@/services/ContactService';
-const ContactsStore = useContactsStore();
 const route = useRoute();
 const state = reactive({
     currentMenu: "Send Money",
@@ -50,11 +46,6 @@ onMounted(() => {
     // keep the nav link active after click menus (components)
     document.getElementById("NavLinkSendandRequest").classList.add("router-link-active")
     document.body.style.height = "1000px";
-
-    ContactService.topContacts().then(r => {
-        if (r.status == 200)
-            ContactsStore.top = r.data['contacts'];
-    });
 });
 onUpdated(() => {
     // keep the nav link active after click menus (components )

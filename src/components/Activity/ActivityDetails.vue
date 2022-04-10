@@ -34,7 +34,7 @@
                         <small class="fw-bold">Amount</small>
                         <small>
                             {{
-                                StrHelper.make(props.order.amount).toUSD(false).get()
+                                StrHelper.make(props?.order?.amount).toUSD(false).get()
                             }} $
                         </small>
                     </div>
@@ -50,9 +50,9 @@
                             {{
                                 props.order.charge ?
                                     StrHelper
-                                        .make(/**/parseFloat(props.order.amount) + parseFloat(props.order.charge)/**/)
+                                        .make(/**/parseFloat(props?.order?.amount) + parseFloat(props?.order?.charge)/**/)
                                         .toUSD(false).get()
-                                    : StrHelper.make(props.order.amount).toUSD(false).get()
+                                    : StrHelper.make(props?.order?.amount).toUSD(false).get()
                             }} $
                         </small>
                     </div>
