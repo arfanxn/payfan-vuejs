@@ -93,12 +93,6 @@ function loadActivitiesPagination(page) {
     width: 25px;
     height: 25px;
 }
-
-.contact-icon-size {
-    width: 40px;
-    height: 40px;
-}
-
 .wrapper-activity:hover {
     background-color: rgba(108, 117, 125, 0.15) !important;
 }

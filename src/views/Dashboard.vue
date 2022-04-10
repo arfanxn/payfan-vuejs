@@ -13,8 +13,7 @@
 
         <RecentActivity />
       </div>
-    </div>
-  </div>
+    </div>  </div>
 </template>
 
 <script setup>
@@ -24,13 +23,20 @@ import WalletCard from '../components/Dashboard/WalletCard.vue';
 import TransferMenu from '../components/Dashboard/TransferMenu.vue';
 import RecentActivity from '../components/Dashboard/RecentActivity.vue';
 import SendAgain from '../components/Dashboard/SendAgain.vue';
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 import { useAuthUserStore } from '@/stores/auth/AuthUserStore.js';
+import { useContactsStore } from '../stores/ContactsStore';
+const ContactsStore = useContactsStore();
 const AuthUserStore = useAuthUserStore();
 
 defineComponent({
   NavbarTop, TransferMenu, WalletCard, RecentActivity, SendAgain
 })
+
+onMounted(() => {
+  ContactsStore.fetch({ per_page: 5 });
+});
+
 </script>
 
 <style scoped>
