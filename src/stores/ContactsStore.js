@@ -7,9 +7,6 @@ export const useContactsStore = defineStore("contacts", {
     state: () => ({
         "pagination/data": [],
         "pagination/meta": [],
-        top: [],
-        all: [],
-        blocked: [],
     }),
 
     actions: {
@@ -52,10 +49,10 @@ export const useContactsStore = defineStore("contacts", {
         },
 
         remove(contactIDtoRemove) {
-            this.top = this.top.filter(contact => contact['id'] != contactIDtoRemove);
+            this["pagination/data"] = this["pagination/data"].filter(contact => contact['id'] != contactIDtoRemove);
         },
         block(contactIDtoBlock) {
-            this.top = this.top.filter(contact => {
+            this["pagination/data"] = this["pagination/data"].filter(contact => {
                 if (contact['id'] == contactIDtoBlock) {
                     this.blocked.push(contact)
                     console.log(() => this.blocked);
@@ -64,7 +61,7 @@ export const useContactsStore = defineStore("contacts", {
             });
         },
         toggleFavorite(contactID) {
-            this.top = this.top.map(contact => {
+            this["pagination/data"] = this["pagination/data"].map(contact => {
                 if (contact['id'] == contactID) {
                     return Object.assign(contact, {
                         status: contact['status'] == "FAVORITED" ? "ADDED" : "FAVORITED"
