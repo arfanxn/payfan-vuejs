@@ -5,6 +5,8 @@
       <div class="col-md-7 p-0 m-0">
         <h2 class="mb-4">Hello, {{ AuthUserStore.data.name }}</h2>
         <WalletCard />
+
+        <ArticlesCarousel class="mt-5" />
       </div>
       <div class="col-md-5 p-0 ps-5 pe-4 m-0">
         <TransferMenu />
@@ -20,6 +22,7 @@
 // @ is an alias to /src
 import NavbarTop from '../components/NavbarTop.vue';
 import WalletCard from '../components/Dashboard/WalletCard.vue';
+import ArticlesCarousel from '../components/Dashboard/ArticlesCarousel.vue';
 import TransferMenu from '../components/Dashboard/TransferMenu.vue';
 import RecentActivity from '../components/Dashboard/RecentActivity.vue';
 import SendAgain from '../components/Dashboard/SendAgain.vue';
