@@ -3,7 +3,8 @@
         <div id="articleCarousel" class="carousel slide " data-bs-ride="carousel">
             <div class="carousel-inner">
                 <a v-for="(article, index) in state.articles" :key="index" class="carousel-item"
-                    :class="index == 1 ? `active` : ``" data-bs-interval="3000" :href="article.url" target="_blank">
+                    :class="index == 1 ? `active` : ``" :data-bs-interval="state.carouselSlideInterval"
+                    :href="article.url" target="_blank">
                     <img class="articleCarouselThumbnailImage d-block " :src="article.urlToImage" :alt="article.title">
                     <div class="carousel-caption d-md-block text-white">
                         <h5 class="fw-bold ">{{ article.title }}</h5>
@@ -15,7 +16,8 @@
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#articleCarousel" data-bs-slide="next">
+            <button id="btnNextArticlesCarousel" class="carousel-control-next" type="button"
+                data-bs-target="#articleCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
@@ -31,6 +33,7 @@ import axios from 'axios';
 import { useAuthUserStore } from '@/stores/auth/AuthUserStore.js';
 const state = reactive({
     articles: [],
+    carouselSlideInterval: 3000,
 });
 
 const AuthUserStore = useAuthUserStore();
@@ -45,6 +48,8 @@ onMounted(async () => {
     });
 
     state.articles = responseNewsAPI.data.articles;
+
+    setTimeout(() => document.getElementById("btnNextArticlesCarousel").click(), state.carouselSlideInterval)
 }),
 
     Helpers; AuthUserStore;
