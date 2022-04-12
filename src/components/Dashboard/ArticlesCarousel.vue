@@ -1,15 +1,15 @@
 <template>
-    <div class="rounded overflow-hidden">
+    <div class="rounded overflow-hidden bg-navy">
         <div id="articleCarousel" class="carousel slide " data-bs-ride="carousel">
             <div class="carousel-inner">
-                <div v-for="(article, index) in state.articles" :key="index" class="carousel-item"
-                    :class="index == 1 ? `active` : ``" data-bs-interval="3000">
+                <a v-for="(article, index) in state.articles" :key="index" class="carousel-item"
+                    :class="index == 1 ? `active` : ``" data-bs-interval="3000" :href="article.url" target="_blank">
                     <img class="articleCarouselThumbnailImage d-block " :src="article.urlToImage" :alt="article.title">
-                    <div class="carousel-caption d-none d-md-block">
+                    <div class="carousel-caption d-md-block text-white">
                         <h5 class="fw-bold ">{{ article.title }}</h5>
                         <small>{{ article.description }}</small>
                     </div>
-                </div>
+                </a>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#articleCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
