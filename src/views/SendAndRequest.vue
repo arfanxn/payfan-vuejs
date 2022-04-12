@@ -18,10 +18,10 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { defineComponent, onMounted, onBeforeMount, reactive, onUpdated } from 'vue';
-import NavbarTop from '../components/NavbarTop.vue';
+import NavbarTop from '../components/Layouts/NavbarTop.vue';
 import SendPayment from '../components/SendAndRequest/SendPayment.vue';
 import RequestPayment from '../components/SendAndRequest/RequestPayment.vue';
-import RightSideMenu from '../components/RightSideMenu.vue';
+import RightSideMenu from '../components/Layouts/RightSideMenu.vue';
 import Contacts from "@/components/SendAndRequest/Contacts.vue";
 const route = useRoute();
 const state = reactive({

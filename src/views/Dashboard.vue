@@ -22,7 +22,7 @@
 
 <script setup>
 // @ is an alias to /src
-import NavbarTop from '../components/NavbarTop.vue';
+import NavbarTop from '../components/Layouts/NavbarTop.vue';
 import WalletCard from '../components/Dashboard/WalletCard.vue';
 import ArticlesCarousel from '../components/Dashboard/ArticlesCarousel.vue';
 import TransferMenu from '../components/Dashboard/TransferMenu.vue';
