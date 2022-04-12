@@ -9,6 +9,12 @@ export const useContactsStore = defineStore("contacts", {
         "pagination/meta": [],
     }),
 
+    getters  : {
+        "pagination/data/blockedContacts": (state) => {
+            return state["pagination/data"].filter(contact => contact.status?.toUpperCase().includes("BLOCK") ) ; 
+        }
+    } ,
+
     actions: {
         async fetch(options = {}) {
             const {
@@ -25,9 +31,9 @@ export const useContactsStore = defineStore("contacts", {
                 const response = await axios.get("/api/user/self/contacts", {
                     params: {
                         order_by: order_by ? order_by : "last_transaction:desc",
-                        favorited: favorited ? 0 : 1,
-                        blocked: blocked ? 1 : 0,
-                        added: added ? 0 : 1,
+                        favorited: typeof favorited !== "undefined"  ? 0 : 1,
+                        blocked: typeof blocked !== "undefined" ? 1 : 0,
+                        added: typeof added !== "undefined" ? 0 : 1,
 
                         // parameters for handling pagination/paginator
                         per_page: per_page ? per_page : 30,
