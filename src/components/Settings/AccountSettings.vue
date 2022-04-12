@@ -4,32 +4,17 @@
             <h5>Profile</h5>
             <div class="d-flex mt-3">
                 <div class="text-center pe-3">
-                    <img
-                        v-if="AuthUserStore.data?.profile_pict"
-                        @click="updateProfilePict"
-                        class="rounded-circle update-profile-pict-img mb-2"
-                        :src="AuthUserStore.data?.profile_pict"
-                    />
-                    <small
-                        @click="updateProfilePict"
-                        class="cursor-pointer text-navy hover-underline"
-                    >Update&nbsp;Photo</small>
+                    <img v-if="AuthUserStore.data?.profile_pict" @click="updateProfilePict"
+                        class="rounded-circle update-profile-pict-img mb-2" :src="AuthUserStore.data?.profile_pict" />
+                    <small @click="updateProfilePict"
+                        class="cursor-pointer text-navy hover-underline">Update&nbsp;Photo</small>
                 </div>
                 <div class="w-100">
                     <h5 v-if="!state.current.isChangeName">{{ AuthUserStore.data.name }}</h5>
-                    <input
-                        v-else
-                        @blur="saveChangeName"
-                        placeholder="Your new name"
-                        v-model="AuthUserStore.data.name"
-                        class="form-control"
-                        type="text"
-                    />
-                    <AlertError
-                        class="mt-1 mb-1 d-block"
-                        @close="v$.$reset()"
-                        :error="v$?.name?.$errors[0]?.$message"
-                    ></AlertError>
+                    <input v-else @blur="saveChangeName" placeholder="Your new name" v-model="AuthUserStore.data.name"
+                        class="form-control" type="text" />
+                    <AlertError class="mt-1 mb-1 d-block" @close="v$.$reset()" :error="v$?.name?.$errors[0]?.$message">
+                    </AlertError>
                     <div class="d-flex justify-content-between">
                         <span class="text-secondary">
                             Joined in {{
@@ -37,16 +22,10 @@
                                     `${DateHelper.numericMonthtoString(created_at.getMonth())} ${created_at.getFullYear()}`)
                             }}
                         </span>
-                        <a
-                            v-show="!state.current.isChangeName"
-                            @click.prevent="state.current.isChangeName = true"
-                            class="cursor-pointer fw-bold text-navy hover-underline"
-                        >Change name</a>
-                        <a
-                            v-show="state.current.isChangeName"
-                            @click.prevent="state.current.isChangeName = false"
-                            class="cursor-pointer fw-bold text-danger hover-underline"
-                        >Cancel</a>
+                        <a v-show="!state.current.isChangeName" @click.prevent="state.current.isChangeName = true"
+                            class="cursor-pointer fw-bold text-navy hover-underline">Change name</a>
+                        <a v-show="state.current.isChangeName" @click.prevent="state.current.isChangeName = false"
+                            class="cursor-pointer fw-bold text-danger hover-underline">Cancel</a>
                     </div>
                 </div>
             </div>
@@ -59,39 +38,22 @@
             <div class="d-flex mt-3 justify-content-between mb-2">
                 <span v-if="!state.current.isChangeEmail">{{ AuthUserStore.data.email }}</span>
                 <div class="d-flex flex-column w-100">
-                    <input
-                        v-if="state.current.isChangeEmail"
-                        @blur="saveChangeEmail"
-                        placeholder="Your new email"
-                        v-model.lazy="AuthUserStore.data.email"
-                        class="form-control"
-                        type="text"
-                    />
-                    <AlertError
-                        class="mt-1 mb-1"
-                        @close="v$.$reset()"
-                        :error="v$?.email?.$errors[0]?.$message"
-                    ></AlertError>
+                    <input v-if="state.current.isChangeEmail" @blur="saveChangeEmail" placeholder="Your new email"
+                        v-model.lazy.trim="AuthUserStore.data.email" class="form-control" type="text" />
+                    <AlertError class="mt-1 mb-1" @close="v$.$reset()" :error="v$?.email?.$errors[0]?.$message">
+                    </AlertError>
                 </div>
-                <a
-                    v-show="!state.current.isChangeEmail"
-                    @click="state.current.isChangeEmail = true"
-                    class="cursor-pointer fw-bold text-navy hover-underline"
-                >Change&nbsp;email</a>
+                <a v-show="!state.current.isChangeEmail" @click="state.current.isChangeEmail = true"
+                    class="cursor-pointer fw-bold text-navy hover-underline">Change&nbsp;email</a>
             </div>
             <div class="d-flex justify-content-between">
-                <small
-                    class="text-secondary"
-                >To update an email address, you must verify your new email address.</small>
-                <a
-                    v-show="state.current.isChangeEmail"
-                    @click.prevent="state.current.isChangeEmail = false"
-                    class="cursor-pointer fw-bold text-danger hover-underline"
-                >Cancel</a>
+                <small class="text-secondary">To update an email address, you must verify your new email
+                    address.</small>
+                <a v-show="state.current.isChangeEmail" @click.prevent="state.current.isChangeEmail = false"
+                    class="cursor-pointer fw-bold text-danger hover-underline">Cancel</a>
             </div>
         </div>
-        <UpdateProfilePictModal />
-    </div>
+        <UpdateProfilePictModal />  </div>
 </template>
 
 <script setup>
@@ -116,6 +78,10 @@ const state = reactive({
     current: {
         isChangeName: false,
         isChangeEmail: false,
+    },
+    oldValue: {
+        name: AuthUserStore.data?.name,
+        email: AuthUserStore.data?.email,
     }
 });
 const v$ = useVuelidate({ // rules  
@@ -131,6 +97,12 @@ function updateProfilePict() {
 }
 
 async function saveChangeName() {
+    if (state.oldValue.name == AuthUserStore.data['name']) {
+        // set cureently is change name/email to false again 
+        state.current.isChangeName = false;
+        return;
+    }
+
     const validator = await v$.value.$validate(); // validate
     if (!validator) return;
 
@@ -145,6 +117,12 @@ async function saveChangeName() {
 }
 
 async function saveChangeEmail() {
+    if (state.oldValue.email == AuthUserStore.data['email']) {
+        // set cureently is change email to false again 
+        state.current.isChangeEmail = false;
+        return;
+    }
+
     const validator = await v$.value.$validate(); // validate
     if (!validator) return;
 
