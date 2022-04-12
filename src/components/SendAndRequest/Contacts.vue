@@ -83,13 +83,31 @@ const state = reactive({
 });
 
 onMounted(() => {
-    ContactsStore.fetch({ per_page: 30 });
+    ContactsStore.fetch({
+        order_by: "last_transaction:desc",
+        favorited: 1,
+        blocked: 0,
+        added: 1,
+
+        // parameters for handling pagination/paginator
+        per_page: 30,
+        page: 1,
+    });
 })
 
 function loadContactsPagination(page) {
     document.querySelector(".top-contacts-lists-wrapper").scrollTo(0, 0);
     window.scrollTo(0, 0);
-    ContactsStore.fetch({ page, per_page: 30 })
+    ContactsStore.fetch({
+        order_by: "last_transaction:desc",
+        favorited: 1,
+        blocked: 0,
+        added: 1,
+
+        // parameters for handling pagination/paginator
+        per_page: 30,
+        page: page,
+    });
 }
 
 function showPeoplePreview(user) {

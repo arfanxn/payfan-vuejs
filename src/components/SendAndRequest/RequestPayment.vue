@@ -23,7 +23,16 @@ const state = reactive({
     modal: { transferPreviewModal: { user: {} }, }
 })
 onMounted(() => {
-    ContactsStore.fetch({ per_page: 5 });
+    ContactsStore.fetch({
+        order_by: "last_transaction:desc",
+        favorited: 1,
+        blocked: 0,
+        added: 1,
+
+        // parameters for handling pagination/paginator
+        per_page: 5,
+        page: 1,
+    });
 })
 
 function requestPaymentPreview(user) {
