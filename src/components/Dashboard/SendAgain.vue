@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-5">
+    <div class="">
         <div class="d-flex justify-content-between mb-4">
             <router-link class="text-navy fw-bold fs-5 hover-underline" to="/transfer/send">Send Again</router-link>
             <div class="dropstart cursor-pointer">
@@ -13,13 +13,13 @@
         </div>
 
         <div class="row row-cols-md-3 row-cols-2 text-center ">
-            <div class="text-center mb-4" v-for="(contact) in ContactsStore['pagination/data'].slice(0, 5)"
-                :key="contact.id">
+            <div class="text-center mb-4 cursor-pointer"
+                v-for="(contact) in ContactsStore['pagination/data'].slice(0, 5)" :key="contact.id">
                 <div @click="sendPaymentPreview(contact.user)"
                     class="w-100 d-flex justify-content-center cursor-pointer">
                     <UserAvatar :user="contact.user" style="width:50px; height:50px" />
                 </div>
-                <small @click="sendPaymentPreview(contact.user)">{{ contact.user.name }}</small>
+                <small @click="sendPaymentPreview(contact.user)">{{ contact.user.name.substr(0, 15) }}</small>
             </div>
             <router-link to="/transfer/contacts" class="text-center text-dark mb-4">
                 <img class="contact-icon-size p-1" src="@/assets/icons/search.png" />
