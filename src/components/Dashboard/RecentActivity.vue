@@ -10,7 +10,7 @@
 
             <router-link v-for="(activity, index) in activities" :key="index"
                 :to="{ path: `/activity`, query: { keyword: activity.id } }"
-                class="d-flex justify-content-between cursor-pointer py-2 text-dark "
+                class="wrapper-activity d-flex justify-content-between cursor-pointer py-2 text-dark "
                 :class="(index + 1) < (activities.length) ? `border-bottom border-secondary` : ``">
                 <div class="d-flex">
                     <UserAvatar class="my-auto"
@@ -117,3 +117,9 @@ async function fetchRecentActivities() {
 }
 
 </script>
+
+<style scoped>
+.wrapper-activity:hover {
+    border-bottom: 2px solid black !important;
+}
+</style>
