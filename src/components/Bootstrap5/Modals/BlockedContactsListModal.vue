@@ -103,7 +103,7 @@ async function fetchBlockedContacts(page = 1) {
 async function unblockContact(contact) {
     const confirmDeletion = await SwalPlugin.confirm({
         title: `Unblock contact`,
-        html: `Unblock ${contact['user']['name']} ?<br>Unblocking will also removing from your contacts`,
+        html: `Unblock "${contact['user']['name']}" ?<br>Unblocking will also removing from your contacts.`,
         icon: `question`,
     });
 

@@ -1,6 +1,6 @@
 <template>
     <teleport to='footer'>
-        <div class="mt-5 bg-white pt-4 border-top">
+        <div class=" mt-5 bg-white pt-4 border-top">
             <div class="container-md custom-container">
                 <!--  -->
 
