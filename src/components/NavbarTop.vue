@@ -35,12 +35,12 @@
                         </router-link>
                     </div>
                     <div class="navbar-nav">
-                        <NotificationsDropdown />
+                            <NotificationsDropdown />
                         <router-link
                             active-class="none"
                             exact-active-class="none"
                             to="/account/settings"
-                            class="cursor-pointer nav-link fw-bold fs-6 d-flex px-0 mx-1"
+                            class="cursor-pointer nav-link fw-bold fs-6 d-flex px-0 mx-1 invert-100"
                         >
                             <img
                                 class="nav-link-icon my-auto"
@@ -49,7 +49,7 @@
                             />
                         </router-link>
                         <a
-                            class="cursor-pointer nav-link fw-bold fs-6 px-0 mx-1"
+                            class="cursor-pointer nav-link fw-bold fs-6 px-0 ms-2 me-1"
                             @click.prevent="handleLogout()"
                         >
                             <small>LOG OUT</small>
@@ -60,6 +60,7 @@
         </nav>
         <div class="pt-5 mt-5"></div>
     </teleport>
+    <!--  -->
 </template>
 
 <script setup>

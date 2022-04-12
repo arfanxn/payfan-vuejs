@@ -37,3 +37,7 @@ a {
 .fs-7 {
     font-size: .84rem;
 }
+
+.invert-100 {
+    filter: invert(1) !important;;
+}

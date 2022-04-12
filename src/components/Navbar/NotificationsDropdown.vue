@@ -1,7 +1,7 @@
 <template>
     <div class="dropdown text-break">
         <a @click="notification.showBadge = false/* if clicked hide unread notifications badge */" href="#"
-            class="nav-link fw-bold fs-6 d-flex position-relative p-0 mt-2 mx-1" data-bs-toggle="dropdown"
+            class="nav-link fw-bold fs-6 d-flex position-relative p-0 mt-2 mx-1 invert-100" data-bs-toggle="dropdown"
             aria-expanded="false">
             <img class="nav-link-icon my-auto" src="@/assets/icons/bell-ring.png" alt="Notifications" />
             <span v-show="notification.showBadge"
