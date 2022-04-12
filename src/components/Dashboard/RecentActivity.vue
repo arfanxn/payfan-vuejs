@@ -51,17 +51,17 @@
     }}</span><!-- end -->
 
                     <!-- if the status completed and order type is either REQUESTING or RECEIVING or GIFT  make the text amount color green (addaction) -->
-                    <span class="text-success" v-else-if="(order.type?.toUpperCase()?.includes(`REQUESTING`)
-                    || order.type?.toUpperCase()?.includes(`RECEIV`)
-                    || order.type?.toUpperCase()?.includes(`GIFT`))
-                    && order.status?.toUpperCase()?.includes(`COMPLETE`)">+&nbsp;${{
-        StrHelper.make(order.amount).toUSD(false).get()
+                    <span class="text-success" v-else-if="(activity.type?.toUpperCase()?.includes(`REQUESTING`)
+                    || activity.type?.toUpperCase()?.includes(`RECEIV`)
+                    || activity.type?.toUpperCase()?.includes(`GIFT`))
+                    && activity.status?.toUpperCase()?.includes(`COMPLETE`)">+&nbsp;${{
+        StrHelper.make(activity.amount).toUSD(false).get()
     }}</span><!-- end  -->
 
                     <!-- if the status FAILED or REJECTED make the text amount color danger  -->
-                    <span class="text-danger" v-else-if="order.status?.toUpperCase()?.includes(`FAIL`)
-                    || order.status?.toUpperCase()?.includes(`REJECT`)">x&nbsp;{{
-        StrHelper.make(order.amount).toUSD(false).get()
+                    <span class="text-danger" v-else-if="activity.status?.toUpperCase()?.includes(`FAIL`)
+                    || activity.status?.toUpperCase()?.includes(`REJECT`)">x&nbsp;{{
+        StrHelper.make(activity.amount).toUSD(false).get()
     }}&nbsp;$</span><!-- end -->
 
                 </div>
