@@ -41,11 +41,16 @@
                         )">Next</button>
                 </div>
             </div>
-        </div> </main>
+        </div>
+
+        <Footer></Footer>
+    </main>
+    <!--  -->
 </template>
 
 <script setup>
 import NavbarTop from '../components/Layouts/NavbarTop.vue';
+import Footer from '../components/Layouts/Footer.vue';
 import ActivitySearchAndFilters from '@/components/Activity/ActivitySearchAndFilters.vue';
 import Helpers from '@/Helpers.js';
 import DateHelper from '@/helpers/DateHelper.js';

@@ -8,11 +8,16 @@
         <span class="text-decoration-underline">arfan2173@gmail.com</span> ,
         <br />We will reponse as soon as possible and we serve our Customers 24H.
       </h4>
-    </div>  </div>
+    </div>
+
+    <Footer></Footer>
+  </div>
+  <!--  -->
 </template>
 
 <script setup>
 import NavbarTop from '../components/Layouts/NavbarTop.vue';
+import Footer from '../components/Layouts/Footer.vue';
 import { defineComponent } from 'vue'
 defineComponent({
   NavbarTop

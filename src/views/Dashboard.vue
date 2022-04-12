@@ -16,19 +16,22 @@
         <RecentActivity />
       </div>
     </div>
+
+    <Footer />
   </div>
   <!--  -->
 </template>
 
 <script setup>
 // @ is an alias to /src
+import { defineComponent, onMounted } from 'vue';
 import NavbarTop from '../components/Layouts/NavbarTop.vue';
+import Footer from '../components/Layouts/Footer.vue';
 import WalletCard from '../components/Dashboard/WalletCard.vue';
 import ArticlesCarousel from '../components/Dashboard/ArticlesCarousel.vue';
 import TransferMenu from '../components/Dashboard/TransferMenu.vue';
 import RecentActivity from '../components/Dashboard/RecentActivity.vue';
 import SendAgain from '../components/Dashboard/SendAgain.vue';
-import { defineComponent, onMounted } from 'vue';
 import { useAuthUserStore } from '@/stores/auth/AuthUserStore.js';
 import { useContactsStore } from '../stores/ContactsStore';
 const ContactsStore = useContactsStore();

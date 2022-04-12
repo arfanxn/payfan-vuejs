@@ -12,13 +12,18 @@
             <div class="col-md-4">
                 <RightSideMenu :menus="state.rightSideMenu" @menuClicked="changeMenu" />
             </div>
-        </div>  </div>
+        </div>
+
+        <Footer></Footer>
+    </div>
+    <!--  -->
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router';
 import { defineComponent, onMounted, onBeforeMount, reactive, onUpdated } from 'vue';
 import NavbarTop from '../components/Layouts/NavbarTop.vue';
+import Footer from '../components/Layouts/Footer.vue';
 import SendPayment from '../components/SendAndRequest/SendPayment.vue';
 import RequestPayment from '../components/SendAndRequest/RequestPayment.vue';
 import RightSideMenu from '../components/Layouts/RightSideMenu.vue';
@@ -45,7 +50,6 @@ onMounted(() => {
         ? state.currentMenu = elem.name : null);
     // keep the nav link active after click menus (components)
     document.getElementById("NavLinkSendandRequest").classList.add("router-link-active")
-    document.body.style.height = "1000px";
 });
 onUpdated(() => {
     // keep the nav link active after click menus (components )

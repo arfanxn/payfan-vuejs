@@ -16,11 +16,16 @@
             <div class="col-md-4">
                 <RightSideMenu :menus="state.rightSideMenu" @menuClicked="changeMenu" />
             </div>
-        </div>  </div>
+        </div>
+
+        <Footer></Footer>
+    </div>
+    <!--  -->
 </template>
 
 <script setup>
 import { defineComponent, reactive, onMounted } from 'vue';
+import Footer from '../components/Layouts/Footer.vue';
 import NavbarTop from '../components/Layouts/NavbarTop.vue';
 import RightSideMenu from '../components/Layouts/RightSideMenu.vue';
 import AccountSettings from "@/components/Settings/AccountSettings.vue";

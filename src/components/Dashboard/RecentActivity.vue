@@ -3,9 +3,9 @@
         <router-link to="/activity" class="text-navy hover-underline fw-bold fs-5">Recent Activity</router-link>
         <div class="mt-2 d-flex flex-column">
 
-            <div>
-                <!-- <span class="text-center fw-bold">No recent activity yet,</span>
-                <small class="d-block">please do some transactions first.</small> -->
+            <div v-if="activities.length < 1">
+                <span class="text-center fw-bold">No recent activity yet,</span>
+                <small class="d-block">please do some transactions first.</small>
             </div>
 
             <router-link v-for="(activity, index) in activities" :key="index"
@@ -65,8 +65,6 @@
     }}&nbsp;$</span><!-- end -->
 
                 </div>
-
-
                 <!--  -->
             </router-link>
 
@@ -115,7 +113,6 @@ async function fetchRecentActivities() {
     });
     return results;
 }
-
 </script>
 
 <style scoped>
