@@ -18,7 +18,7 @@
                         Helpers.ENV("APP_TITLE")
                     }}.&nbsp;All rights reserved.</small>
 
-                    <small class="mx-3 fw-bold text-dark">|</small>
+                    <small class="mx-3 fw-bold ">|</small>
 
                     <small class="fw-bold">{{ Helpers.ENV("APP_TITLE") }}</small>
                 </div>
