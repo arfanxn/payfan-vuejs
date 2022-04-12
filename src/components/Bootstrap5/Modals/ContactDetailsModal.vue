@@ -219,7 +219,6 @@ function blockContact() {
     }).then(result => {
         if (result.isConfirmed) {
             ContactService.block(props.contact['id']).then(() => {
-                ContactsStore.block(props.contact['id']);
                 Helpers.closeBSModal(`#btn-close-modal-contact-detail`);
                 SwalPlugin.alertPositioned({
                     title: `"${props.contact['user']['name']}" has been blocked`,

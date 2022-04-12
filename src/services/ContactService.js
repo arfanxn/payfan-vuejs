@@ -23,7 +23,14 @@ export default class ContactService {
 
     static async block(contactID) {
         try {
-            return await axios.post(`/api/user/self/contact/${contactID}/block`);
+            return await axios.patch(`/api/user/self/contact/${contactID}/block`);
+        } catch (error) {
+            return error.response;
+        }
+    }
+    static async unblock(contactID) {
+        try {
+            return await axios.patch(`/api/user/self/contact/${contactID}/unblock`);
         } catch (error) {
             return error.response;
         }

@@ -1,5 +1,6 @@
 <template>
-  <router-view class="container-md custom-container"></router-view>
+  <router-view class="container-md custom-container">
+    </router-view>
 </template>
 
 <script setup>
@@ -9,6 +10,7 @@ const AuthUserStore = useAuthUserStore();
 
 onMounted(() => {
   document.body.classList.add("bg-light");
+  document.body.style.minHeight = "100vh";
 
   if (AuthUserStore.isLoggedIn) {
     AuthUserStore.fetch();

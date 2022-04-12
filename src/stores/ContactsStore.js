@@ -31,9 +31,12 @@ export const useContactsStore = defineStore("contacts", {
                 const response = await axios.get("/api/user/self/contacts", {
                     params: {
                         order_by: order_by ? order_by : "last_transaction:desc",
-                        favorited: typeof favorited !== "undefined"  ? 0 : 1,
-                        blocked: typeof blocked !== "undefined" ? 1 : 0,
-                        added: typeof added !== "undefined" ? 0 : 1,
+                        // favorited: typeof favorited !== "undefined"  ? 0 : 1,
+                        // blocked: typeof blocked !== "undefined" ? 1 : 0,
+                        // added: typeof added !== "undefined" ? 0 : 1,
+                        favorited,
+                        blocked,
+                        added,
 
                         // parameters for handling pagination/paginator
                         per_page: per_page ? per_page : 30,
@@ -56,15 +59,6 @@ export const useContactsStore = defineStore("contacts", {
 
         remove(contactIDtoRemove) {
             this["pagination/data"] = this["pagination/data"].filter(contact => contact['id'] != contactIDtoRemove);
-        },
-        block(contactIDtoBlock) {
-            this["pagination/data"] = this["pagination/data"].filter(contact => {
-                if (contact['id'] == contactIDtoBlock) {
-                    this.blocked.push(contact)
-                    console.log(() => this.blocked);
-                }
-                return contact['id'] != contactIDtoBlock
-            });
         },
         toggleFavorite(contactID) {
             this["pagination/data"] = this["pagination/data"].map(contact => {
