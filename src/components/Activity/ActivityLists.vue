@@ -5,8 +5,9 @@
                 @click="toggleActivityDetails(order)">
                 <div class="d-flex text-dark w-100">
                     <!--  -->
-                    <UserAvatar v-if="isActivityTypeIsSendingOrRequesting(order)" :user="order.to_wallet.user"
-                        style="width:40px ; height:40px" />
+                    <UserAvatar
+                        v-if="order.type?.toUpperCase()?.includes(`SENDING`) || order.type?.toUpperCase()?.includes(`REQUESTING`)"
+                        :user="order.to_wallet.user" style="width:40px ; height:40px" />
                     <UserAvatar v-else :user="order.from_wallet.user" style="width:40px ; height:40px" />
 
                     <!--  -->
@@ -14,7 +15,8 @@
                         <div class="d-flex justify-content-between">
                             <p class="fw-bold my-auto text-dark">
                                 {{
-                                    isActivityTypeIsSendingOrRequesting(order)
+                                    order.type?.toUpperCase()?.includes(`SENDING`) ||
+                                        order.type?.toUpperCase()?.includes(`REQUESTING`)
                                         ? order.to_wallet.user.name
                                         : order.from_wallet.user.name
                                 }}
@@ -161,12 +163,6 @@ const currentShowedActivityDetailsID = ref("");
 function toggleActivityDetails(order) {
     currentShowedActivityDetailsID.value = currentShowedActivityDetailsID.value == order.id ? "" : order.id;
 }
-
-function isActivityTypeIsSendingOrRequesting(order) {
-    const type = order.type.toUpperCase();
-    return type?.includes(`SENDING`) || type?.includes(`REQUESTING`);
-}
-
 
 function approveRequestMoney(order) {
     const amountInUSD = StrHelper.make(order.amount).toUSD().get();
