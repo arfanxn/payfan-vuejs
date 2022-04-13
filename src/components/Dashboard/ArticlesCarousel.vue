@@ -49,7 +49,12 @@ onMounted(async () => {
 
     state.articles = responseNewsAPI.data.articles;
 
-    setTimeout(() => document.getElementById("btnNextArticlesCarousel").click(), state.carouselSlideInterval)
+    setTimeout(() => Helpers.tap(
+        document.getElementById("btnNextArticlesCarousel"), btnNextArticlesCarousel => {
+            if (btnNextArticlesCarousel)
+                btnNextArticlesCarousel.click()
+        }
+    ), state.carouselSlideInterval)
 }),
 
     Helpers; AuthUserStore;
