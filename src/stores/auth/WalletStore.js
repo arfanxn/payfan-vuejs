@@ -16,9 +16,11 @@ export const useWalletStore = defineStore("wallet", {
         },
 
         subtractBalance(amount) {
+            amount = amount.includes(".") ? amount : amount + ".00"; 
             this.data['balance'] =  NumberHelper.subDecimals(this.data['balance'] , amount ) ; 
         },
         addBalance(amount) {
+            amount = amount.includes(".") ? amount : amount + ".00"; 
             this.data['balance'] = NumberHelper.addDecimals(this.data['balance'] , amount ) ; 
         }, 
     }
