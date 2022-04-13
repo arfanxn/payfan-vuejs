@@ -3,65 +3,31 @@
         <form @submit.prevent>
             <div class="mb-3">
                 <label for="inputFullname" class="form-label">Fullname</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="inputFullname"
-                    v-model="state.form.values.fullname"
-                />
-                <AlertError
-                    class="mt-1"
-                    @close="v$.$reset()"
-                    :error="v$?.form?.values?.fullname?.$errors[0]?.$message"
-                ></AlertError>
+                <input type="text" class="form-control" id="inputFullname" v-model="state.form.values.fullname" />
+                <AlertError class="mt-1" @close="v$.$reset()" :error="v$?.form?.values?.fullname?.$errors[0]?.$message">
+                </AlertError>
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
-                <input
-                    type="email"
-                    class="form-control"
-                    id="inputEmail"
-                    v-model.lazy="state.form.values.email"
-                />
-                <AlertError
-                    class="mt-1"
-                    @close="v$.$reset()"
-                    :error="v$?.form?.values?.email?.$errors[0]?.$message"
-                ></AlertError>
+                <input type="email" class="form-control" id="inputEmail" v-model.lazy="state.form.values.email" />
+                <AlertError class="mt-1" @close="v$.$reset()" :error="v$?.form?.values?.email?.$errors[0]?.$message">
+                </AlertError>
             </div>
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input
-                    type="password"
-                    class="form-control"
-                    id="inputPassword"
-                    v-model="state.form.values.password"
-                />
-                <AlertError
-                    class="mt-1"
-                    @close="v$.$reset()"
-                    :error="v$?.form?.values?.password?.$errors[0]?.$message"
-                ></AlertError>
+                <input type="password" class="form-control" id="inputPassword" v-model="state.form.values.password" />
+                <AlertError class="mt-1" @close="v$.$reset()" :error="v$?.form?.values?.password?.$errors[0]?.$message">
+                </AlertError>
             </div>
             <div class="mb-3">
                 <label for="inputConfPassword" class="form-label">Confirm Password</label>
-                <input
-                    type="password"
-                    class="form-control"
-                    id="inputConfPassword"
-                    v-model="state.form.values.password_confirmation"
-                />
-                <AlertError
-                    class="mt-1"
-                    @close="v$.$reset()"
-                    :error="v$?.form?.values?.password_confirmation?.$errors[0]?.$message"
-                ></AlertError>
+                <input type="password" class="form-control" id="inputConfPassword"
+                    v-model="state.form.values.password_confirmation" />
+                <AlertError class="mt-1" @close="v$.$reset()"
+                    :error="v$?.form?.values?.password_confirmation?.$errors[0]?.$message"></AlertError>
             </div>
-            <button
-                type="submit"
-                class="btn btn-outline-primary float-end mb-4"
-                @click="handleRegister()"
-            >Submit</button>
+            <button type="submit" class="btn btn-outline-primary float-end mb-4"
+                @click="handleRegister()">Submit</button>
         </form>
     </div>
 </template>
@@ -70,7 +36,7 @@
 import AlertError from '../Errors/AlertError.vue';
 import AuthService from '../../services/AuthService';
 import { reactive, defineComponent } from 'vue';
-import router from '../../router';
+// import router from '../../router';
 import SwalPlugin from '../../plugins/SwalPlugin';
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength, helpers } from '@vuelidate/validators';
@@ -123,7 +89,8 @@ async function handleRegister() {
                             '<h5>Please wait a few seconds, we are redirecting you to your Dashboard.</h5>', "success", 2000)
                             .then(result => {
                                 if (result.dismiss) {
-                                    router.go('/');
+                                    // router.push('/');
+                                    window.location.href = "/";
                                 }
                             });
                     }

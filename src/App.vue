@@ -1,6 +1,6 @@
 <template>
   <router-view class="container-md custom-container">
-    </router-view>
+  </router-view>
 </template>
 
 <script setup>
@@ -16,15 +16,17 @@ onMounted(() => {
   document.body.style.minHeight = "100vh";
 
   if (AuthUserStore.isLoggedIn) { // if user is logged in
-    AuthUserStore.fetch().then(() => {
-      NotificationService.latest().then(r => {
-        if (r.status == 200) NotificationsStore.pushLatest(r.data.notifications);
-      })
+    AuthUserStore.fetch().then(r => {
+      if (r.status == 200) {
+        NotificationService.latest().then(r => {
+          if (r.status == 200) NotificationsStore.pushLatest(r.data.notifications);
+        })
 
-      // listen live notifications
-      window.Echo.private('users.' + AuthUserStore.data['id']).notification(notification => {
-        NotificationsStore.realtimeLatest(notification);
-      } /**/);
+        // listen live notifications
+        window.Echo.private('users.' + AuthUserStore.data['id']).notification(notification => {
+          NotificationsStore.realtimeLatest(notification);
+        } /**/);
+      }
     });
   }
 
