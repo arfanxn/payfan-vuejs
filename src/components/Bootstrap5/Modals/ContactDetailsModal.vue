@@ -32,11 +32,11 @@
                         </div>
 
                         <div class="d-flex justify-content-center mt-4">
-                            <a @click="triggerTransferPreviewModal(`SEND`)"
+                            <a @click="showCreateOrderModal(`SEND`)"
                                 class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-5 py-2">
                                 <span class="fw-bold">Send</span>
                             </a>
-                            <a @click="triggerTransferPreviewModal(`REQUEST`)"
+                            <a @click="showCreateOrderModal(`REQUEST`)"
                                 class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-5 py-2">
                                 <span class="fw-bold">Request</span>
                             </a>
@@ -116,14 +116,14 @@
             </div>
         </div>
 
-        <TransferPreviewModal
-            @nextClicked="(obj) => state.transferPreviewModal.currentStep == `SEND` ? handleSendPayment(obj) : handleMakeRequestPayment(obj)"
+        <CreateOrderModal
+            @nextClicked="(obj) => state.createOrderModal.currentStep == `SEND` ? handleSendPayment(obj) : handleMakeRequestPayment(obj)"
             :user="props.contact?.user">
             <template #nextButtonText>{{
-                state.transferPreviewModal.currentStep == `SEND` ? `Send payment` : `Make a
+                state.createOrderModal.currentStep == `SEND` ? `Send payment` : `Make a
             request` }}</template>
-        </TransferPreviewModal>
-        </teleport>
+        </CreateOrderModal>
+    </teleport>
 </template>
 
 <script setup>
@@ -138,12 +138,12 @@ import { useContactsStore } from '@/stores/ContactsStore.js';
 import { searchPeoplesOnPayfan, handleSendPayment, handleMakeRequestPayment } from "../../../services/functions";
 import { useSearchPeoplesStore } from "../../../stores/SearchPeoplesStore";
 import UserAvatar from "@/components/Avatar/UserAvatar.vue";
-import TransferPreviewModal from "./TransferPreviewModal.vue";
+import CreateOrderModal from "./CreateOrderModal.vue";
 const SearchPeoplesStore = useSearchPeoplesStore();
 const ContactsStore = useContactsStore();
 defineComponent({
     StarIcon,
-    TransferPreviewModal
+    CreateOrderModal
 });
 const props = defineProps({
     contact: {},
@@ -156,7 +156,7 @@ const state = reactive({
             showFullNote: false
         },
     },
-    transferPreviewModal: {
+    createOrderModal: {
         currentStep: null,
     }
 })
@@ -235,9 +235,9 @@ function blockContact() {
     });
 }
 
-function triggerTransferPreviewModal(operation) {
-    state.transferPreviewModal.currentStep = operation.toUpperCase();
-    Helpers.triggerBSModal(`#btn-modal-transfer-preview`);
+function showCreateOrderModal(operation) {
+    state.createOrderModal.currentStep = operation.toUpperCase();
+    Helpers.triggerBSModal(`#btn-modal-create-order`);
 }
 </script>
 

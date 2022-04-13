@@ -3,14 +3,14 @@
         <NavbarTop />
         <div class="row p-0 m-0">
             <div class="col-md-8 bg-white">
-                <SendPayment v-if="state.currentMenu == state.rightSideMenu[0].name" />
+                <SendPayment v-if="state.currentMenu == state.menus[0].name" />
 
-                <RequestPayment v-if="state.currentMenu == state.rightSideMenu[1].name" />
+                <RequestPayment v-if="state.currentMenu == state.menus[1].name" />
 
-                <Contacts v-if="state.currentMenu == state.rightSideMenu[2].name" />
+                <Contacts v-if="state.currentMenu == state.menus[2].name" />
             </div>
             <div class="col-md-4">
-                <RightSideMenu :menus="state.rightSideMenu" @menuClicked="changeMenu" />
+                <VerticalMenu :menus="state.menus" @menuClicked="changeMenu" />
             </div>
         </div>
 
@@ -26,12 +26,12 @@ import NavbarTop from '../components/Layouts/NavbarTop.vue';
 import Footer from '../components/Layouts/Footer.vue';
 import SendPayment from '../components/SendAndRequest/SendPayment.vue';
 import RequestPayment from '../components/SendAndRequest/RequestPayment.vue';
-import RightSideMenu from '../components/Layouts/RightSideMenu.vue';
+import VerticalMenu from '../components/Layouts/VerticalMenu.vue';
 import Contacts from "@/components/SendAndRequest/Contacts.vue";
 const route = useRoute();
 const state = reactive({
     currentMenu: "Send Money",
-    rightSideMenu: [{
+    menus: [{
         name: "Send Money", link: "/transfer/send"
     }, {
         name: "Request Money", link: "/transfer/request"
@@ -40,13 +40,13 @@ const state = reactive({
     }],
 });
 defineComponent({
-    NavbarTop, SendPayment, RequestPayment, Contacts, RightSideMenu
+    NavbarTop, SendPayment, RequestPayment, Contacts, VerticalMenu
 });
 onBeforeMount(() => {
-    changeMenu(state.rightSideMenu[0].name);
+    changeMenu(state.menus[0].name);
 });
 onMounted(() => {
-    (state.rightSideMenu).forEach(elem => elem.link.toLowerCase() == route.path.toLowerCase()
+    (state.menus).forEach(elem => elem.link.toLowerCase() == route.path.toLowerCase()
         ? state.currentMenu = elem.name : null);
     // keep the nav link active after click menus (components)
     document.getElementById("NavLinkSendandRequest").classList.add("router-link-active")

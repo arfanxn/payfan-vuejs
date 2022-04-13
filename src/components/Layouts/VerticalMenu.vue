@@ -1,13 +1,11 @@
 <template>
     <div class="bg-white ms-4">
         <ul class="text-end p-0">
-            <router-link
-                v-for="(menu, index) in props.menus"
-                :key="index"
-                :to="menu.link || menu.url"
+            <router-link v-for="(menu, index) in props.menus" :key="index" :to="menu.link || menu.url"
                 @click.prevent="menuClicked(menu)"
-                class="py-3 px-3 border-bottom cursor-pointer d-block text-decoration-none text-dark fw-bolder"
-            >{{ menu.name || menu.text || menu.title }}</router-link>
+                class="py-3 px-3 border-bottom cursor-pointer d-block text-decoration-none text-dark fw-bolder">{{
+                    menu.name || menu.text || menu.title
+                }}</router-link>
         </ul>
     </div>
 </template>

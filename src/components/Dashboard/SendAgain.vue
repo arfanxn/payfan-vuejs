@@ -15,11 +15,11 @@
         <div class="row row-cols-md-3 row-cols-2 text-center ">
             <div class="text-center mb-4 cursor-pointer"
                 v-for="(contact) in ContactsStore['pagination/data'].slice(0, 5)" :key="contact.id">
-                <div @click="sendPaymentPreview(contact.user)"
+                <div @click="showCreateSendPaymentOrderModal(contact.user)"
                     class="w-100 d-flex justify-content-center cursor-pointer">
                     <UserAvatar :user="contact.user" style="width:50px; height:50px" />
                 </div>
-                <small @click="sendPaymentPreview(contact.user)">{{ contact.user.name.substr(0, 15) }}</small>
+                <small @click="showCreateSendPaymentOrderModal(contact.user)">{{ contact.user.name.substr(0, 15) }}</small>
             </div>
             <router-link to="/transfer/contacts" class="text-center text-dark mb-4">
                 <img class="contact-icon-size p-1" src="@/assets/icons/search.png" />
@@ -27,10 +27,10 @@
             </router-link>
         </div>
 
-        <TransferPreviewModal v-if="state.transferPreviewModal.user" :user="state.transferPreviewModal.user"
+        <CreateOrderModal v-if="state.createOrderModal.user" :user="state.createOrderModal.user"
             @nextClicked="handleSendPayment">
             <template #nextButtonText>Send payment</template>
-        </TransferPreviewModal>
+        </CreateOrderModal>
     </div>
     <!--  -->
 </template>
@@ -40,18 +40,18 @@ import { useContactsStore } from "../../stores/ContactsStore";
 import { reactive } from "vue";
 import UserAvatar from "@/components/Avatar/UserAvatar.vue";
 import Helpers from "@/Helpers.js";
-import TransferPreviewModal from "@/components/Bootstrap5/Modals/TransferPreviewModal.vue";
+import CreateOrderModal from "@/components/Bootstrap5/Modals/CreateOrderModal.vue";
 import { handleSendPayment } from "@/services/functions.js";
 const ContactsStore = useContactsStore();
 const state = reactive({
-    transferPreviewModal: {
+    createOrderModal: {
         user: {},
     },
 })
 
-function sendPaymentPreview(user) {
-    state.transferPreviewModal.user = user;
-    Helpers.triggerBSModal(`#btn-modal-transfer-preview`);
+function showCreateSendPaymentOrderModal(user) {
+    state.createOrderModal.user = user;
+    Helpers.triggerBSModal(`#btn-modal-create-order`);
 }
 </script>
 
