@@ -1,10 +1,10 @@
 <template>
     <div class="dropdown text-break">
-        <a @click="notification.showBadge = false/* if clicked hide unread notifications badge */" href="#"
-            class="nav-link fw-bold fs-6 d-flex position-relative p-0 mt-2 mx-1 " data-bs-toggle="dropdown"
+        <a @click="NotificationsStore['private/showBadge'] = false/* if clicked hide unread notifications badge */"
+            href="#" class="nav-link fw-bold fs-6 d-flex position-relative p-0 mt-2 mx-1 " data-bs-toggle="dropdown"
             aria-expanded="false">
             <img class="nav-link-icon my-auto invert-100" src="@/assets/icons/bell-ring.png" alt="Notifications" />
-            <span v-show="notification.showBadge"
+            <span v-show="NotificationsStore['private/showBadge']"
                 class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
         </a>
         <ul class="dropdown-menu pt-0 notification-dropdown-menu overflow-auto"
@@ -42,43 +42,42 @@
 
             <!-- blank li for adding a range between  -->
             <li class="pb-5 pt-3 mb-5 bg-transparent text-center fw-bold">{{
-                notification.isLoadingMore ? `Loading more
+                isLoadNotification ? `Loading more
                             notifications....` : `No more notifications yet.`
             }}</li>
-        </ul>  </div>
+        </ul>
+    </div>
+    <!--  -->
 </template>
 
 <script setup>
-import { onMounted, reactive, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useNotificationsStore } from '../../stores/NotificationsStore';
 import router from '../../router';
 import NotificationService from "@/services/NotificationService.js";
 import StrHelper from "@/helpers/StrHelper.js";
-import { useAuthUserStore } from "../../stores/auth/AuthUserStore.js"
-const AuthUserStore = useAuthUserStore();
+// import { useAuthUserStore } from "../../stores/auth/AuthUserStore.js"
+// const AuthUserStore = useAuthUserStore();
 StrHelper;
 const NotificationsStore = useNotificationsStore()
-const notification = reactive({
-    alreadyLoadedPageList: [],
-    isLoadingMore: false,
-    showBadge: false,
-});
+
+const isLoadNotification = ref(false);
 
 onMounted(() => {
-    NotificationService.latest().then(r => {
-        if (r.status == 200) {
-            notification.alreadyLoadedPageList.push(r.data.notifications['current_page']);
-            NotificationsStore.pushLatest(r.data.notifications);
-            if (NotificationsStore['latest/total_unread'] > 0)
-                notification.showBadge = true;
-
-        }
-    })
+    /*  NotificationService.latest().then(r => {
+           if (r.status == 200) {
+               notification.alreadyLoadedPageList.push(r.data.notifications['current_page']);
+               NotificationsStore.pushLatest(r.data.notifications);
+               if (NotificationsStore['latest/total_unread'] > 0)
+                   NotificationsStore['private/showBadge'] = true;
+   
+           }
+       })     */
 
     // listen live notifications
-    window.Echo.private('users.' + AuthUserStore.data['id']).notification(notification => {
-        NotificationsStore.realtimeLatest(notification);
-    } /**/);
+    // window.Echo.private('users.' + AuthUserStore.data['id']).notification(notification => {
+    //     NotificationsStore.realtimeLatest(notification);
+    // } /**/);
 })
 
 watch(() => NotificationsStore['latest/total_unread'], (newValue, oldValue) => {
@@ -86,23 +85,24 @@ watch(() => NotificationsStore['latest/total_unread'], (newValue, oldValue) => {
     oldValue = parseInt(oldValue);
 
     if (newValue > oldValue)
-        notification.showBadge = true;
+        NotificationsStore['private/showBadge'] = true;
     else if (newValue === 0)
-        notification.showBadge = false;
+        NotificationsStore['private/showBadge'] = false;
 
 });
 
 function notificationAction(notification, action) {
     const goToAction = () => {
-        // const urlQueries = new Proxy(
-        //     new URLSearchParams(action.url || action.link || action.endpoint), {
-        //     get: (searchParams, prop) => searchParams.get(prop),
-        // });
-        if ("endpoint" in action) router.push(window.location.host + action.endpoint);
-        else if (action.url || action.link) router.push((action.url || action.link) /**/);
+        if (typeof action.query == "object") {
+            if ("order_id" in action.query) {
+                return router.push("/activity/?keyword=" + action.query.order_id);
+            }
+        }
+
+        if (action.url || action.link) return router.push((action.url || action.link) /**/);
     }
 
-    if (!notification.read_at)
+    if (!notification.read_at) // if not read mark as read
         NotificationService.markAsRead(notification.id).then(r => {
             if (r.status == 200) NotificationsStore.markAsRead(notification.id);
             goToAction();
@@ -112,30 +112,13 @@ function notificationAction(notification, action) {
 
 function loadMoreNotifications(event) {
     if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) { // if scrolled to bottom 
-        notification.isLoadingMore = true;
+        isLoadNotification.value = true;
         const nextPage = NotificationsStore['latest/meta']["current_page"] + 1;
-        if (notification.alreadyLoadedPageList.indexOf(nextPage) <= -1) { // if next page isn't loaded 
+        if (NotificationsStore['private/alreadyLoadedPageList'].indexOf(nextPage) <= -1) { // if next page isn't loaded 
             NotificationService.latest(nextPage).then(r => {
                 if (r.status == 200) {
-                    const notificationsDataLength = r.data?.notifications?.data?.length;
-                    const middleIndexOfNotificationsData = notificationsDataLength > 0 ? Math.floor(notificationsDataLength / 2) : null;
-
-                    const isAlreadyInsertedToNotificationsStore = () => {
-                        if (!notificationsDataLength)
-                            return false
-
-                        return NotificationsStore['latest/data']
-                            .filter(notification => notification.id ==
-                                r.data['notifications']['data'][middleIndexOfNotificationsData]["id"])
-                            .length;
-                    }
-
-                    if (notificationsDataLength && !isAlreadyInsertedToNotificationsStore()) {
-                        NotificationsStore.pushLatest(r.data.notifications);
-                        notification.alreadyLoadedPageList.push(r.data.notifications['current_page']);
-                    }
-
-                    notification.isLoadingMore = false;
+                    NotificationsStore.pushLatest(r.data.notifications);
+                    isLoadNotification.value = false;
                 }
             });
         }

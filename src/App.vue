@@ -5,16 +5,27 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import NotificationService from './services/NotificationService.js';
 import { useAuthUserStore } from './stores/auth/AuthUserStore.js';
+import { useNotificationsStore } from './stores/NotificationsStore.js';
+const NotificationsStore = useNotificationsStore();
 const AuthUserStore = useAuthUserStore();
 
 onMounted(() => {
   document.body.classList.add("bg-light");
   document.body.style.minHeight = "100vh";
 
-  if (AuthUserStore.isLoggedIn) {
-    AuthUserStore.fetch();
+  if (AuthUserStore.isLoggedIn) { // if user is logged in
+    AuthUserStore.fetch().then(() => {
+      NotificationService.latest().then(r => {
+        if (r.status == 200) NotificationsStore.pushLatest(r.data.notifications);
+      })
 
+      // listen live notifications
+      window.Echo.private('users.' + AuthUserStore.data['id']).notification(notification => {
+        NotificationsStore.realtimeLatest(notification);
+      } /**/);
+    });
   }
 
 });
