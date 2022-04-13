@@ -55,7 +55,7 @@ import ActivitySearchAndFilters from '@/components/Activity/ActivitySearchAndFil
 import Helpers from '@/Helpers.js';
 import DateHelper from '@/helpers/DateHelper.js';
 import ActivityLists from '@/components/Activity/ActivityLists.vue';
-import { defineComponent, onMounted, watch } from 'vue';
+import { defineComponent, onMounted, watch, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useActivitiesStore } from '../stores/ActivitiesStore';
 const ActivitiesStore = useActivitiesStore();
@@ -74,6 +74,16 @@ function loadActivitiesPagination(page) {
     window.scrollTo(0, 0);
     ActivitiesStore.fetch(page);
 }
+
+onUnmounted(() => {
+    ActivitiesStore.updateFilterBy({
+        keyword: null,
+        start_at: null,
+        end_at: null,
+        status: null,
+        transaction_type: null,
+    })
+}); 
 </script>
 
     <style scoped>
