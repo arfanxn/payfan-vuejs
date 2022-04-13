@@ -119,13 +119,11 @@ async function onNextClicked() {
 }
 
 function resetOrderData() {
-    console.log("hello" + Date.now());
     setTimeout(() => {
         order.amountInUSD = null;
         order.amount = 0;
         order.note = ""
         v$.value.$reset();
-        console.log("hello" + Date.now());
     }, 1500);
 }
 </script>
