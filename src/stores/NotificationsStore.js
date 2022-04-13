@@ -16,32 +16,12 @@ export const useNotificationsStore = defineStore("notifications", {
     getters: {
         "latest/total_unread": (state) => {
             if ( typeof state["latest/meta"]['total_unread'] == "undefined") return 0 ; 
-            console.log(state["latest/meta"]['total_unread']);
 
             return parseInt(state["latest/meta"]['total_unread']) ; 
         },
     },
     actions: {
         pushLatest(notificationPagination, additionals = null) {
-            /*     this['latest/data'].push(...notificationPagination.data); // why the state is named "latest/data" because "latest" is mean notification ordered by latest datetime and data is meaning to the notificationPagination data it self
-
-            this['latest/meta'] = Object.keys(notificationPagination).filter(key => // the "this['latest/meta']" is a state for storing the latest notification meta data , like an pagination information and other additional things
-
-                key !== 'data').reduce((obj, key) => { // filter/remove/delete the object key "data" (because the key "data" is already added to the "this['latest/data']" state)
-                obj[key] = notificationPagination[key];
-
-                return obj; // return to this['latest/meta'] (replacing this['latest/meta'] property)
-            }, {});
-
-            if (typeof additionals == "object") { // if "additionals" parameter is provided and type is object then add "additionals" to object this['latest/meta'] 
-                Object.keys(additionals || {}).forEach(key => {
-                    this['latest/meta'][key] = additionals[key];
-                })
-            }
-
-            this["private/alreadyLoadedPageList"]?.push(notificationPagination['current_page']);
-            if (notificationPagination['total_unread'] > 0) this.showBadge = true;       */
-
             if (this["private/alreadyLoadedPageList"]?.indexOf(notificationPagination['current_page']) <= -1) { // if page isn't already loaded 
                     const notificationsDataLength = notificationPagination.data.length;
                     const middleIndexOfNotificationsData = notificationsDataLength > 0 ? Math.floor(notificationsDataLength / 2) : null;
@@ -104,8 +84,7 @@ export const useNotificationsStore = defineStore("notifications", {
                     this['latest/meta'][`total_unread`] =
                         parseInt(
                             this['latest/meta'][`total_unread`]) - 1; // subtract the total unread notifications
-                    console.log(
-                        this['latest/meta'][`total_unread`]);
+
                     return notification;
                 } else return notification;
             });
@@ -119,8 +98,6 @@ export const useNotificationsStore = defineStore("notifications", {
                         parseInt(
                             this['latest/meta'][`total_unread`]) + 1; // add the total unread notifications
 
-                    console.log(
-                        this['latest/meta'][`total_unread`]);
                     return notification;
                 } else return notification;
             });
