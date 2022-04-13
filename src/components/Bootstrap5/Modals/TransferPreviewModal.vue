@@ -17,9 +17,9 @@
                     </div>
                     <div class="modal-body d-flex flex-column">
                         <div class="d-flex justify-content-center">
-                            <div class="d-flex">
-                                <div class="w-100 d-flex  justify-content-center mb-1">
-                                    <UserAvatar :user="user" style="width:80px; height:80px" />
+                            <div class="d-flex mb-1">
+                                <div class="d-flex justify-content-center ">
+                                    <UserAvatar :user="user" class="my-auto" style="width:80px; height:80px" />
                                 </div>
 
                                 <div class="my-auto ms-3">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        </teleport>
+    </teleport>
 </template>
 
 <script setup>
