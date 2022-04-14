@@ -15,19 +15,29 @@
                     :error="state.form.errors.password"></AlertError>
             </div>
 
-            <button type="submit" class="btn btn-outline-primary float-end mb-4" @click="handleLogin()">Submit</button>
+            <div class="d-flex justify-content-between mb-4">
+                <!--  -->
+                <a @click="() => Helpers.triggerBSModal('#btn-modal-forgot-password')"
+                    class="cursor-pointer my-auto text-navy hover-underline fw-bold">Forgot password?
+                </a>
+                <button type="submit" class="btn btn-outline-primary my-auto" @click="handleLogin()">Submit</button>
+                <!--  -->
+            </div>
         </form>
+
+        <ForgotPasswordModal />
     </div>
 </template>
 
 <script setup>
 import AlertError from '../Errors/AlertError.vue';
 import AuthService from "../../services/AuthService.js";
+import ForgotPasswordModal from "@/components/Bootstrap5/Modals/ForgotPasswordModal.vue";
 import Helpers from "../../Helpers.js";
 import { reactive, defineComponent } from 'vue';
 // import router from '../../router';
 import SwalPlugin from '../../plugins/SwalPlugin';
-defineComponent({ AlertError })
+defineComponent({ AlertError, ForgotPasswordModal })
 
 const state = reactive({
     form: {
