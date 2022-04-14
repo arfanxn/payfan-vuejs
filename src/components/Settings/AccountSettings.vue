@@ -3,13 +3,14 @@
         <div class="pt-3 px-4 pb-4">
             <h5>Profile</h5>
             <div class="d-flex mt-3">
-                <div class="text-center pe-3">
-                    <img v-if="AuthUserStore.data?.profile_pict" @click="updateProfilePict"
-                        class="rounded-circle update-profile-pict-img mb-2" :src="AuthUserStore.data?.profile_pict" />
+                <div class="text-center me-4">
+                    <div class="d-flex justify-content-center mb-2">
+                        <UserAvatar :user="AuthUserStore.data" style="width: 90px; height: 90px" />
+                    </div>
                     <small @click="updateProfilePict"
-                        class="cursor-pointer text-navy hover-underline">Update&nbsp;Photo</small>
+                        class=" cursor-pointer text-navy hover-underline ">Update&nbsp;Photo</small>
                 </div>
-                <div class="w-100">
+                <div class="w-100 ">
                     <h5 v-if="!state.current.isChangeName">{{ AuthUserStore.data.name }}</h5>
                     <input v-else @blur="saveChangeName" placeholder="Your new name" v-model="AuthUserStore.data.name"
                         class="form-control" type="text" />
@@ -53,15 +54,16 @@
                     class="cursor-pointer fw-bold text-danger hover-underline">Cancel</a>
             </div>
         </div>
-        <UpdateProfilePictModal />  </div>
+        <UpdateProfilePictModal />
+    </div>
 </template>
 
 <script setup>
-
 import useVuelidate from "@vuelidate/core";
 import { required, email, minLength, helpers } from '@vuelidate/validators';
 import { computed, defineComponent, reactive } from "vue";
 import AlertError from "../Errors/AlertError.vue";
+import UserAvatar from "../Avatar/UserAvatar.vue";
 import ValidatorService from "../../services/ValidatorService";
 import SwalPlugin from "../../plugins/SwalPlugin";
 import AuthService from "../../services/AuthService";
@@ -71,7 +73,7 @@ import UpdateProfilePictModal from "../Bootstrap5/Modals/UpdateProfilePictModal.
 import Helpers from "../../Helpers";
 import DateHelper from "../../helpers/DateHelper";
 DateHelper;
-defineComponent({ AlertError, UpdateProfilePictModal });
+defineComponent({ AlertError, UpdateProfilePictModal, UserAvatar });
 const AuthUserStore = useAuthUserStore();
 
 const state = reactive({
