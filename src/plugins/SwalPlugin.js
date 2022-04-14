@@ -94,9 +94,10 @@ export default class SwalPlugin {
             didOpen() {
                 let inputVerificationCode = Swal.getPopup().querySelector('#verification-code');
 
-                btnResendTimerCountdown();
+                showResendButtonTimerCountdown();
 
                 Swal.getPopup().querySelector('#next').addEventListener("click", () => {
+                    // begin validation
                     if (inputVerificationCode.value.length != 6) {
                         Swal.showValidationMessage("Verification Code must be 6 chars!");
                     } else if ((inputVerificationCode.value).match(/\D/)) {
@@ -104,8 +105,9 @@ export default class SwalPlugin {
                     } else if (!inputVerificationCode.value) {
                         Swal.showValidationMessage(`Please enter Verification Code!`);
                     }
+                    // end validation
 
-                    if (typeof onConfirmCallback == "function") {
+                    if (typeof onConfirmCallback == "function") { // trigger "onConfirmCallback"
                         onConfirmCallback(inputVerificationCode.value).then(response => {
                             if (response.statusText.toLowerCase() == "verifyverificationcodemiddleware") {
                                 if ("verification_code_error_message" in response.data)
@@ -117,7 +119,7 @@ export default class SwalPlugin {
                 });
 
                 const btnResend = Swal.getPopup().querySelector('#resend');
-                btnResend.addEventListener("click", async () => {
+                btnResend.addEventListener("click", async () => { // listen to click events on the button resend verfication code
                     let response;
 
                     if (resendCallbackOrObjectOrEmail == null) {
@@ -134,22 +136,22 @@ export default class SwalPlugin {
 
                     if ((response.statusText == "OK" || resendCallbackOrObjectOrEmail == null || "status" in response ||
                             response.status == 429) && typeof resendCallbackOrObjectOrEmail != "function") {
-                        btnResendTimerCountdown();
+                        showResendButtonTimerCountdown();
                     }
                 });
 
-                function btnResendTimerCountdown() {
+                function showResendButtonTimerCountdown() {
                     new Promise(() => {
-                        let timer60Sec = 60;
-                        let resendInterval = setInterval(() => {
-                            timer60Sec -= 1;
+                        let ratelimitRemaining = 60;
+                        let countdownBtnResend = setInterval(() => {
+                            ratelimitRemaining -= 1;
                             btnResend.disabled = true;
-                            btnResend.childNodes[1].innerHTML = `(${timer60Sec})`;
+                            btnResend.childNodes[1].innerHTML = `(${ratelimitRemaining})`;
 
-                            if (!timer60Sec) {
+                            if (!ratelimitRemaining) {
                                 btnResend.disabled = false;
                                 btnResend.childNodes[1].innerHTML = "";
-                                clearInterval(resendInterval);
+                                clearInterval(countdownBtnResend);
                             }
                         }, 1000);
                     })
