@@ -12,8 +12,10 @@ const NotificationsStore = useNotificationsStore();
 const AuthUserStore = useAuthUserStore();
 
 onMounted(() => {
-  document.body.classList.add("bg-light");
-  document.body.style.minHeight = "100vh";
+  const app = document.getElementById("app");
+  if (app) {
+    app.style.minHeight = "100vh";
+  }
 
   if (AuthUserStore.isLoggedIn) { // if user is logged in
     AuthUserStore.fetch().then(r => {
