@@ -12,6 +12,8 @@ const NotificationsStore = useNotificationsStore();
 const AuthUserStore = useAuthUserStore();
 
 onMounted(() => {
+  document.body.classList.add("bg-light");
+
   const app = document.getElementById("app");
   if (app) {
     app.style.minHeight = "100vh";
