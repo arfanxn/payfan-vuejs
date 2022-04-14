@@ -1,4 +1,5 @@
 import axios from "axios";
+import  {useAuthUserStore} from "@/stores/auth/AuthUserStore.js" ; 
 
 export default class AuthService {
     static async login(email, password, code = null) {
@@ -57,6 +58,12 @@ export default class AuthService {
     static async logout() {
         try {
             const response = await axios.get("/api/user/logout");
+
+            if (response.status == 200) {
+                const AuthUserStore = useAuthUserStore() ; 
+                AuthUserStore['isLoggedIn'] = false ;
+            }
+
             return response;
         } catch (error) {
             return error.response;
