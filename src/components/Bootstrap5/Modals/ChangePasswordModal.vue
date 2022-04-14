@@ -16,7 +16,7 @@
                     <div class="modal-body px-5 pb-5 d-flex flex-column text-center">
                         <h2 class="fw-light">Change your password</h2>
 
-                        <form class="text-start mt-4" autocomplete="off">
+                        <form @submit.prevent class="text-start mt-4" autocomplete="off">
                             <div class="mb-3">
                                 <label for="inputCurrentPassword" class="form-label">Confirm your current
                                     password</label>
@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-        </teleport>
+    </teleport>
 </template>
 
 <script setup>
