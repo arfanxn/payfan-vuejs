@@ -23,7 +23,60 @@
       </div>
 
       <div class="mt-3">
-        <p class="text-dark ">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa, porro
+        <p class="text-dark ">{{ helpCenterParagraph }}</p>
+      </div>
+
+      <div class="mt-5 text-center bg-white rounded py-4 shadow-sm">
+        <h5 class="fw-bold">Contact us</h5>
+        <!--  -->
+
+        <div class="w-100 d-flex justify-content-evenly mt-3">
+          <!--  -->
+          <div class="">
+            <span class="d-block fw-bold">Call {{ Helpers.ENV("APP_TITLE") }} customer service</span>
+            <a :href="`tel:${Helpers.ENV('APP_HELP_PHONENUMBER') || '1-888-221-1161'}`"
+              class="fs-5 hover-underline text-navy mt-2">{{ Helpers.ENV('APP_HELP_PHONENUMBER') || '1-888-221-1161' }}
+            </a>
+          </div>
+          <div class="">
+            <span class="d-block fw-bold">Email {{ Helpers.ENV("APP_TITLE") }} customer service</span>
+            <a :href="`mailto:` + (Helpers.ENV('APP_HELP_EMAIL') || `help@${Helpers.ENV('APP_TITLE').toLowerCase()}.com`)"
+              class="fs-5 hover-underline text-navy mt-2">{{
+                Helpers.ENV("APP_HELP_EMAIL") || `help@${Helpers.ENV("APP_TITLE").toLowerCase()}.com`
+              }}</a>
+          </div>
+          <!--  -->
+        </div>
+
+        <div class="mt-1">
+          <span class="d-block fw-bold">Customer service hours</span>
+          <small class="fs-7 ">08:00 to 17:00, Monday through Sunday.</small>
+        </div>
+        <!--  -->
+      </div>
+
+    </div>
+
+    <Footer></Footer>
+  </main>
+  <!--  -->
+</template>
+
+<script setup>
+import NavbarTop from '../components/Layouts/NavbarTop.vue';
+import Helpers from '@/Helpers';
+import Footer from '../components/Layouts/Footer.vue';
+import { defineComponent } from 'vue'
+defineComponent({
+  NavbarTop
+})
+
+function searchHelpByKeyword(event) {
+  const keyword = event.target.value;
+  window.open(`https://www.google.com/search?q=${keyword}`);
+}
+
+const helpCenterParagraph = `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa, porro
           praesentium
           vero
           obcaecati
@@ -62,58 +115,7 @@
           inventore dolore fugiat eius animi necessitatibus ex sunt fuga illo. Exercitationem, reiciendis nulla aperiam
           officia dolores debitis, quidem quibusdam possimus, ducimus ea vero tempore. Eaque, impedit recusandae quae
           fugit quas doloribus delectus sequi in temporibus suscipit rem magni accusantium doloremque sed molestiae
-          culpa ratione cupiditate ex vero! Voluptatibus animi placeat nam.</p>
-      </div>
-
-      <div class="mt-5 text-center bg-white rounded py-4 shadow-sm">
-        <h5 class="fw-bold">Contact us</h5>
-        <!--  -->
-
-        <div class="w-100 d-flex justify-content-evenly mt-3">
-          <!--  -->
-          <div class="">
-            <span class="d-block fw-bold">Call {{ Helpers.ENV("APP_TITLE") }} Customer Service</span>
-            <a :href="`tel:${Helpers.ENV('APP_HELP_PHONENUMBER') || '1-888-221-1161'}`"
-              class="fs-5 hover-underline text-navy mt-2">{{ Helpers.ENV('APP_HELP_PHONENUMBER') || '1-888-221-1161' }}
-            </a>
-          </div>
-          <div class="">
-            <span class="d-block fw-bold">Email {{ Helpers.ENV("APP_TITLE") }} Customer Service</span>
-            <a :href="`mailto:` + (Helpers.ENV('APP_HELP_EMAIL') || `help@${Helpers.ENV('APP_TITLE').toLowerCase()}.com`)"
-              class="fs-5 hover-underline text-navy mt-2">{{
-                Helpers.ENV("APP_HELP_EMAIL") || `help@${Helpers.ENV("APP_TITLE").toLowerCase()}.com`
-              }}</a>
-          </div>
-          <!--  -->
-        </div>
-
-        <div class="mt-1">
-          <span class="d-block fw-bold">Customer Service Hours</span>
-          <small class="fs-7 ">08:00 to 17:00, Monday through Sunday.</small>
-        </div>
-        <!--  -->
-      </div>
-
-    </div>
-
-    <Footer></Footer>
-  </main>
-  <!--  -->
-</template>
-
-<script setup>
-import NavbarTop from '../components/Layouts/NavbarTop.vue';
-import Helpers from '@/Helpers';
-import Footer from '../components/Layouts/Footer.vue';
-import { defineComponent } from 'vue'
-defineComponent({
-  NavbarTop
-})
-
-function searchHelpByKeyword(event) {
-  const keyword = event.target.value;
-  window.open(`https://www.google.com/search?q=${keyword}`);
-}
+          culpa ratione cupiditate ex vero! Voluptatibus animi placeat nam.` ;
 </script>
 
 <style scoped>

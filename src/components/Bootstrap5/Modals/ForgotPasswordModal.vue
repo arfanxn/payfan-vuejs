@@ -150,7 +150,6 @@ import AlertError from '../../Errors/AlertError.vue';
 import useVuelidate from '@vuelidate/core';
 import ValidatorService from '../../../services/ValidatorService';
 import Helpers from '@/Helpers';
-// import SwalPlugin from '../../../plugins/SwalPlugin';
 import AuthService from '../../../services/AuthService';
 import SwalPlugin from '../../../plugins/SwalPlugin';
 import axios from 'axios';
