@@ -28,7 +28,7 @@
                                 <div v-show="currentStep == recoveryPasswordStep[0]">
                                     <input v-model.lazy="state.form.email" autocomplete="off" type="email"
                                         class="form-control" placeholder="Your email" />
-                                    <AlertError class="mt-1" @close="v$.email.$reset()"
+                                    <AlertError class="mt-2" @close="v$.email.$reset()"
                                         :error="v$?.email?.email?.$errors[0]?.$message"></AlertError>
                                 </div>
                                 <div v-if="currentStep != recoveryPasswordStep[0]"
@@ -195,9 +195,9 @@ const v$ = reactive({
         },
     }, state.form),
     newPassword: useVuelidate({
-        new_password: { required, minLength: minLength(6) },
+        new_password: { required, minLength: minLength(8) },
         confirm_new_password: {
-            required, minLength: minLength(6),
+            required, minLength: minLength(8),
             sameAsPassword: helpers.withMessage("Password must match!", () => state.form.new_password == state.form.confirm_new_password)
         }
     }, state.form),
@@ -256,7 +256,7 @@ async function next() {
             if (r.status == 200) {
                 closeModal(() =>
                     SwalPlugin.autoCloseAlert("Password updated successfully",
-                        `Your password has been reseted, please <a href="/auth/login">login</a>.`, "success", 2000));
+                        `<h5>Your password has been reseted, please <a href="/auth/login">login</a>.</h5>`, "success", 2000));
                 return;
             }
 

@@ -52,7 +52,7 @@ const error_message = ref('');
 
 const v$ = useVuelidate({
     email: { required, email, },
-    password: { required, minLength: minLength(6), maxLength: maxLength(50) },
+    password: { required, minLength: minLength(8), maxLength: maxLength(50) },
 }, state.form);
 
 async function handleLogin() {

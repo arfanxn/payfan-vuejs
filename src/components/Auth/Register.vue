@@ -56,9 +56,9 @@ const rules = {
         required, email, $lazy: true, isUnique: helpers.withMessage("Email has been taken!",
             helpers.withAsync(ValidatorService.isEmailTaken))
     },
-    password: { required, minLength: minLength(6) },
+    password: { required, minLength: minLength(8) },
     password_confirmation: {
-        required, minLength: minLength(6),
+        required, minLength: minLength(8),
         sameAsPassword: helpers.withMessage("Password must match!", () => state.form.password == state.form.password_confirmation)
     }
 };
