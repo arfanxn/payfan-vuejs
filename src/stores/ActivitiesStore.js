@@ -5,6 +5,7 @@ import {
 import axios from "axios";
 import Helpers from "../Helpers";
 import router from "../router/index.js";
+import SwalPlugin from "@/plugins/SwalPlugin"
 
 export const useActivitiesStore = defineStore("activities", {
     state: () => ({
@@ -62,6 +63,7 @@ export const useActivitiesStore = defineStore("activities", {
         },
         async fetch(page = 1) {
             try {
+                SwalPlugin.showLoading()
                 const {
                     keyword,
                     start_at,
@@ -83,6 +85,7 @@ export const useActivitiesStore = defineStore("activities", {
 
                 if (response.status == 200) {
                     this["pagination/data"] = response.data.orders.data;
+                    SwalPlugin.close()
 
                     if (delete response.data.orders.data)
                         this["pagination/meta"] = response.data.orders;
