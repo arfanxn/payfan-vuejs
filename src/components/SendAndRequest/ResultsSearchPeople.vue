@@ -75,6 +75,7 @@ function onPeopleClicked(user) {
 .wrapper-input-contact-option {
     background-color: rgb(245, 251, 254) !important;
     max-height: 400px !important;
+    z-index: 10 !important;
 }
 
 .contact-lists:hover {

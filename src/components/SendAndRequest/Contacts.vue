@@ -20,30 +20,35 @@
                     </div>
                 </div>
 
-                <div class=" p-3 bg-white w-100 text-center">
+                <div class="p-3 bg-white w-100 text-center">
                     <span v-if="ContactsStore['pagination/data'].length <= 0" class="my-auto lh-sm">No Contacts
                         found.</span>
 
-                    <div class="mt-4 d-flex justify-content-between">
-                        <div class="">
-                            <button :disabled="ContactsStore['pagination/meta']['current_page'] <= 1 ? true : false"
-                                class="btn btn-sm btn-outline-secondary me-3"
-                                @click="loadContactsPagination(1)">First</button>
+                    <div v-else-if="(ContactsStore['pagination/meta']['current_page'] >= 1)
+                    && (ContactsStore['pagination/data'].length)">
+                        <small class="fs-7 fw-light mt-3 d-block">use "Contacts Search" instead of
+                            scrolling/paginating for better experience.</small>
+
+                        <div class="mt-4 d-flex justify-content-between">
+                            <div class="">
+                                <button :disabled="ContactsStore['pagination/meta']['current_page'] <= 1 ? true : false"
+                                    class="btn btn-sm btn-outline-secondary me-3"
+                                    @click="loadContactsPagination(1)">First</button>
+                            </div>
+                            <div>
+                                <button :disabled="ContactsStore['pagination/meta']['current_page'] <= 1 ? true : false"
+                                    class="btn btn-sm btn-primary mx-1"
+                                    @click="loadContactsPagination(parseInt(ContactsStore['pagination/meta']['current_page']) - 1)">
+                                    Prev</button>
+                                <button class="btn btn-sm btn-primary"
+                                    :disabled="ContactsStore['pagination/data'].length < ContactsStore['pagination/meta']['per_page']"
+                                    @click="loadContactsPagination(parseInt(ContactsStore['pagination/meta']['current_page']) + 1)">
+                                    Next</button>
+                            </div>
                         </div>
-                        <div>
-                            <button :disabled="ContactsStore['pagination/meta']['current_page'] <= 1 ? true : false"
-                                class="btn btn-sm btn-primary mx-1"
-                                @click="loadContactsPagination(parseInt(ContactsStore['pagination/meta']['current_page']) - 1)">
-                                Prev</button>
-                            <button class="btn btn-sm btn-primary"
-                                :disabled="ContactsStore['pagination/data'].length < ContactsStore['pagination/meta']['per_page']"
-                                @click="loadContactsPagination(parseInt(ContactsStore['pagination/meta']['current_page']) + 1)">
-                                Next</button>
-                        </div>
+                        <!--  -->
                     </div>
 
-                    <small class="fs-7 fw-light mt-3 d-block">use "Contacts Search" instead of
-                        scrolling/paginating for better experience.</small>
                 </div>
             </div>
 
@@ -54,7 +59,8 @@
                 </router-link>
             </div>
         </div>
-        <ContactDetailsModal :contact="state.modal.contactDetail.contact" />  </div>
+        <ContactDetailsModal :contact="state.modal.contactDetail.contact" />
+    </div>
 </template>
 
 <script setup>
