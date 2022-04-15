@@ -9,7 +9,7 @@
             <div class="p-0 m-0">
                 <small v-if="!Object.keys(ActivitiesStore['pagination/data']).length" class="px-3 fw-bold">
                     No activities
-                    yet / activities on loading.
+                    yet.
                 </small>
 
                 <div v-for="(activities, keyYearAndMonth, index) in ActivitiesStore['pagination/data']" :key="index">
