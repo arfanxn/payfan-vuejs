@@ -94,7 +94,7 @@ watch(() => NotificationsStore['latest/total_unread'], (newValue, oldValue) => {
 function notificationAction(notification, action) {
     const goToAction = () => {
         if (typeof action.query == "object") {
-            if ("order_id" in action.query) {
+            if ("payment_id" in action.query) {
                 return router.push("/activity/?keyword=" + action.query.order_id);
             }
         }

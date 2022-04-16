@@ -12,7 +12,7 @@
                 <div class="modal-content">
                     <div class="modal-header border-bottom-0">
                         <h5 class="modal-title" id="modal-create-paymentLabel"></h5>
-                        <button @click="resetOrderData()" type="button" id="btn-close-modal-create-payment"
+                        <button @click="resetPaymentData()" type="button" id="btn-close-modal-create-payment"
                             class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex flex-column">
@@ -52,7 +52,7 @@
                             class="btn w-100 rounded-pill btn-light fw-bold text-secondary">
                             <slot name="nextButtonText">Continue</slot>
                         </button>
-                        <a @click="resetOrderData()" class="btn rounded-pill px-4 text-navy fw-bold hover-underline"
+                        <a @click="resetPaymentData()" class="btn rounded-pill px-4 text-navy fw-bold hover-underline"
                             data-bs-dismiss="modal">Cancel</a>
                     </div>
                 </div>
@@ -118,7 +118,7 @@ async function onNextClicked() {
     })
 }
 
-function resetOrderData() {
+function resetPaymentData() {
     setTimeout(() => {
         payment.amountInUSD = null;
         payment.amount = 0;

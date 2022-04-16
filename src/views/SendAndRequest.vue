@@ -30,11 +30,11 @@ import VerticalMenu from '../components/Layouts/VerticalMenu.vue';
 import Contacts from "@/components/SendAndRequest/Contacts.vue";
 const route = useRoute();
 const state = reactive({
-    currentMenu: "Send Money",
+    currentMenu: "Send Payment",
     menus: [{
-        name: "Send Money", link: "/transfer/send"
+        name: "Send Payment", link: "/transfer/send"
     }, {
-        name: "Request Money", link: "/transfer/request"
+        name: "Request Payment", link: "/transfer/request"
     }, {
         name: "Contacts", link: "/transfer/contacts"
     }],

@@ -2,7 +2,7 @@ import axios from "axios";
 import {useWalletStore} from "@/stores/auth/WalletStore.js" ; 
 
 export default class TransactionService {
-    static async sendMoney({
+    static async sendPayment({
         amount,
         note,
         to_wallet,
@@ -10,7 +10,7 @@ export default class TransactionService {
         code
     }) {
         try {
-            const response = await axios.post("/api/user/self/transaction/send-money", {
+            const response = await axios.post("/api/user/self/transaction/send-payment", {
                 amount,
                 note,
                 to_wallet,
@@ -29,13 +29,13 @@ export default class TransactionService {
         }
     }
 
-    static async makeRequestMoney({
+    static async makeRequestPayment({
         amount,
         to_wallet,
         note
     }) {
         try {
-            const response = await axios.post("/api/user/self/transaction/request-money/make", {
+            const response = await axios.post("/api/user/self/transaction/request-payment/make", {
                 amount,
                 note,
                 to_wallet,
@@ -46,11 +46,11 @@ export default class TransactionService {
         }
     }
 
-    static async approveRequestMoney(payment, code) {
+    static async approveRequestPayment(payment, code) {
         try {
             const paymentID = payment.id;
 
-            const response = await axios.patch(`/api/user/self/transaction/request-money/payment/${paymentID}/approve`, {
+            const response = await axios.patch(`/api/user/self/transaction/request-payment/payment/${paymentID}/approve`, {
                 code: code,
             });
 
@@ -65,11 +65,11 @@ export default class TransactionService {
         }
     }
 
-    static async rejectRequestMoney(payment) {
+    static async rejectRequestPayment(payment) {
         try {
             const paymentID = typeof payment === "string" ? payment : payment.id;
 
-            const response = await axios.patch(`/api/user/self/transaction/request-money/payment/${paymentID}/reject`);
+            const response = await axios.patch(`/api/user/self/transaction/request-payment/payment/${paymentID}/reject`);
             return response;
         } catch (error) {
             return error.response;

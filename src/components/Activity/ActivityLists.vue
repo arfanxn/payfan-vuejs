@@ -61,7 +61,7 @@
 
                         <div class="d-flex justify-content-between mt-2">
                             <div class>
-                                <!-- show this if payment type is send money -->
+                                <!-- show this if payment type is send payment -->
                                 <button v-if="(payment.type?.toUpperCase()?.includes(`SEND`))" @click.stop="handleSendPayment({
                                     amount: payment.amount,
                                     name: payment.to_wallet.user.name,
@@ -89,11 +89,11 @@
                                 <div v-else-if="(payment.type?.toUpperCase()?.includes(`REQUESTED`)) &&
                                 (payment.status?.toUpperCase()?.includes(`PENDING`))"
                                     class="d-flex justify-content-between">
-                                    <button @click.stop="approveRequestMoney(payment)"
+                                    <button @click.stop="approveRequestPayment(payment)"
                                         class="btn btn-outline-primary d-flex rounded-pill fw-bold px-3 text-center py-0">
                                         <small class="my-auto">Approve request</small>
                                     </button>
-                                    <button @click.stop="rejectRequestMoney(payment)"
+                                    <button @click.stop="rejectRequestPayment(payment)"
                                         class="btn btn-outline-danger d-flex rounded-pill ms-1 fw-bold px-3 text-center py-0">
                                         <small class="my-auto">Reject request</small>
                                     </button>
@@ -165,7 +165,7 @@ function toggleActivityDetails(payment) {
     currentShowedActivityDetailsID.value = currentShowedActivityDetailsID.value == payment.id ? "" : payment.id;
 }
 
-function approveRequestMoney(payment) {
+function approveRequestPayment(payment) {
     const amountInUSD = StrHelper.make(payment.amount).toUSD().get();
 
     SwalPlugin.confirm({
@@ -177,7 +177,7 @@ function approveRequestMoney(payment) {
         if (result.isConfirmed) {
             AuthService.createVerificationCode().then(() => {
                 SwalPlugin.verificationCode("Verify to continue", async verificationCode => {
-                    return await TransactionService.approveRequestMoney(payment, verificationCode)
+                    return await TransactionService.approveRequestPayment(payment, verificationCode)
                         .then(r => {
                             if (r.status == 200) {
                                 ActivitiesStore.fetch().then(() => {
@@ -196,7 +196,7 @@ function approveRequestMoney(payment) {
 }
 
 
-function rejectRequestMoney(payment) {
+function rejectRequestPayment(payment) {
     const amountInUSD = StrHelper.make(payment.amount).toUSD().get();
 
     SwalPlugin.confirm({
@@ -208,7 +208,7 @@ function rejectRequestMoney(payment) {
         if (result.isConfirmed) {
             SwalPlugin.close();
 
-            TransactionService.rejectRequestMoney(payment)
+            TransactionService.rejectRequestPayment(payment)
                 .then(r => {
                     if (r.status == 200) {
                         ActivitiesStore.fetch().then(() => {

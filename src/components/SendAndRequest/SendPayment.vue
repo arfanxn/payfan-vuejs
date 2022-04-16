@@ -2,9 +2,9 @@
     <div class="ms-4 p-5">
         <h5 class="text-dark mb-4">Send Payment To</h5>
         <SearchPeoples :showButton="true"
-            @contactClicked="(contact) => showCreateSendPaymentOrderModal(contact['user'])"
-            @peopleClicked="showCreateSendPaymentOrderModal" />
-        <RecentContacts @contactClicked="(contact) => showCreateSendPaymentOrderModal(contact['user'])" class="mt-5" />
+            @contactClicked="(contact) => showCreateSendPaymentModal(contact['user'])"
+            @peopleClicked="showCreateSendPaymentModal" />
+        <RecentContacts @contactClicked="(contact) => showCreateSendPaymentModal(contact['user'])" class="mt-5" />
         <CreatePaymentModal @nextClicked="handleSendPayment" :user="state.modals.createPaymentModal.user">
             <template #nextButtonText>Send Payment</template>
         </CreatePaymentModal>
@@ -38,7 +38,7 @@ onMounted(() => {
     });
 })
 
-function showCreateSendPaymentOrderModal(user) {
+function showCreateSendPaymentModal(user) {
     state.modals.createPaymentModal.user = user;
     Helpers.triggerBSModal(`#btn-modal-create-payment`);
 }

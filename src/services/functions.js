@@ -33,21 +33,21 @@ export const handleSendPayment = ({
 
     SwalPlugin.confirm({
         title: 'Confirm your payment',
-        html: `Send money ${amountInUSD} to "${name}" ?`,
+        html: `Send payment ${amountInUSD} to "${name}" ?`,
         icon: 'question'
     }).then(result => {
         if (result.isConfirmed) {
             Helpers.closeBSModal(`#btn-close-modal-transfer-preview`).then(() => {
                 AuthService.createVerificationCode().then(() => {
                     SwalPlugin.verificationCode("Verify to continue", async verificationCode => {
-                        return await TransactionService.sendMoney({
+                        return await TransactionService.sendPayment({
                             amount,
                             note,
                             to_wallet: walletAddress,
                             code: verificationCode,
                         }).then(r => {
                             if (r.status == 200) {
-                                SwalPlugin.autoCloseAlert('Send Money success', `Send money to "${name}", amount ${amountInUSD} successfully.`, "success", 2000);
+                                SwalPlugin.autoCloseAlert('Send Payment success', `Send payment to "${name}", amount ${amountInUSD} successfully.`, "success", 2000);
                             } else if ("error_message" in r.data) {
                                 SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
                             }
@@ -72,12 +72,12 @@ export const handleMakeRequestPayment = ({
 
     SwalPlugin.confirm({
         title: 'Make a request',
-        html: `Request a money for ${amountInUSD} from "${name}" ?`,
+        html: `Request a payment for ${amountInUSD} from "${name}" ?`,
         icon: 'question'
     }).then(result => {
         if (result.isConfirmed) {
             Helpers.closeBSModal(`#btn-close-modal-transfer-preview`).then(() => {
-                TransactionService.makeRequestMoney({
+                TransactionService.makeRequestPayment({
                     amount,
                     note,
                     to_wallet: walletAddress,
@@ -85,7 +85,7 @@ export const handleMakeRequestPayment = ({
                     if (r.status == 200) {
                         SwalPlugin.alertPositioned({
                             title: "Request sent",
-                            html: `Request a money for ${amountInUSD} from "${name}" has been sent, and waiting for approval from "${name}".`,
+                            html: `Request a payment for ${amountInUSD} from "${name}" has been sent, and waiting for approval from "${name}".`,
                             icon: 'success',
                             timer: 5000,
                         });
