@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded overflow-hidden bg-navy">
+    <div class="rounded shadow-sm overflow-hidden bg-navy">
         <div id="articleCarousel" class="carousel slide " data-bs-ride="carousel">
             <div class="carousel-inner">
                 <a v-for="(article, index) in state.articles" :key="index" class="carousel-item"

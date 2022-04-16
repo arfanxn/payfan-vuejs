@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main class=" shadow-sm">
 
         <div v-if="AuthUserStore.data['profile_pict']?.includes(`#`)"
             class="card suggestion-card border-0 rounded overflow-hidden bg-navy text-white">
