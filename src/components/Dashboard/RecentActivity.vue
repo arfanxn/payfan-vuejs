@@ -89,10 +89,29 @@ import Helpers from "../../Helpers";
 import StrHelper from "../../helpers/StrHelper.js";
 import DateHelper from "../../helpers/DateHelper.js";
 import UserAvatar from "../Avatar/UserAvatar.vue";
+import { useAuthUserStore } from "../../stores/auth/AuthUserStore";
+const AuthUserStore = useAuthUserStore();
 const activities = ref([]);
 
 onMounted(async () => {
     activities.value = await fetchRecentActivities();
+
+    window.Echo.private('payments.' + AuthUserStore.data['id'])
+        .listen("PaymentSavedEvent", event => {
+            event.payment.to_wallet.user.profile_pict =
+                event.payment.to_wallet.user.profile_pict.replace('http://payfan.test',
+                    Helpers.ENV("VUE_APP_LARAVEL_URL"));
+
+            event.payment.from_wallet.user.profile_pict =
+                event.payment.from_wallet.user.profile_pict.replace('http://payfan.test',
+                    Helpers.ENV("VUE_APP_LARAVEL_URL"));
+
+            // if already exist filter it (delete) and replace with new value (replace by unshift) ; 
+            activities.value = activities.value.filter(activity => activity.id != event.payment.id);
+            //  unshift new value 
+            activities.value.unshift(event.payment);
+        });
+
 });
 
 

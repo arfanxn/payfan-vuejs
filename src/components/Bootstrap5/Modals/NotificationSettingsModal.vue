@@ -19,7 +19,7 @@
                             <span class="text-secondary">We'll let you know when you</span>
                             <div
                                 class="cursor-pointer py-4 border-bottom border-secondary d-flex justify-content-between">
-                                <span>Make a payment</span>
+                                <span>Sending a payment</span>
 
                                 <div class="form-check form-switch">
                                     <input disabled class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        </teleport>
+    </teleport>
 </template>
 
 <script setup>
