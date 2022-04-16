@@ -45,13 +45,13 @@
                         <div class="mt-4">
                             <small class="fw-bold text-secondary mb-3 d-block">Recent activity</small>
                             <div class="bg-light cursor-pointer w-100 d-flex justify-content-between p-4"
-                                v-if="`completed_at` in state.contact.last_transaction.data">
+                                v-if="`id` in state.contact.last_transaction.data">
                                 <div class="d-flex">
                                     <small class="me-5">
                                         {{
-                                            Helpers.tap(new Date(state.contact.last_transaction.data['completed_at']),
-                                                completedAt => `${completedAt.getDate()} ${DateHelper
-                                                    .numericMonthtoString(completedAt.getMonth(), 3)}`)
+                                            Helpers.tap(new Date(state.contact.last_transaction.data['started_at']),
+                                                started_at => `${started_at.getDate()} ${DateHelper
+                                                    .numericMonthtoString(started_at.getMonth(), 3)}`)
                                         }}
                                     </small>
                                     <div class="d-flex flex-column">
@@ -70,7 +70,7 @@
                                                 v-if="state.contact.last_transaction.showFullNote"
                                                 class="cursor-pointer text-navy hover-underline d-block">Show less</a>
                                         </small>
-                                        <a v-if="state.contact.last_transaction.data['type']?.toUpperCase().includes('SEND')"
+                                        <!-- <a v-if="state.contact.last_transaction.data['type']?.toUpperCase().includes('SEND')"
                                             @click="handleSendPayment({
                                                 amount: state.contact.last_transaction.data['amount'],
                                                 name: contact?.user?.name,
@@ -90,11 +90,19 @@
                                             wallet: props?.contact?.user?.wallet?.address
                                         })">
                                             <small>Repeat this request</small>
-                                        </a>
+                                        </a> -->
+                                        <router-link
+                                            @click="() => Helpers.closeBSModal(`#btn-close-modal-contact-detail`)" :to="{
+                                                path: `/activity`, query: {
+                                                    keyword: state.contact.last_transaction.data['id']
+                                                }
+                                            }" class="btn btn-outline-secondary rounded-pill py-0 px-0">
+                                            <small class="fs-7 fw-bold mx-0">Details</small>
+                                        </router-link>
                                     </div>
                                 </div>
-                                <div class="text-secondary">
-                                    <span>-&nbsp;{{
+                                <div class="text-dark">
+                                    <span>&nbsp;{{
                                         state.contact.last_transaction.data?.amount
                                     }}&nbsp;$&nbsp;USD</span>
                                 </div>
@@ -130,7 +138,7 @@
 import { defineComponent, defineProps, watch, reactive } from "vue";
 import ContactService from "@/services/ContactService";
 import DateHelper from "@/helpers/DateHelper.js";
-import StrHelper from "@/helpers/StrHelper.js";
+// import StrHelper from "@/helpers/StrHelper.js";
 import StarIcon from "@/components/Icons/StarIcon.vue";
 import SwalPlugin from "../../../plugins/SwalPlugin";
 import Helpers from "../../../Helpers";
@@ -204,6 +212,11 @@ function removeContact() {
                         title: `"${props.contact['user']['name']}" removed from contacts`,
                         icon: "success",
                         timer: 1000,
+                    });
+                    searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
+                        if (r.status == 200) {
+                            SearchPeoplesStore.refreshResults(r.data);
+                        }
                     });
                 }
             });
