@@ -137,7 +137,8 @@
                 <!--  -->
             </div>
         </div>
-        <!--  -->  </div>
+        <!--  -->
+    </div>
 </template>
 
 <script setup>
@@ -179,9 +180,10 @@ function approveRequestMoney(order) {
                     return await TransactionService.approveRequestMoney(order, verificationCode)
                         .then(r => {
                             if (r.status == 200) {
-                                SwalPlugin.autoCloseAlert('Request approved successfully', `Request from "${order.from_wallet.user.name}", amount 
+                                ActivitiesStore.fetch().then(() => {
+                                    SwalPlugin.autoCloseAlert('Request approved successfully', `Request from "${order.from_wallet.user.name}", amount 
                                     ${amountInUSD} has been approved.`, "success", 2000);
-                                ActivitiesStore.fetch();
+                                });
                             } else if ("error_message" in r.data) {
                                 SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
                             }
@@ -204,11 +206,14 @@ function rejectRequestMoney(order) {
         icon: 'question'
     }).then(result => {
         if (result.isConfirmed) {
+            SwalPlugin.close();
+
             TransactionService.rejectRequestMoney(order)
                 .then(r => {
                     if (r.status == 200) {
-                        SwalPlugin.autoCloseAlert('Request rejected successfully', `Request from "${order.from_wallet.user.name}", amount ${amountInUSD} has been rejected.`, "success", 2000);
-                        ActivitiesStore.fetch();
+                        ActivitiesStore.fetch().then(() => {
+                            SwalPlugin.autoCloseAlert('Request rejected successfully', `Request from "${order.from_wallet.user.name}", amount ${amountInUSD} has been rejected.`, "success", 3000);
+                        });
                     } else if ("error_message" in r.data) {
                         SwalPlugin.autoCloseAlert(r.data.error_message, null, "error", 2000);
                     }
