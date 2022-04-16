@@ -95,7 +95,7 @@ function notificationAction(notification, action) {
     const goToAction = () => {
         if (typeof action.query == "object") {
             if ("payment_id" in action.query) {
-                return router.push("/activity/?keyword=" + action.query.order_id);
+                return router.push("/activity/?keyword=" + action.query.payment_id);
             }
         }
 
