@@ -7,6 +7,8 @@
         <WalletCard />
 
         <ArticlesCarousel class="mt-5" />
+
+        <SettingSuggestionsCard class="mt-5" />
       </div>
       <div class="col-md-5 p-0 ps-5 pe-4 m-0">
         <TransferMenu />
@@ -14,6 +16,7 @@
         <SendAgain />
 
         <RecentActivity />
+
       </div>
     </div>
 
@@ -28,6 +31,7 @@ import { defineComponent, onMounted } from 'vue';
 import NavbarTop from '../components/Layouts/NavbarTop.vue';
 import Footer from '../components/Layouts/Footer.vue';
 import WalletCard from '../components/Dashboard/WalletCard.vue';
+import SettingSuggestionsCard from '../components/Dashboard/SettingSuggestionsCard';
 import ArticlesCarousel from '../components/Dashboard/ArticlesCarousel.vue';
 import TransferMenu from '../components/Dashboard/TransferMenu.vue';
 import RecentActivity from '../components/Dashboard/RecentActivity.vue';
@@ -38,7 +42,7 @@ const ContactsStore = useContactsStore();
 const AuthUserStore = useAuthUserStore();
 
 defineComponent({
-  NavbarTop, TransferMenu, WalletCard, RecentActivity, SendAgain
+  NavbarTop, TransferMenu, WalletCard, RecentActivity, SendAgain, SettingSuggestionsCard, ArticlesCarousel
 })
 
 onMounted(() => {
