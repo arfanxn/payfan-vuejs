@@ -1,12 +1,14 @@
 <template>
     <div class="ms-4 p-5">
         <h5 class="text-dark mb-4">Request Payment From</h5>
-        <SearchPeoples :showButton="true" @contactClicked="(contact) => showCreateRequestPaymentOrderModal(contact['user'])"
+        <SearchPeoples :showButton="true"
+            @contactClicked="(contact) => showCreateRequestPaymentOrderModal(contact['user'])"
             @peopleClicked="showCreateRequestPaymentOrderModal" />
-        <RecentContacts @contactClicked="(contact) => showCreateRequestPaymentOrderModal(contact['user'])" class="mt-5" />
-        <CreateOrderModal @nextClicked="handleMakeRequestPayment" :user="state.modal.createOrderModal.user">
+        <RecentContacts @contactClicked="(contact) => showCreateRequestPaymentOrderModal(contact['user'])"
+            class="mt-5" />
+        <CreatePaymentModal @nextClicked="handleMakeRequestPayment" :user="state.modal.createPaymentModal.user">
             <template #nextButtonText>Make a request</template>
-        </CreateOrderModal>
+        </CreatePaymentModal>
     </div>
 </template>
 
@@ -14,14 +16,14 @@
 import SearchPeoples from './SearchPeoples.vue';
 import { defineComponent, reactive, onMounted } from "vue";
 import { handleMakeRequestPayment } from "@/services/functions.js";
-import CreateOrderModal from "@/components/Bootstrap5/Modals/CreateOrderModal.vue"
+import CreatePaymentModal from "@/components/Bootstrap5/Modals/CreatePaymentModal.vue"
 import RecentContacts from './RecentContacts.vue';
 import Helpers from '../../Helpers';
 import { useContactsStore } from '../../stores/ContactsStore';
 const ContactsStore = useContactsStore();
-defineComponent({ SearchPeoples, RecentContacts, CreateOrderModal });
+defineComponent({ SearchPeoples, RecentContacts, CreatePaymentModal });
 const state = reactive({
-    modal: { createOrderModal: { user: {} }, }
+    modal: { createPaymentModal: { user: {} }, }
 })
 onMounted(() => {
     ContactsStore.fetch({
@@ -37,8 +39,8 @@ onMounted(() => {
 })
 
 function showCreateRequestPaymentOrderModal(user) {
-    state.modal.createOrderModal.user = user;
-    Helpers.triggerBSModal(`#btn-modal-create-order`);
+    state.modal.createPaymentModal.user = user;
+    Helpers.triggerBSModal(`#btn-modal-create-payment`);
 }
 </script>
 

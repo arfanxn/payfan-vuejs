@@ -1,12 +1,13 @@
 <template>
     <div class="ms-4 p-5">
         <h5 class="text-dark mb-4">Send Payment To</h5>
-        <SearchPeoples :showButton="true" @contactClicked="(contact) => showCreateSendPaymentOrderModal(contact['user'])"
+        <SearchPeoples :showButton="true"
+            @contactClicked="(contact) => showCreateSendPaymentOrderModal(contact['user'])"
             @peopleClicked="showCreateSendPaymentOrderModal" />
         <RecentContacts @contactClicked="(contact) => showCreateSendPaymentOrderModal(contact['user'])" class="mt-5" />
-        <CreateOrderModal @nextClicked="handleSendPayment" :user="state.modals.createOrderModal.user">
+        <CreatePaymentModal @nextClicked="handleSendPayment" :user="state.modals.createPaymentModal.user">
             <template #nextButtonText>Send Payment</template>
-        </CreateOrderModal>
+        </CreatePaymentModal>
     </div>
 </template>
 
@@ -14,14 +15,14 @@
 import { defineComponent, reactive, onMounted } from "vue";
 import SearchPeoples from './SearchPeoples.vue';
 import RecentContacts from './RecentContacts.vue';
-import CreateOrderModal from "@/components/Bootstrap5/Modals/CreateOrderModal.vue"
+import CreatePaymentModal from "@/components/Bootstrap5/Modals/CreatePaymentModal.vue"
 import Helpers from '../../Helpers';
 import { handleSendPayment } from "@/services/functions.js";
 import { useContactsStore } from "../../stores/ContactsStore";
 const ContactsStore = useContactsStore();
-defineComponent({ SearchPeoples, RecentContacts, CreateOrderModal });
+defineComponent({ SearchPeoples, RecentContacts, CreatePaymentModal });
 const state = reactive({
-    modals: { createOrderModal: { user: {} } }
+    modals: { createPaymentModal: { user: {} } }
 })
 
 onMounted(() => {
@@ -38,8 +39,8 @@ onMounted(() => {
 })
 
 function showCreateSendPaymentOrderModal(user) {
-    state.modals.createOrderModal.user = user;
-    Helpers.triggerBSModal(`#btn-modal-create-order`);
+    state.modals.createPaymentModal.user = user;
+    Helpers.triggerBSModal(`#btn-modal-create-payment`);
 }
 </script>
 

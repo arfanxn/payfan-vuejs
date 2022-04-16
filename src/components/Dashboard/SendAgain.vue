@@ -27,10 +27,10 @@
             </router-link>
         </div>
 
-        <CreateOrderModal v-if="state.createOrderModal.user" :user="state.createOrderModal.user"
+        <CreatePaymentModal v-if="state.createPaymentModal.user" :user="state.createPaymentModal.user"
             @nextClicked="handleSendPayment">
             <template #nextButtonText>Send payment</template>
-        </CreateOrderModal>
+        </CreatePaymentModal>
     </div>
     <!--  -->
 </template>
@@ -40,18 +40,18 @@ import { useContactsStore } from "../../stores/ContactsStore";
 import { reactive } from "vue";
 import UserAvatar from "@/components/Avatar/UserAvatar.vue";
 import Helpers from "@/Helpers.js";
-import CreateOrderModal from "@/components/Bootstrap5/Modals/CreateOrderModal.vue";
+import CreatePaymentModal from "@/components/Bootstrap5/Modals/CreatePaymentModal.vue";
 import { handleSendPayment } from "@/services/functions.js";
 const ContactsStore = useContactsStore();
 const state = reactive({
-    createOrderModal: {
+    createPaymentModal: {
         user: {},
     },
 })
 
 function showCreateSendPaymentOrderModal(user) {
-    state.createOrderModal.user = user;
-    Helpers.triggerBSModal(`#btn-modal-create-order`);
+    state.createPaymentModal.user = user;
+    Helpers.triggerBSModal(`#btn-modal-create-payment`);
 }
 </script>
 

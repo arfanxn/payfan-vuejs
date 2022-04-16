@@ -32,11 +32,11 @@
                         </div>
 
                         <div class="d-flex justify-content-center mt-4">
-                            <a @click="showCreateOrderModal(`SEND`)"
+                            <a @click="showCreatePaymentModal(`SEND`)"
                                 class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-5 py-2">
                                 <span class="fw-bold">Send</span>
                             </a>
-                            <a @click="showCreateOrderModal(`REQUEST`)"
+                            <a @click="showCreatePaymentModal(`REQUEST`)"
                                 class="cursor-pointer btn-send-n-req text-white rounded-pill mx-1 px-5 py-2">
                                 <span class="fw-bold">Request</span>
                             </a>
@@ -124,13 +124,13 @@
             </div>
         </div>
 
-        <CreateOrderModal
-            @nextClicked="(obj) => state.createOrderModal.currentStep == `SEND` ? handleSendPayment(obj) : handleMakeRequestPayment(obj)"
+        <CreatePaymentModal
+            @nextClicked="(obj) => state.createPaymentModal.currentStep == `SEND` ? handleSendPayment(obj) : handleMakeRequestPayment(obj)"
             :user="props.contact?.user">
             <template #nextButtonText>{{
-                state.createOrderModal.currentStep == `SEND` ? `Send payment` : `Make a
+                state.createPaymentModal.currentStep == `SEND` ? `Send payment` : `Make a
             request` }}</template>
-        </CreateOrderModal>
+        </CreatePaymentModal>
     </teleport>
 </template>
 
@@ -146,12 +146,12 @@ import { useContactsStore } from '@/stores/ContactsStore.js';
 import { searchPeoplesOnPayfan, handleSendPayment, handleMakeRequestPayment } from "../../../services/functions";
 import { useSearchPeoplesStore } from "../../../stores/SearchPeoplesStore";
 import UserAvatar from "@/components/Avatar/UserAvatar.vue";
-import CreateOrderModal from "./CreateOrderModal.vue";
+import CreatePaymentModal from "./CreatePaymentModal.vue";
 const SearchPeoplesStore = useSearchPeoplesStore();
 const ContactsStore = useContactsStore();
 defineComponent({
     StarIcon,
-    CreateOrderModal
+    CreatePaymentModal
 });
 const props = defineProps({
     contact: {},
@@ -164,7 +164,7 @@ const state = reactive({
             showFullNote: false
         },
     },
-    createOrderModal: {
+    createPaymentModal: {
         currentStep: null,
     }
 })
@@ -248,9 +248,9 @@ function blockContact() {
     });
 }
 
-function showCreateOrderModal(operation) {
-    state.createOrderModal.currentStep = operation.toUpperCase();
-    Helpers.triggerBSModal(`#btn-modal-create-order`);
+function showCreatePaymentModal(operation) {
+    state.createPaymentModal.currentStep = operation.toUpperCase();
+    Helpers.triggerBSModal(`#btn-modal-create-payment`);
 }
 </script>
 

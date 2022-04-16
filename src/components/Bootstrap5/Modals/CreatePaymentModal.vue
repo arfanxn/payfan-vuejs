@@ -1,18 +1,18 @@
 <template>
     <teleport to="#modals">
         <!-- Button trigger modal -->
-        <button type="button" class="btn d-none btn-primary" data-bs-toggle="modal" data-bs-target="#modal-create-order"
-            id="btn-modal-create-order">Launch static backdrop
+        <button type="button" class="btn d-none btn-primary" data-bs-toggle="modal"
+            data-bs-target="#modal-create-payment" id="btn-modal-create-payment">Launch static backdrop
             modal</button>
 
         <!-- Modal -->
-        <div class="modal fade" id="modal-create-order" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="modal-create-orderLabel" aria-hidden="true">
+        <div class="modal fade" id="modal-create-payment" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="modal-create-paymentLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header border-bottom-0">
-                        <h5 class="modal-title" id="modal-create-orderLabel"></h5>
-                        <button @click="resetOrderData()" type="button" id="btn-close-modal-create-order"
+                        <h5 class="modal-title" id="modal-create-paymentLabel"></h5>
+                        <button @click="resetOrderData()" type="button" id="btn-close-modal-create-payment"
                             class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex flex-column">
@@ -113,7 +113,7 @@ async function onNextClicked() {
     const validator = await v$.value.$validate()
     if (!validator) return;
 
-    Helpers.closeBSModal("#btn-close-modal-create-order").then(() => {
+    Helpers.closeBSModal("#btn-close-modal-create-payment").then(() => {
         emits('nextClicked', { ...props.user, ...order, });
     })
 }
