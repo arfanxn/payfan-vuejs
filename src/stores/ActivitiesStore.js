@@ -71,8 +71,8 @@ export const useActivitiesStore = defineStore("activities", {
                     status,
                     transaction_type
                 } = this.filter.by;
-                const response = await axios.get("/api/user/self/orders", {
-                    // const response = await axios.get("/api/orders", {
+                const response = await axios.get("/api/user/self/payments", {
+                    // const response = await axios.get("/api/payments", {
                     params: {
                         page,
                         keyword: keyword || "",
@@ -84,11 +84,11 @@ export const useActivitiesStore = defineStore("activities", {
                 });
 
                 if (response.status == 200) {
-                    this["pagination/data"] = response.data.orders.data;
+                    this["pagination/data"] = response.data.payments.data;
                     SwalPlugin.close()
 
-                    if (delete response.data.orders.data)
-                        this["pagination/meta"] = response.data.orders;
+                    if (delete response.data.payments.data)
+                        this["pagination/meta"] = response.data.payments;
                 }
 
                 return response;

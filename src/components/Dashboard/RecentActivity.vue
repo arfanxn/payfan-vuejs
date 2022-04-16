@@ -43,14 +43,14 @@
                         }}</span>
                     <!-- end -->
 
-                    <!-- if the status completed and order type is either SEND or REQUESTED  make the text amount color red (subtraction) -->
+                    <!-- if the status completed and payment type is either SEND or REQUESTED  make the text amount color red (subtraction) -->
                     <span class="text-danger" v-else-if="
                     (activity.type?.toUpperCase()?.includes(`SEND`) || activity.type?.toUpperCase()?.includes(`REQUESTED`))
                     && activity.status?.toUpperCase()?.includes(`COMPLETE`)">-&nbsp;${{
         StrHelper.make(activity.amount).toUSD(false).get()
     }}</span><!-- end -->
 
-                    <!-- if the status completed and order type is either REQUESTING or RECEIVING or GIFT  make the text amount color green (addaction) -->
+                    <!-- if the status completed and payment type is either REQUESTING or RECEIVING or GIFT  make the text amount color green (addaction) -->
                     <span class="text-success" v-else-if="(activity.type?.toUpperCase()?.includes(`REQUESTING`)
                     || activity.type?.toUpperCase()?.includes(`RECEIV`)
                     || activity.type?.toUpperCase()?.includes(`GIFT`))
@@ -116,7 +116,7 @@ onMounted(async () => {
 
 
 async function fetchRecentActivities() {
-    const response = await axios.get("/api/user/self/orders", {
+    const response = await axios.get("/api/user/self/payments", {
         params: {
             per_page: 3,
             start_at: (new Date( // "today/now" subtract by "7 days" 
@@ -127,8 +127,8 @@ async function fetchRecentActivities() {
         }
     });
     let results = [];
-    Object.keys(response.data.orders.data).forEach(key => {
-        results.push(...response.data.orders.data[key]);
+    Object.keys(response.data.payments.data).forEach(key => {
+        results.push(...response.data.payments.data[key]);
     });
     return results;
 }

@@ -46,17 +46,17 @@ export default class TransactionService {
         }
     }
 
-    static async approveRequestMoney(order, code) {
+    static async approveRequestMoney(payment, code) {
         try {
-            const orderID = order.id;
+            const paymentID = payment.id;
 
-            const response = await axios.patch(`/api/user/self/transaction/request-money/order/${orderID}/approve`, {
+            const response = await axios.patch(`/api/user/self/transaction/request-money/payment/${paymentID}/approve`, {
                 code: code,
             });
 
             if (response.status == 200) {
                 const WalletStore = useWalletStore();
-                WalletStore.subtractBalance(order.amount) ; 
+                WalletStore.subtractBalance(payment.amount) ; 
             }
 
             return response;
@@ -65,11 +65,11 @@ export default class TransactionService {
         }
     }
 
-    static async rejectRequestMoney(order) {
+    static async rejectRequestMoney(payment) {
         try {
-            const orderID = typeof order === "string" ? order : order.id;
+            const paymentID = typeof payment === "string" ? payment : payment.id;
 
-            const response = await axios.patch(`/api/user/self/transaction/request-money/order/${orderID}/reject`);
+            const response = await axios.patch(`/api/user/self/transaction/request-money/payment/${paymentID}/reject`);
             return response;
         } catch (error) {
             return error.response;

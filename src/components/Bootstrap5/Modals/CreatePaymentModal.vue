@@ -30,14 +30,14 @@
                         </div>
 
                         <div class="d-flex flex-column mt-3">
-                            <input @change="amountToUSD" placeholder="Amount in USD" v-model="order.amountInUSD"
+                            <input @change="amountToUSD" placeholder="Amount in USD" v-model="payment.amountInUSD"
                                 type="text" class="form-control fw-bold fs-5 text-center" />
                             <AlertError class="mt-1" @close="v$.$reset()"
                                 :error="v$?.amountInUSD?.$errors[0]?.$message || v$?.amount?.$errors[0]?.$message" />
                         </div>
 
                         <div class="d-flex flex-column border-top mt-5 border-secondary border-1">
-                            <textarea v-model="order.note" class="form-control scrollbar-thin mt-3"
+                            <textarea v-model="payment.note" class="form-control scrollbar-thin mt-3"
                                 placeholder="Add a note"></textarea>
                             <AlertError class="mt-2" @close="v$.$reset()" :error="v$?.note?.$errors[0]?.$message" />
                         </div>
@@ -74,12 +74,12 @@ const props = defineProps({
     user: {},
 });
 const emits = defineEmits(["nextClicked",]);
-const order = reactive({
+const payment = reactive({
     amountInUSD: null, amount: 0, note: ""
 })
 
 watch(() => props.user, () => {
-    order.amountInUSD = null, order.amount = 0, order.note = '';
+    payment.amountInUSD = null, payment.amount = 0, payment.note = '';
 });
 
 const v$ = useVuelidate({ // rules  
@@ -90,21 +90,21 @@ const v$ = useVuelidate({ // rules
         maxValue: helpers.withMessage("Maximum transaction is $100,000,000.00 ", maxValue(100000000))
     },
     note: { maxLength: maxLength(255) },
-},  /*state */ order)
+},  /*state */ payment)
 
 function amountToUSD() {
-    if (!order.amountInUSD) return
+    if (!payment.amountInUSD) return
 
     //remove dollar sign and commas , and replace duplicate "." with only a single "." ; 
-    const amount = order.amountInUSD.replace(/[$,]/g, "").replace(/[.]+/g, ".");
+    const amount = payment.amountInUSD.replace(/[$,]/g, "").replace(/[.]+/g, ".");
 
     // amount string -> parse to float (if not the ".toFixed" funtion below will not work ) ; 
-    order.amount = parseFloat(amount);
+    payment.amount = parseFloat(amount);
 
     // make the parsedFloat (amount) to USD currency format ;
-    const converted = order.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    const converted = payment.amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
-    return (order.amountInUSD = converted.toString().toLowerCase() != "nan" ? "$" + converted : null);
+    return (payment.amountInUSD = converted.toString().toLowerCase() != "nan" ? "$" + converted : null);
 }
 
 async function onNextClicked() {
@@ -114,15 +114,15 @@ async function onNextClicked() {
     if (!validator) return;
 
     Helpers.closeBSModal("#btn-close-modal-create-payment").then(() => {
-        emits('nextClicked', { ...props.user, ...order, });
+        emits('nextClicked', { ...props.user, ...payment, });
     })
 }
 
 function resetOrderData() {
     setTimeout(() => {
-        order.amountInUSD = null;
-        order.amount = 0;
-        order.note = ""
+        payment.amountInUSD = null;
+        payment.amount = 0;
+        payment.note = ""
         v$.value.$reset();
     }, 1500);
 }
