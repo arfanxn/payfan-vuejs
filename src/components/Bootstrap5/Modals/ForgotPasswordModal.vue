@@ -30,6 +30,9 @@
                                         class="form-control" placeholder="Your email" />
                                     <AlertError class="mt-2" @close="v$.email.$reset()"
                                         :error="v$?.email?.email?.$errors[0]?.$message"></AlertError>
+                                    <AlertError class="mt-1" @close="errors.securityQuestionNotConfigured = ``"
+                                        :error="errors.securityQuestionNotConfigured">
+                                    </AlertError>
                                 </div>
                                 <div v-if="currentStep != recoveryPasswordStep[0]"
                                     class="bg-light d-flex justify-content-center px-2 py-1  rounded border overflow-hidden">
@@ -168,6 +171,7 @@ const state = reactive({
 const errors = reactive({
     verificationCode: "",
     securityAnswer: "",
+    securityQuestionNotConfigured: "",
 });
 
 const recoveryPasswordStep = ref(['insertEmail', "verify", "createNewPassword"]);
@@ -216,9 +220,19 @@ async function verifyWithSecurityQuestion() {
     if (!validatorEmail) return;
 
     axios.get(`/api/user/${state.form.email}/settings`).then(r => {
-        state.securityQuestion = r.data.user_settings.security_question;
-        verifyWith.value = verifyOptions.value[1];
-        currentStep.value = recoveryPasswordStep.value[1]
+        if (r.status == 200) {
+            const { security_question } = r.data?.user_settings || {};
+
+            if (typeof security_question == "string" && security_question.length) { // if security_question is configured
+                state.securityQuestion = r.data.user_settings.security_question;
+                verifyWith.value = verifyOptions.value[1];
+                currentStep.value = recoveryPasswordStep.value[1]
+            } else {
+                errors.securityQuestionNotConfigured =
+                    "Your account security question is not configured yet, please try to configure it on the account settings page";
+            }
+
+        }
     });
 }
 
@@ -277,7 +291,15 @@ async function next() {
 }
 
 function sendVerificationCode() {
-    AuthService.createVerificationCode(state.form.email).then(r => {  // send verificationCode 
+    const { email } = state.form;
+
+    // const notifiable_name = email.substring(0, email.indexOf("@")) // get string before "@"
+    //     .replace(/[^A-Z]/ig, ' ') // remove non alphabetic characters
+    //     .replace(/\s+/g, ' ') // remove duplicate/multiple spaces 
+    //     .trim() // replace spaces at the end
+    //     .replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()); // capitalize each letter 
+
+    AuthService.createVerificationCode(email).then(r => {  // send verificationCode 
         let ratelimitRemaining = 60 * (parseInt(r.headers['x-ratelimit-remaining']) + 1); //seconds remaining
 
         new Promise(() => {
