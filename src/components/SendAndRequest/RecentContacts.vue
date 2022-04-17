@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="text-center mt-3">
-            <a href="/transfer/contacts" class="fw-bold text-navy hover-underline">Manage Contacts</a>
+            <router-link to="/transfer/contacts" class="fw-bold text-navy hover-underline">Manage Contacts</router-link>
         </div>
 
     </div>

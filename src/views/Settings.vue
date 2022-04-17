@@ -14,7 +14,7 @@
                 </keep-alive>
             </div>
             <div class="col-md-4">
-                <VerticalMenu :menus="state.menus" @menuClicked="changeMenu" />
+                <VerticalMenu :menus="state.menus" />
             </div>
         </div>
 
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { defineComponent, reactive, onMounted } from 'vue';
+import { defineComponent, reactive, watch } from 'vue';
 import Footer from '../components/Layouts/Footer.vue';
 import NavbarTop from '../components/Layouts/NavbarTop.vue';
 import VerticalMenu from '../components/Layouts/VerticalMenu.vue';
@@ -49,14 +49,13 @@ const state = reactive({
     }]
 });
 
-onMounted(() => {
-    (state.menus).forEach(elem => elem.link.toLowerCase() == route.path.toLowerCase()
-        ? state.currentMenu = elem.name : null);
+watch(() => route.params.menu, (newValue) => {
+    if (typeof newValue == "string")
+        state.menus.forEach(menu => {
+            if (menu.link.toLowerCase().includes(newValue.toLowerCase()/**/) /**/) {
+                state.currentMenu = menu.name;
+            }
+        });
+
 });
-
-
-
-function changeMenu(menu) {
-    state.currentMenu = menu.name;
-}
 </script>

@@ -13,19 +13,19 @@
           <h5 class="fw-bold">{{ Helpers.ENV("APP_TITLE") }}</h5>
         </div>
         <div class="my-auto">
-          <a href class="text-decoration-none text-white fw-bold d-inline me-3"
-            @click.prevent="changeMenu(`login`)">Login</a>
-          <a href class="text-decoration-none text-white fw-bold d-inline"
-            @click.prevent="changeMenu(`register`)">Register</a>
+          <router-link to="/auth/login" class="text-decoration-none text-white fw-bold d-inline me-3">Login
+          </router-link>
+          <router-link to="/auth/register" class="text-decoration-none text-white fw-bold d-inline">Register
+          </router-link>
         </div>
       </div>
 
       <div class="p-4">
         <keep-alive>
-          <Login v-if="currentStep == `login`"></Login>
+          <Login v-if="currentMenu == `login`"></Login>
         </keep-alive>
         <keep-alive>
-          <Register v-if="currentStep == `register`"></Register>
+          <Register v-if="currentMenu == `register`"></Register>
         </keep-alive>
       </div>
     </div>
@@ -33,41 +33,27 @@
 </template>
 
 <script setup>
-import { defineComponent, ref, onBeforeMount } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import Helpers from "../Helpers";
 import Login from "../components/Auth/Login.vue";
 import Register from "../components/Auth/Register.vue";
-import router from "../router";
 const route = useRoute();
 
-const currentStep = ref("login");
+const currentMenu = ref("login");
 
 defineComponent({ Login, Register });
 
-onBeforeMount(() => {
-  changeMenu(route.params.menu);
-});
+watch(() => route.params.menu, (newValue) => {
 
-function changeMenu(menu) {
-  if (menu == "register") {
-    currentStep.value = "register";
-    router.replace({
-      ...router.currentRoute,
-      params: {
-        menu: "register",
-      },
-    });
-  } else {
-    currentStep.value = "login";
-    router.replace({
-      ...router.currentRoute,
-      params: {
-        menu: "login",
-      },
-    });
-  }
-}
+  if (typeof newValue == "string")
+    if (newValue.toLowerCase().includes('register')) {
+      currentMenu.value = "register";
+    } else {
+      currentMenu.value = "login";
+    }
+
+});
 </script>
 
 <style scoped>
