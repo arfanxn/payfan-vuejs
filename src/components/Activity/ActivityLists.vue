@@ -51,7 +51,7 @@
 
                         <small class="d-block">
                             {{
-                                Helpers.tap(new Date(payment.started_at), date =>
+                                Helpers.tap(new Date(payment.created_at), date =>
                                     date.getDate() + " " + DateHelper.numericMonthtoString(date.getMonth())
                                 )
                             }}
