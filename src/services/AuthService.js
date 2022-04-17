@@ -52,10 +52,13 @@ export default class AuthService {
         }
     }
 
-    static async createVerificationCode(email = null) {
+    static async createVerificationCode(email = null , {
+        reason,
+        notifiable_name,
+    } = {}) {    
         try {
             const response = await axios.post("/api/users/verification-code/create", {
-                email,
+                email, reason , notifiable_name
             });
             return response;
         } catch (error) {

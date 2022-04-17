@@ -70,9 +70,15 @@ async function handleRegister() {
 
     const { fullname, email, password, password_confirmation, } = state.form;
 
+    const notifiable_name = fullname
+        .replace(/[^A-Z]/ig, ' ') // remove non alphabetic characters
+        .replace(/\s+/g, ' ') // remove duplicate/multiple spaces 
+        .trim() // replace spaces at the end
+        .replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()); // capitalize each letter 
+        
     // handle the registration ;
     SwalPlugin.showLoading();
-    AuthService.createVerificationCode(email).then(() => {
+    AuthService.createVerificationCode(email, { notifiable_name: notifiable_name }).then(() => {
         SwalPlugin.close();
         SwalPlugin.verificationCode("Verify your account", async verificationCode => {
             return await AuthService.register(fullname, email,
