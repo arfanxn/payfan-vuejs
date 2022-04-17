@@ -84,20 +84,20 @@ router.beforeEach((to, from, next) => {
   // this if statement is used to prevent already loged in user to accessing the "auth" page (login/register page)
   if (to.name && to.name.toLowerCase() == "auth") { // if redirect to "auth" page then check for user already loged in or not logged in
     AuthService.check().then(response => {
-      if (response.status != 401 && response.status == 200) { // if response status != 401 that means that user is already logged in 
-        window.location = '/'; // if already logged in then redirect to "dashboard" page 
+      if (typeof response=="object" && response.status != 401 && response.status == 200) { // if response status != 401 that means that user is already logged in 
+        router.push(  '/'); // if already logged in then redirect to "dashboard" page 
       }
     });
   }
 
   if (!("guest" in to.meta)) { // if "guest" is not in the "to.meta" object (that's mean the routes require Authentication)
     AuthService.check().then(response => {
-      if (response.status != 401 && response.status == 200) {
+      if (typeof response=="object" && response.status != 401 && response.status == 200) {
         AuthUserStore['isLoggedIn'] = true;
         next() // next if user is already logged in
       } else { // if not logged in/authenticated then redirect to "auth" page
         AuthUserStore['isLoggedIn'] = false;
-        window.location = "/auth";
+        router.push("/auth");
       }
     });
   } else next();

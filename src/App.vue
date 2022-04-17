@@ -21,15 +21,17 @@ onMounted(() => {
 
   if (AuthUserStore.isLoggedIn) { // if user is logged in
     AuthUserStore.fetch().then(r => {
-      if (r.status == 200) {
-        NotificationService.latest().then(r => {
-          if (r.status == 200) NotificationsStore.pushLatest(r.data.notifications);
-        })
+      if (typeof r == "object") {
+        if (r.status == 200) {
+          NotificationService.latest().then(r => {
+            if (r.status == 200) NotificationsStore.pushLatest(r.data.notifications);
+          })
 
-        // listen live notifications
-        window.Echo.private('users.' + AuthUserStore.data['id']).notification(notification => {
-          NotificationsStore.realtimeLatest(notification);
-        } /**/);
+          // listen live notifications
+          window.Echo.private('users.' + AuthUserStore.data['id']).notification(notification => {
+            NotificationsStore.realtimeLatest(notification);
+          } /**/);
+        }
       }
     });
   }
