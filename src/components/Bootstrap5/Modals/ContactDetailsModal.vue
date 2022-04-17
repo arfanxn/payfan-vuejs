@@ -49,9 +49,9 @@
                                 <div class="d-flex">
                                     <small class="me-5">
                                         {{
-                                            Helpers.tap(new Date(state.contact.last_transaction.data['started_at']),
-                                                started_at => `${started_at.getDate()} ${DateHelper
-                                                    .numericMonthtoString(started_at.getMonth(), 3)}`)
+                                            Helpers.tap(new Date(state.contact.last_transaction.data['created_at']),
+                                                created_at => `${created_at.getDate()} ${DateHelper
+                                                    .numericMonthtoString(created_at.getMonth(), 3)}`)
                                         }}
                                     </small>
                                     <div class="d-flex flex-column">
@@ -113,7 +113,8 @@
                         </div>
 
                         <div class="text-center mt-4">
-                            <a class="cursor-pointer text-navy hover-underline mb-2" @click="removeContact">Remove this
+                            <a class="cursor-pointer text-navy hover-underline mb-2"
+                                @click="removeUserFromContacts">Remove this
                                 contact</a>
                             <br />
                             <a @click.prevent="blockContact" class="cursor-pointer text-navy hover-underline">Block this
@@ -136,7 +137,7 @@
 
 <script setup>
 import { defineComponent, defineProps, watch, reactive } from "vue";
-import ContactService from "@/services/ContactService";
+import ContactsService from "@/services/ContactsService";
 import DateHelper from "@/helpers/DateHelper.js";
 // import StrHelper from "@/helpers/StrHelper.js";
 import StarIcon from "@/components/Icons/StarIcon.vue";
@@ -171,7 +172,7 @@ const state = reactive({
 
 watch(() => props.contact, async contactValue => {
     if ("id" in contactValue) {
-        const response = await ContactService.lastTransactionDetail(contactValue['id'])
+        const response = await ContactsService.lastTransactionDetail(contactValue['id'])
         if (response.status == 200) {
             state.contact.last_transaction.data = await response.data.last_transaction || {};
             state.contact.isFavorited = props.contact["status"] == "FAVORITED" ? true : false;
@@ -181,42 +182,43 @@ watch(() => props.contact, async contactValue => {
 
 function toggleFavorite() {
     const contact = props.contact;
-    ContactService.toggleFavorite(contact['id']).then(r => {
-        if (r.data.message == "FAVORITED") {
+    ContactsService.toggleFavorite(contact['id']).then(r => {
+        if (r.data.message.toLowerCase()?.includes("add") /*favorited*/) {
             SwalPlugin.alertPositioned({
-                title: `"${contact['user']['name']}" <strong>marked</strong> as top contacts`
+                title: `contact "${contact['user']['name']}" <strong>marked</strong> as top contacts`
             });
             state.contact.isFavorited = true;
-        } else if (r.data.message == 'UNFAVORITED') {
+        } else if (r.data.message.toLowerCase()?.includes("remove")/*unfavorited*/) {
             SwalPlugin.alertPositioned({
-                title: `"${contact['user']['name']}" <strong>removed</strong> from top contacts`
+                title: `contact "${contact['user']['name']}" <strong>removed</strong> from top contacts`
             })
             state.contact.isFavorited = false;
         }
     });
 }
 
-function removeContact() {
+function removeUserFromContacts() {
     SwalPlugin.confirm({
         title: `Remove contact`,
-        html: `Remove ${props.contact['user']['name']} from contact?`,
+        html: `Remove "${props.contact['user']['name']}" from contacts ?`,
         icon: `warning`,
     }).then(result => {
         if (result.isConfirmed) {
-            ContactService.addOrRm(props.contact['user']['id']).then(r => {
+            ContactsService.addOrRm(props.contact['user']['id']).then(r => {
                 const rMsg = r.data.message.toLowerCase();
-                if (rMsg == "removed") {
+                if (rMsg.includes("remove") || rMsg.includes("delete")) {
                     ContactsStore.remove(props.contact['id']);
                     Helpers.closeBSModal(`#btn-close-modal-contact-detail`)
-                    SwalPlugin.alertPositioned({
-                        title: `"${props.contact['user']['name']}" removed from contacts`,
-                        icon: "success",
-                        timer: 1000,
-                    });
                     searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
                         if (r.status == 200) {
                             SearchPeoplesStore.refreshResults(r.data);
                         }
+                    }).then(() => {
+                        SwalPlugin.alertPositioned({
+                            title: `"${props.contact['user']['name']}" removed from contacts`,
+                            icon: "success",
+                            timer: 1000,
+                        })
                     });
                 }
             });
@@ -231,7 +233,7 @@ function blockContact() {
         icon: `question`,
     }).then(result => {
         if (result.isConfirmed) {
-            ContactService.block(props.contact['id']).then(() => {
+            ContactsService.block(props.contact['id']).then(() => {
                 Helpers.closeBSModal(`#btn-close-modal-contact-detail`);
                 SwalPlugin.alertPositioned({
                     title: `"${props.contact['user']['name']}" has been blocked`,

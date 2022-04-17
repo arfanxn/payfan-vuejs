@@ -61,14 +61,14 @@
                 </div>
             </div>
         </div>
-        </teleport>
+    </teleport>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import UserAvatar from '../../Avatar/UserAvatar.vue';
 import { useContactsStore } from '../../../stores/ContactsStore';
-import ContactService from '../../../services/ContactService';
+import ContactsService from '../../../services/ContactsService';
 import SwalPlugin from '../../../plugins/SwalPlugin';
 const ContactsStore = useContactsStore();
 
@@ -88,7 +88,7 @@ function loadBlockedContactsPagination(page) {
 
 async function fetchBlockedContacts(page = 1) {
     return await ContactsStore.fetch({
-        order_by: "last_transaction:desc",
+        order_by: "added_at:desc",
         favorited: 0,
         blocked: 1,
         added: 0,
@@ -103,28 +103,23 @@ async function fetchBlockedContacts(page = 1) {
 async function unblockContact(contact) {
     const confirmDeletion = await SwalPlugin.confirm({
         title: `Unblock contact`,
-        html: `Unblock "${contact['user']['name']}" ?<br>Unblocking will also removing from your contacts.`,
+        html: `Unblock "${contact['user']['name']}" ?`,
         icon: `question`,
     });
 
     if (confirmDeletion.isConfirmed) {
-        ContactService.unblock(contact.id).then(r => {
+        ContactsService.unblock(contact.id).then(r => {
             if (r.status == 200) {
-                SwalPlugin.alertPositioned({
-                    title: `"${contact.user.name}" has been unblocked and removed from your contacts`,
-                    icon: "success",
-                    timer: 1500,
-                })
-
-                // update the status of the contact in client side state
-                // ContactsStore['pagination/data'] = ContactsStore['pagination/data']
-                //     .filter(contactFromState => contactFromState.id !== contact.id);
-                fetchBlockedContacts(blockedContactsCurrentPage.value);
+                fetchBlockedContacts(blockedContactsCurrentPage.value).then(() => {
+                    SwalPlugin.alertPositioned({
+                        title: `contact "${contact.user.name}" has been unblocked.`,
+                        icon: "success",
+                        timer: 1500,
+                    })
+                });
             }
         });
     }
-
-
 }
 </script>
 

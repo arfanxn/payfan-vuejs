@@ -30,7 +30,7 @@ export const useContactsStore = defineStore("contacts", {
             try {
                 const response = await axios.get("/api/user/self/contacts", {
                     params: {
-                        order_by: order_by ? order_by : "last_transaction:desc",
+                        order_by: order_by ? order_by : "updated_at:desc",
                         // favorited: typeof favorited !== "undefined"  ? 0 : 1,
                         // blocked: typeof blocked !== "undefined" ? 1 : 0,
                         // added: typeof added !== "undefined" ? 0 : 1,

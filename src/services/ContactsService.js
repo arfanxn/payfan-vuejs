@@ -4,7 +4,7 @@ import {
 } from "../stores/ContactsStore";
 const ContactsStore = useContactsStore();
 
-export default class ContactService {
+export default class ContactsService {
     static async lastTransactionDetail(contactID) {
         try {
             return await axios.get(`/api/user/self/contact/${contactID}/last-transaction`);

@@ -1,8 +1,7 @@
 <template>
     <div class="ms-4 p-5">
         <h5 class="text-dark mb-4">Send Payment To</h5>
-        <SearchPeoples :showButton="true"
-            @contactClicked="(contact) => showCreateSendPaymentModal(contact['user'])"
+        <SearchPeoples :showButton="true" @contactClicked="(contact) => showCreateSendPaymentModal(contact['user'])"
             @peopleClicked="showCreateSendPaymentModal" />
         <RecentContacts @contactClicked="(contact) => showCreateSendPaymentModal(contact['user'])" class="mt-5" />
         <CreatePaymentModal @nextClicked="handleSendPayment" :user="state.modals.createPaymentModal.user">

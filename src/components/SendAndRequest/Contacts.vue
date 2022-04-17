@@ -2,7 +2,7 @@
     <div class="ms-4 p-5">
         <div class>
             <h5 class="text-dark mb-4">Contacts</h5>
-            <SearchPeoples @peopleClicked="showPeoplePreview" @contactClicked="contactDetail" />
+            <SearchPeoples @peopleClicked="addUserToContacts" @contactClicked="contactDetail" />
         </div>
         <div class>
             <small class="text-secondary d-block mt-2">Top contacts</small>
@@ -69,7 +69,7 @@ import ContactDetailsModal from '../Bootstrap5/Modals/ContactDetailsModal.vue';
 import { defineComponent, onMounted } from 'vue';
 import Helpers from '../../Helpers';
 import UserAvatar from "@/components/Avatar/UserAvatar.vue";
-import ContactService from "@/services/ContactService.js";
+import ContactsService from "@/services/ContactsService.js";
 import { useContactsStore } from '../../stores/ContactsStore';
 import { useSearchPeoplesStore } from '../../stores/SearchPeoplesStore';
 import SearchPeoples from './SearchPeoples.vue';
@@ -90,7 +90,7 @@ const state = reactive({
 
 onMounted(() => {
     ContactsStore.fetch({
-        order_by: "last_transaction:desc",
+        order_by: "updated_at:desc",
         favorited: 1,
         blocked: 0,
         added: 1,
@@ -105,7 +105,7 @@ function loadContactsPagination(page) {
     document.querySelector(".top-contacts-lists-wrapper").scrollTo(0, 0);
     window.scrollTo(0, 0);
     ContactsStore.fetch({
-        order_by: "last_transaction:desc",
+        order_by: "updated_at:desc",
         favorited: 1,
         blocked: 0,
         added: 1,
@@ -116,22 +116,24 @@ function loadContactsPagination(page) {
     });
 }
 
-function showPeoplePreview(user) {
+function addUserToContacts(user) {
     SwalPlugin.confirm({
-        title: `add "${user.name}" to contacts ?`,
+        title: `Add contact`,
+        html: `Add "${user['name']}" to contacts ?`,
         confirmButtonText: `Add`,
         icon: "question",
     }).then(result => {
         const onError = () => SwalPlugin.alert({ title: "Something went wrong!", icon: "error" });
         if (result.isConfirmed) {
-            ContactService.addOrRm(user.id).then(r => {
-                if (r.data.message.toLowerCase() == "added") {
-                    SwalPlugin.autoCloseAlert(`"${user.name}" added to contacts`, null, "success", 1000)
-                        ;
+            ContactsService.addOrRm(user.id).then(r => {
+                if (r.data.message?.toLowerCase()?.includes("add")) {
                     searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
                         if (r.status == 200) {
                             SearchPeoplesStore.refreshResults(r.data);
                         }
+                    }).then(() => {
+                        SwalPlugin.autoCloseAlert(`"${user.name}" added to contacts`, null, "success", 1000)
+                            ;
                     });
                 } else {
                     onError()
@@ -146,15 +148,19 @@ function contactDetail(contact) {
     Helpers.triggerBSModal("#btn-modal-contact-detail");
 }
 function toggleFavoriteContact(event, contact) {
-    ContactService.toggleFavorite(contact.id).then(r => {
-        if (r.data.message == "FAVORITED") {
-            SwalPlugin.alertPositioned({ title: `"${contact.user.name}" <strong>marked</strong> as top contacts` })
+    ContactsService.toggleFavorite(contact.id).then(r => {
+        if (r.data.message.toLowerCase()?.includes("add") /*favorited*/) {
+            SwalPlugin.alertPositioned({
+                title: `contact "${contact['user']['name']}" <strong>marked</strong> as top contacts`
+            });
             if (event.target.classList.contains("text-dark")) { // if contains dark == not added to favorite
                 event.target.classList.remove("text-dark");
                 event.target.classList.add("text-success");
             }
-        } else if (r.data.message == 'UNFAVORITED') {
-            SwalPlugin.alertPositioned({ title: `"${contact.user.name}" <strong>removed</strong> from top contacts` })
+        } else if (r.data.message.toLowerCase()?.includes("remove") /*unfavorited*/) {
+            SwalPlugin.alertPositioned({
+                title: `contact "${contact['user']['name']}" <strong>removed</strong> from top contacts`
+            })
             if (event.target.classList.contains("text-success")) {
                 event.target.classList.remove("text-success");
                 event.target.classList.add("text-dark");

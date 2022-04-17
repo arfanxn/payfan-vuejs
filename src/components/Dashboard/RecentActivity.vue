@@ -27,7 +27,7 @@
                                 : activity.from_wallet.user.name/**/).substr(0, 15)
                         }}</p>
                         <small class="fs-7 d-block lh-1 m-0 p-0">{{
-                            Helpers.tap(new Date(activity.started_at || activity.created_at), date =>
+                            Helpers.tap(new Date(activity.created_at), date =>
                                 date.getDate() + " " + DateHelper.numericMonthtoString(date.getMonth())
                             )
                         }}</small>
