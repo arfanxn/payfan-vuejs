@@ -57,5 +57,5 @@ watch(() => route.params.menu, (newValue) => {
             }
         });
 
-});
+}, { deep: true });
 </script>

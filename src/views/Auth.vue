@@ -53,7 +53,7 @@ watch(() => route.params.menu, (newValue) => {
       currentMenu.value = "login";
     }
 
-});
+}, { deep: true });
 </script>
 
 <style scoped>
