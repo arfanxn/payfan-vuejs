@@ -70,6 +70,8 @@ async function handleLogin() {
     SwalPlugin.showLoading(() =>
         AuthService.login(email, password)
             .then((r) => {
+                if ("response" in r) r = r.response;
+
                 if (r.status == 200) {
                     // router.push("/");
                     window.location.href = "/";
