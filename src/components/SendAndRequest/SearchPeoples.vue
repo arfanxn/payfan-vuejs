@@ -1,6 +1,6 @@
 <template>
     <div class="form-floating">
-        <input @keyup.esc="hideResults" @input="hideResultsIfKeywordLessThan" v-model="SearchPeoplesStore.searchKeyword"
+        <input @keyup.esc="hideResults" @input="hideResultsIfKeywordLessThan" v-model="SearchPeoplesStore.keyword"
             @focus="SearchPeoplesStore['results/toggleShow'] = true" @keyup.enter="search" type="text"
             class="form-control" id="inputSendTo" placeholder="Name on your contacts or Email" />
         <label class="text-secondary" for="inputSendTo">Name on your contacts or Email</label>
@@ -34,7 +34,7 @@ onMounted(() => {
 
 function search() {
     SearchPeoplesStore['results/toggleShow'] = true;
-    const keyword = SearchPeoplesStore.searchKeyword;
+    const keyword = SearchPeoplesStore.keyword;
 
     if (!hideResultsIfKeywordLessThan()) return;
 
@@ -43,7 +43,7 @@ function search() {
 }
 
 function hideResultsIfKeywordLessThan() {
-    if (SearchPeoplesStore.searchKeyword.length <= 2) {
+    if (SearchPeoplesStore.keyword.length <= 2) {
         hideResults()
         return false
     }

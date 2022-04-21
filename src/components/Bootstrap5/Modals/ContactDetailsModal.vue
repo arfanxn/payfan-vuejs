@@ -211,7 +211,7 @@ function removeUserFromContacts() {
                     Helpers.closeBSModal(`#btn-close-modal-contact-detail`)
 
                     // refresh the peoples store
-                    SearchPeoplesStore.fetch(SearchPeoplesStore.searchKeyword)
+                    SearchPeoplesStore.fetch(SearchPeoplesStore.keyword)
                         .then(() => {
                             SwalPlugin.alertPositioned({
                                 title: `"${props.contact['user']['name']}" removed from contacts`,
@@ -241,7 +241,7 @@ function blockContact() {
                 })
 
                 // refresh the peoples store
-                SearchPeoplesStore.fetch(SearchPeoplesStore.searchKeyword);
+                SearchPeoplesStore.fetch(SearchPeoplesStore.keyword);
 
             });
         }

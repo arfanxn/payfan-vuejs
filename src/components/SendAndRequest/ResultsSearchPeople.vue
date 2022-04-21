@@ -35,7 +35,7 @@
                     <div class="ms-3">
                         <small class="fw-bold d-block">{{ user['name'] }}</small>
                         <small class="fw-light">{{
-                            user["email"].includes(SearchPeoplesStore.searchKeyword) ?
+                            user["email"].includes(SearchPeoplesStore.keyword) ?
                                 user["email"] : StrHelper.make(user["email"]).censor().get()
                         }}</small>
                     </div>

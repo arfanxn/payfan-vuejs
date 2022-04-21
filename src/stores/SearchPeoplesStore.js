@@ -8,13 +8,13 @@ export const useSearchPeoplesStore = defineStore("searchPeoples", {
         "results/users": [],
         "results/contacts": [],
         "results/toggleShow": false,
-        searchKeyword: '',
+        keyword: '',
     }),
     getters: {
         userIDsInContacts: state => state["results/contacts"].map(contact => contact['user']['id']),
     },
     actions: {
-        async fetch (keyword) {
+        async fetch (keyword = "") {
             try {
                 const response = await axios.get(`/api/peoples/search`, {
                     params: {

@@ -128,7 +128,7 @@ function addUserToContacts(user) {
                 if (r.data.message?.toLowerCase()?.includes("add")) {
 
                     // refresh the peoples store
-                    SearchPeoplesStore.fetch(SearchPeoplesStore.searchKeyword).then(() => {
+                    SearchPeoplesStore.fetch(SearchPeoplesStore.keyword).then(() => {
                         SwalPlugin.autoCloseAlert(`"${user.name}" added to contacts`, null, "success", 1000)
                             ;
                     });
