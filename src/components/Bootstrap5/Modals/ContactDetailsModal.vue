@@ -144,7 +144,7 @@ import StarIcon from "@/components/Icons/StarIcon.vue";
 import SwalPlugin from "../../../plugins/SwalPlugin";
 import Helpers from "../../../Helpers";
 import { useContactsStore } from '@/stores/ContactsStore.js';
-import { searchPeoplesOnPayfan, handleSendPayment, handleMakeRequestPayment } from "../../../services/functions";
+import { handleSendPayment, handleMakeRequestPayment } from "../../../services/functions";
 import { useSearchPeoplesStore } from "../../../stores/SearchPeoplesStore";
 import UserAvatar from "@/components/Avatar/UserAvatar.vue";
 import CreatePaymentModal from "./CreatePaymentModal.vue";
@@ -209,17 +209,16 @@ function removeUserFromContacts() {
                 if (rMsg.includes("remove") || rMsg.includes("delete")) {
                     ContactsStore.remove(props.contact['id']);
                     Helpers.closeBSModal(`#btn-close-modal-contact-detail`)
-                    searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
-                        if (r.status == 200) {
-                            SearchPeoplesStore.refreshResults(r.data);
-                        }
-                    }).then(() => {
-                        SwalPlugin.alertPositioned({
-                            title: `"${props.contact['user']['name']}" removed from contacts`,
-                            icon: "success",
-                            timer: 1000,
-                        })
-                    });
+
+                    // refresh the peoples store
+                    SearchPeoplesStore.fetch(SearchPeoplesStore.searchKeyword)
+                        .then(() => {
+                            SwalPlugin.alertPositioned({
+                                title: `"${props.contact['user']['name']}" removed from contacts`,
+                                icon: "success",
+                                timer: 1000,
+                            })
+                        });
                 }
             });
         }
@@ -240,11 +239,10 @@ function blockContact() {
                     icon: "info",
                     timer: 1000,
                 })
-                searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
-                    if (r.status == 200) {
-                        SearchPeoplesStore.refreshResults(r.data);
-                    }
-                });
+
+                // refresh the peoples store
+                SearchPeoplesStore.fetch(SearchPeoplesStore.searchKeyword);
+
             });
         }
     });

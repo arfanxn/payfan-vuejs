@@ -75,7 +75,6 @@ import { useSearchPeoplesStore } from '../../stores/SearchPeoplesStore';
 import SearchPeoples from './SearchPeoples.vue';
 import { reactive } from 'vue';
 import SwalPlugin from '../../plugins/SwalPlugin';
-import { searchPeoplesOnPayfan } from '../../services/functions';
 const ContactsStore = useContactsStore();
 const SearchPeoplesStore = useSearchPeoplesStore();
 
@@ -127,14 +126,13 @@ function addUserToContacts(user) {
         if (result.isConfirmed) {
             ContactsService.addOrRm(user.id).then(r => {
                 if (r.data.message?.toLowerCase()?.includes("add")) {
-                    searchPeoplesOnPayfan(SearchPeoplesStore.searchKeyword).then(r => {
-                        if (r.status == 200) {
-                            SearchPeoplesStore.refreshResults(r.data);
-                        }
-                    }).then(() => {
+
+                    // refresh the peoples store
+                    SearchPeoplesStore.fetch(SearchPeoplesStore.searchKeyword).then(() => {
                         SwalPlugin.autoCloseAlert(`"${user.name}" added to contacts`, null, "success", 1000)
                             ;
                     });
+
                 } else {
                     onError()
                 }
