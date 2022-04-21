@@ -1,6 +1,6 @@
-# payfan
+# Payfan (VueJS/Frontend)
 
-# Paypal clone with VueJS and integrated with restfull apis backend laravel application "payfan-laravel" (repository)
+Payfan is Paypal Clone application build with VueJS, Swal2, and Bootstrap5.
 
 ## Project setup
 ```
@@ -17,7 +17,7 @@ yarn serve
 yarn build
 ```
 
-### Run your unit tests
+### Run unit tests
 ```
 yarn test:unit
 ```
