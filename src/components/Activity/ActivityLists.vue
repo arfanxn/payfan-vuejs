@@ -57,7 +57,13 @@
                             }}
                         </small>
                         <small class="d-block">{{ payment.type }}</small>
-                        <small class="d-block">{{ `"${payment.note.substring(0, 100)}"` }}</small>
+                        <div class="d-block">
+                            <small v-if="payment.note" class="d-block">{{
+                                `"${payment.note.substring(0, 100)}"`
+                            }}</small>
+                            <small v-else class="d-block py-1"></small>
+                        </div>
+
 
                         <div class="d-flex justify-content-between mt-2">
                             <div class>
