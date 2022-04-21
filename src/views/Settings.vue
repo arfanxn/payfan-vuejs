@@ -50,6 +50,11 @@ const state = reactive({
 });
 
 watch(() => route.params.menu, (newValue) => {
+    if (!newValue) { // if route.params.menu is empty 
+        state.currentMenu = state.menus[0].name;
+        return;
+    }
+
     if (typeof newValue == "string")
         state.menus.forEach(menu => {
             if (menu.link.toLowerCase().includes(newValue.toLowerCase()/**/) /**/) {
