@@ -1,25 +1,11 @@
-import axios from "axios";
 import SwalPlugin from '@/plugins/SwalPlugin.js'
 import StrHelper from "@/helpers/StrHelper.js";
+import {useWalletStore} from "@/stores/auth/WalletStore.js";
 // import Swal from "sweetalert2";
 
 import TransactionService from '@/services/TransactionService.js'
 import Helpers from '@/Helpers.js'
 import AuthService from '@/services/AuthService.js'
-
-export const searchPeoplesOnPayfan = async (keyword) => {
-    try {
-        const response = await axios.get(`/api/users-and-contacts/search`, {
-            params: {
-                keyword
-            }
-        });
-
-        return response;
-    } catch (error) {
-        return error.response;
-    }
-}
 
 export const handleSendPayment = ({
     amount,
@@ -37,6 +23,15 @@ export const handleSendPayment = ({
         icon: 'question'
     }).then(result => {
         if (result.isConfirmed) {
+
+            const WalletStore = useWalletStore(); 
+
+                // validate wallet balance amount
+            if (parseFloat(WalletStore.data.balance) <  parseFloat(amount)) {
+                SwalPlugin.autoCloseAlert("Wallet balance is not enough!" , null , "error" , 2000 )  ;
+                return;
+            }
+
             Helpers.closeBSModal(`#btn-close-modal-transfer-preview`).then(() => {
                 AuthService.createVerificationCode().then(() => {
                     SwalPlugin.verificationCode("Verify to continue", async verificationCode => {
